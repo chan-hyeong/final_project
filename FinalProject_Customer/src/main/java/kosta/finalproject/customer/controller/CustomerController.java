@@ -59,25 +59,22 @@ public class CustomerController {
 		return "customer/index";
 	}
 
-	// 내정보 보기
+	// �궡�젙蹂� 蹂닿린
 	@RequestMapping("/modify.do")
 	public String modify(Model model, HttpSession session) {
 		CustomersDAO dao = sqlsession.getMapper(CustomersDAO.class);
-		System.out.println("모디처음");
 		String id = (String) session.getAttribute("id");
 		System.out.println("id : " + id);
 		CustomersTDTO dto = null;
 		dto = dao.getcustomers(id);
 		System.out.println(dto.getC_id());
 		model.addAttribute("info", dto);
-		System.out.println("모디파이");
 		return "customer/modify";
 	}
 
 	@RequestMapping("/modify_update.do")
 	public String modify_update(CustomersTDTO dto, HttpSession session) {
 		CustomersDAO dao = sqlsession.getMapper(CustomersDAO.class);
-		System.out.println("모디처음");
 		String id = (String) session.getAttribute("id");
 		System.out.println("id : " + id);
 		dao.update(dto);
@@ -100,7 +97,6 @@ public class CustomerController {
 	public String menulist(HttpServletRequest request) {
 		MenuDAO dao=sqlsession.getMapper(MenuDAO.class);
 		request.setAttribute("menulist", dao.menulist());
-		request.setAttribute("url", getClass().getResource("/img"));
 		return "customer/menulist";
 	}
 

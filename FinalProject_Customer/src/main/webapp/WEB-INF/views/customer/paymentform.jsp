@@ -83,10 +83,10 @@
  	<div>
 		<c:forEach var="olist" items="${option}" begin="32" end="36" varStatus="status">
 		<div>
-			${olist.m_name} <input name="price" value="0"/>
+			${olist.m_name} <input name="price" value="0" style="width: 75px; text-align: center;"/>
 			<input type="hidden" value="${ olist.m_price }" name="h_price"/>
 			<input type="button" value="-" id="${status.count}" onclick="minus(this)"/>
-			<input readonly="" value="0" name="quantity">
+			<input readonly="" value="0" name="quantity" style="width: 25px; text-align: center;">
 			<input type="button" value="+" id="${status.count}" onclick="plus(this)"/>
 		</div>
 		</c:forEach>
