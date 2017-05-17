@@ -13,7 +13,7 @@ public class CustomerController {
 
 	@RequestMapping("/index.do")
 	public String index() {
-
+			/*수정테스트*/
 		return "customer/index";
 	}
 
