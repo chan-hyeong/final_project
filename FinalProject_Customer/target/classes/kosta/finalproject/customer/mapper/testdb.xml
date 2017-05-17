@@ -4,9 +4,9 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
   <mapper namespace="kosta.finalproject.customer.dao.CustomersDAO">
-  <insert id="insert" parameterType="kosta.finalproject.customer.dto.CustomersTDTO">
-	 insert into CUSTOMERS (c_id, c_pw, c_name, c_email, c_coin, c_birth) values
-	 (#{c_id},#{c_pw},#{c_name},#{c_email},#{c_coin},#{c_birth})
+   <insert id="insert" parameterType="kosta.finalproject.customer.dto.CustomersTDTO">
+	 insert into CUSTOMERS (c_id, c_pw, c_name, c_email, c_coin, c_birth, c_gender) values
+	 (#{c_id},#{c_pw},#{c_name},#{c_email},#{c_coin},#{c_birth},#{c_gender})
   </insert>
   
   <select id="customers" resultType="integer" parameterType="kosta.finalproject.customer.dto.CustomersTDTO">

@@ -83,11 +83,13 @@ public class CustomerController {
 		dao.update(dto);
 		return "customer/main";
 	}
-
+	//로그아웃 수정 - 지혜
 	@RequestMapping("/logout.do")
 	public String logout(HttpSession session) {
 		session.setAttribute("id", null);
-		return "customer/logout";
+		session.invalidate();
+		System.out.println("로그아웃됨");
+		return "customer/index";
 	}
 
 	@RequestMapping("/main.do")
