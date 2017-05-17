@@ -7,12 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>로그인폼</h1>
-<form method="post" action="/customer/loginpro.do">
-ID: <input type="text" name="c_id"/><br>
-pw: <input type="password" name="c_pw"/><br>
-<input type="submit" value="로그인">
-<a href="index.do">홈</a><br>
-</form>
+<h1>결제창으로 옴 </h1>
+<a href="history.do">결제</a><br>
+<a href="menulist.do">취소</a><br>
+<a href="shoppingbag.do">장바구니담기</a><br>
 </body>
 </html>

@@ -8,6 +8,6 @@
 </head>
 <body>
 <h1>메뉴리스트 </h1>
-<a href="payment.do">클릭하면 해당상품 결제</a>
+<a href="cash.do">클릭하면 해당상품 결제</a>
 </body>
 </html>
