@@ -18,7 +18,8 @@
  			<input type="checkbox" name="${olist.m_code}" value="${olist.m_name}">${olist.m_name}&nbsp;
  		</c:forEach>
  	</div>
- 	<div> 		
+ 	<br>
+ 	<div>
 		<select>
 			<option>빵선택</option>
 			<c:forEach var="olist" items="${option}" begin="9" end="14">
@@ -26,6 +27,7 @@
 			</c:forEach>
 		</select> 		
  	</div>
+ 	<br>
  	<div> 		
 		<select>
 			<option>소스선택</option>
@@ -40,6 +42,7 @@
 			</c:forEach>
 		</select> 
  	</div>
+ 	<br>
  	<div>
  		<select>
 			<option>옵션</option>
@@ -48,6 +51,7 @@
 			</c:forEach>
 		</select> 
  	</div>
+ 	<br>
 	<div>
 		<a href="history.do">결제</a>&nbsp;
 		<a href="menulist.do">취소</a>&nbsp;
