@@ -23,6 +23,9 @@ public class CustomerController {
 		return "customer/loginform";
 	}
 
+	
+	
+	/*수정입니다.*/
 	@RequestMapping("/joinform.do")
 	public String joinform() {
 
