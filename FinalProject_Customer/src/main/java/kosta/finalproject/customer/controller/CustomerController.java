@@ -90,7 +90,9 @@ public class CustomerController {
 	@RequestMapping("/logout.do")
 	public String logout(HttpSession session){
 		session.setAttribute("id", null);
-		return "customer/logout";
+		session.invalidate();
+		System.out.println("로그아웃됨");
+		return "customer/index";
 	}
 	@RequestMapping("/main.do")
 	public String main(){
