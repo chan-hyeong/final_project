@@ -96,9 +96,9 @@
  	</div>
  	<br>
 	<div>
-		<a href="history.do">결제</a>&nbsp;
-		<a href="menulist.do">취소</a>&nbsp;
 		<a href="shoppingbag.do">장바구니담기</a>&nbsp;
+		<a href="menulist.do">취소</a>&nbsp;
+		<a href="payment.do">결제</a>&nbsp;
 	</div>
 </body>
 </html>

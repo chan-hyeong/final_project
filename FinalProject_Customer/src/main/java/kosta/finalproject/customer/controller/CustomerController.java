@@ -124,11 +124,18 @@ public class CustomerController {
 		return "customer/cashform";
 	}
 		
-	@RequestMapping("/payment.do")
+//	@RequestMapping("/payment.do")
 	public String menudetail(/*HttpServletRequest request,@RequestParam("m_code") String m_code*/) {
 		/*MenuDAO dao=sqlsession.getMapper(MenuDAO.class);
 		request.setAttribute("menudto", dao.menudetail(m_code));
 		request.setAttribute("option",dao.menuoption());*/
+		return "customer/paymentform";
+	}
+	
+	//0517 17:11 찬형 
+	@RequestMapping("/payment.do")
+	public String paymentform(/*HttpServletRequest request,@RequestParam("m_code") String m_code*/) {
+		
 		return "customer/paymentform";
 	}
 
@@ -144,6 +151,6 @@ public class CustomerController {
 	@RequestMapping("/shoppingbag.do")
 	public String shoppingbag() {
 
-		return "customer/shoppingbag";
+		return "customer/shoppingbag";//장바구니 페이지 보여주기 vs 메뉴 리스트로 다시 돌아가기
 	}
 }
