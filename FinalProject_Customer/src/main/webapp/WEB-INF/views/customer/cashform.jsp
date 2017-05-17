@@ -7,7 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>메뉴리스트 </h1>
-<a href="cash.do">클릭하면 해당상품 결제</a>
+<h1>결제창으로 옴 </h1>
+<a href="history.do">결제</a><br>
+<a href="menulist.do">취소</a><br>
+<a href="shoppingbag.do">장바구니담기</a><br>
 </body>
 </html>
