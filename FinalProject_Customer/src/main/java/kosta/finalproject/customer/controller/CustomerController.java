@@ -15,7 +15,7 @@ import kosta.finalproject.customer.dto.MenuTDTO;
 public class CustomerController {
 
 	@Autowired
-	private SqlSession sqlsessoin;
+	private SqlSession sqlsession;
 
 	@RequestMapping("/index.do")
 	public String index() {
@@ -43,7 +43,7 @@ public class CustomerController {
 
 	@RequestMapping("/menulist.do")
 	public String menulist(HttpServletRequest request) {
-		MenuDAO dao=sqlsessoin.getMapper(MenuDAO.class);
+		MenuDAO dao=sqlsession.getMapper(MenuDAO.class);
 		request.setAttribute("menulist", dao.menulist());
 		request.setAttribute("url", getClass().getResource("/img"));
 		return "customer/menulist";
@@ -63,7 +63,7 @@ public class CustomerController {
 
 	@RequestMapping("/payment.do")
 	public String menudetail(HttpServletRequest request,@RequestParam("m_code") String m_code) {
-		MenuDAO dao=sqlsessoin.getMapper(MenuDAO.class);
+		MenuDAO dao=sqlsession.getMapper(MenuDAO.class);
 		request.setAttribute("menudto", dao.menudetail(m_code));
 		request.setAttribute("option",dao.menuoption());
 		return "customer/paymentform";
