@@ -9,14 +9,13 @@
 </head>
 <body>
 	<h1>메뉴리스트</h1>
-	<a href="cash.do">클릭하면 해당상품 결제</a>
 	<c:forEach var="list" items="${menulist}">
 		<div>
-			<a href="payment.do?m_code=${ list.m_code }"><img
+			<a href="orderdetail.do?m_code=${ list.m_code }"><img
 				src="${pageContext.request.contextPath}/img/${ list.m_code }.png"></a>
 			${list.m_name}
 		</div>
 	</c:forEach>
-	<a href="payment.do">클릭하면 해당상품 결제</a>
+	<!-- <a href="payment.do">클릭하면 해당상품 결제</a> -->
 </body>
 </html>
