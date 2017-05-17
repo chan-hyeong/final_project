@@ -31,7 +31,7 @@ public class CustomerController {
 
 	@RequestMapping("/main.do")
 	public String main() {
-
+			/*수정 3 */
 		return "customer/main";
 	}
 
