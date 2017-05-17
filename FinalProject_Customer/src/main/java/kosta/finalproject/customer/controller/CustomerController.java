@@ -123,15 +123,18 @@ public class CustomerController {
 	}
 		
 	@RequestMapping("/payment.do")
-	public String menudetail(HttpServletRequest request,@RequestParam("m_code") String m_code) {
-		MenuDAO dao=sqlsession.getMapper(MenuDAO.class);
+	public String menudetail(/*HttpServletRequest request,@RequestParam("m_code") String m_code*/) {
+		/*MenuDAO dao=sqlsession.getMapper(MenuDAO.class);
 		request.setAttribute("menudto", dao.menudetail(m_code));
-		request.setAttribute("option",dao.menuoption());
+		request.setAttribute("option",dao.menuoption());*/
 		return "customer/paymentform";
 	}
 
 	@RequestMapping("/orderdetail.do")
-	public String orderdetail() {
+	public String orderdetail(HttpServletRequest request,@RequestParam("m_code") String m_code) {
+		MenuDAO dao=sqlsession.getMapper(MenuDAO.class);
+		request.setAttribute("menudto", dao.menudetail(m_code));
+		request.setAttribute("option",dao.menuoption());
 
 		return "customer/orderdetail";
 	}
