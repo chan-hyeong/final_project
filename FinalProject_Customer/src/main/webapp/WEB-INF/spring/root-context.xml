@@ -20,5 +20,6 @@
 	 
 	 <bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSession">
 		<constructor-arg index="0" ref="sqlSessionFactoryBean" />
-		</bean> 
+	</bean>
+	<bean class="kosta.finalproject.customer.controller.CustomerController"></bean>
 </beans>
