@@ -25,7 +25,7 @@ public class CustomerController {
 
 	@RequestMapping("/joinform.do")
 	public String joinform() {
-
+		/*수정테스트 2*/
 		return "customer/joinform";
 	}
 
