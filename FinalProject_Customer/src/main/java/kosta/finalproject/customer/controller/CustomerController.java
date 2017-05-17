@@ -19,7 +19,7 @@ public class CustomerController {
 
 	@RequestMapping("/loginform.do")
 	public String loginform() {
-
+/* 수정 444*/
 		return "customer/loginform";
 	}
 
