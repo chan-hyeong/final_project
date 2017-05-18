@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kosta.finalproject.customer.dao.Order_DetailDAO">
+	<select id="order_detail_list" resultType="kosta.finalproject.customer.dto.Order_DetailTDTO">
+		<!-- select (select c.code_name from code c where m.m_code=c.code) m_name 
+			from menu m -->
+		select
+		m_code,
+		(select c.code_name from code c where m.m_code=c.code) m_name
+		from menu m
+		where m_code like 'm%'
+	</select>
+
+	<insert id="insert_order_detail" parameterType="kosta.finalproject.customer.dto.Order_DetailTDTO">
+		insert into CUSTOMERS (c_id, c_pw, c_name, c_email, c_coin, c_birth,
+		c_gender) values
+		(#{c_id},#{c_pw},#{c_name},#{c_email},#{c_coin},#{c_birth},#{c_gender})
+	</insert>
+
+
+	<delete id="delete_order_detail" parameterType="kosta.finalproject.customer.dto.Order_DetailTDTO">
+	
+	
+	</delete>
+	<update id="update_order_detail" parameterType="kosta.finalproject.customer.dto.Order_DetailTDTO">
+	
+
+	</update>	
+</mapper>

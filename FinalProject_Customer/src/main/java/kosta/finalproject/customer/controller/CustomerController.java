@@ -135,6 +135,11 @@ public class CustomerController {
 	//0517 17:11 찬형 
 	@RequestMapping("/payment.do")
 	public String paymentform(/*HttpServletRequest request,@RequestParam("m_code") String m_code*/) {
+		//orderdtail 페이지로부터 order_detail DTO 타입으로 받아와야함 
+		
+		
+		
+		
 		
 		return "customer/paymentform";
 	}
