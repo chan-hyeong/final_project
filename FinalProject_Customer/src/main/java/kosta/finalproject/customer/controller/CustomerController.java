@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import kosta.finalproject.customer.dao.CustomersDAO;
 import kosta.finalproject.customer.dao.MenuDAO;
+import kosta.finalproject.customer.dao.Order_DetailDAO;
+import kosta.finalproject.customer.dao.Order_ListDAO;
 import kosta.finalproject.customer.dto.CustomersTDTO;
+import kosta.finalproject.customer.dto.Order_DetailTDTO;
 
 @Controller
 public class CustomerController {
@@ -134,8 +137,13 @@ public class CustomerController {
 	
 	//0517 17:11 찬형 
 	@RequestMapping("/payment.do")
-	public String paymentform(/*HttpServletRequest request,@RequestParam("m_code") String m_code*/) {
+	public String paymentform(Order_DetailTDTO dto/*HttpServletRequest request,@RequestParam("m_code") String m_code*/) {
 		//orderdtail 페이지로부터 order_detail DTO 타입으로 받아와야함 
+		
+		Order_ListDAO list_dao = sqlsession.getMapper(Order_ListDAO.class);
+		Order_DetailDAO detail_dao = sqlsession.getMapper(Order_DetailDAO.class);
+		
+		detail_dao.insert_order_detail(dto);
 		
 		
 		
