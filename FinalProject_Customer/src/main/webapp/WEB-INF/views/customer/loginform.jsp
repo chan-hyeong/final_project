@@ -12,16 +12,16 @@
 		
 		if(obj.c_id.value == ''){
 			document.getElementById("id_txt").innerHTML = "<font color = 'red'>아이디는 필수 값입니다.</font>";
-			return;
+			return false;
 		}else
 			document.getElementById("id_txt").innerHTML = "";
-		
+	
 		if(obj.c_pw.value == ''){
 			document.getElementById("pwd_txt").innerHTML = "<font color = 'red'>비밀번호는 필수 값입니다.</font>";
-			return;
+			return false;
 		}else
 			document.getElementById("pwd_txt").innerHTML = "";
-}
+	}
 </script>
 <body> 
 	<h1>로그인폼</h1>
