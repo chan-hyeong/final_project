@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import kosta.finalproject.customer.dao.CustomersDAO;
 import kosta.finalproject.customer.dao.MenuDAO;
+import kosta.finalproject.customer.dao.Order_DetailDAO;
 import kosta.finalproject.customer.dto.CustomersTDTO;
+import kosta.finalproject.customer.dto.Order_DetailTDTO;
 
 @Controller
 public class CustomerController {
@@ -59,25 +61,22 @@ public class CustomerController {
 		return "customer/index";
 	}
 
-	// 내정보 보기
+	// �궡�젙蹂� 蹂닿린
 	@RequestMapping("/modify.do")
 	public String modify(Model model, HttpSession session) {
 		CustomersDAO dao = sqlsession.getMapper(CustomersDAO.class);
-		System.out.println("모디처음");
 		String id = (String) session.getAttribute("id");
 		System.out.println("id : " + id);
 		CustomersTDTO dto = null;
 		dto = dao.getcustomers(id);
 		System.out.println(dto.getC_id());
 		model.addAttribute("info", dto);
-		System.out.println("모디파이");
 		return "customer/modify";
 	}
 
 	@RequestMapping("/modify_update.do")
 	public String modify_update(CustomersTDTO dto, HttpSession session) {
 		CustomersDAO dao = sqlsession.getMapper(CustomersDAO.class);
-		System.out.println("모디처음");
 		String id = (String) session.getAttribute("id");
 		System.out.println("id : " + id);
 		dao.update(dto);
@@ -102,7 +101,6 @@ public class CustomerController {
 	public String menulist(HttpServletRequest request) {
 		MenuDAO dao=sqlsession.getMapper(MenuDAO.class);
 		request.setAttribute("menulist", dao.menulist());
-		request.setAttribute("url", getClass().getResource("/img"));
 		return "customer/menulist";
 	}
 
@@ -124,11 +122,21 @@ public class CustomerController {
 		return "customer/cashform";
 	}
 		
-//	@RequestMapping("/payment.do")
-	public String menudetail(/*HttpServletRequest request,@RequestParam("m_code") String m_code*/) {
-		/*MenuDAO dao=sqlsession.getMapper(MenuDAO.class);
-		request.setAttribute("menudto", dao.menudetail(m_code));
-		request.setAttribute("option",dao.menuoption());*/
+	@RequestMapping("/payment.do")
+	public String menudetail(HttpServletRequest request,Order_DetailTDTO dto) {
+		
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+		/*Map paramMap = request.getParameterMap();		
+		String[] vege = (String[]) paramMap.get("vege");
+		for(int i=0;i<vege.length;i++){
+			System.out.println(vege[i]);
+		}*/
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+		String command = request.getParameter("command");
+		if(command!=null&&command.equals("basket")){
+			
+			return "redirect:shoppingbag.do";
+		}
 		return "customer/paymentform";
 	}
 	
@@ -144,13 +152,25 @@ public class CustomerController {
 		MenuDAO dao=sqlsession.getMapper(MenuDAO.class);
 		request.setAttribute("menudto", dao.menudetail(m_code));
 		request.setAttribute("option",dao.menuoption());
-
 		return "customer/orderdetail";
 	}
 
 	@RequestMapping("/shoppingbag.do")
-	public String shoppingbag() {
-
-		return "customer/shoppingbag";//장바구니 페이지 보여주기 vs 메뉴 리스트로 다시 돌아가기
+	public String shoppingbag(HttpServletRequest request) {		
+		HttpSession session = request.getSession();
+		String ID = (String) session.getAttribute("id");
+		if(ID==null) return "customer/loginform";
+		
+		String command = request.getParameter("command");
+		Order_DetailDAO dao=sqlsession.getMapper(Order_DetailDAO.class);	
+		if(command!=null&&command.equals("delete")){
+			int order_num1=Integer.parseInt(request.getParameter("order_num"));
+			dao.order_detail_delete1(order_num1);
+			dao.order_detail_delete2(order_num1);	
+			return "redirect:shoppingbag.do";
+		}
+			
+		request.setAttribute("order_detail", dao.order_detail_list(ID));
+		return "customer/shoppingbag";
 	}
 }
