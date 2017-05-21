@@ -22,4 +22,23 @@
 		<constructor-arg index="0" ref="sqlSessionFactoryBean" />
 	</bean>
 	<bean class="kosta.finalproject.customer.controller.CustomerController"></bean>
+	
+	<!-- email 설정 -->
+	<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com"/>
+		<property name="port" value="587"/>
+		<property name="username" value="wlgp123776@gmail.com"/>
+		<property name="password" value="@rlaalswl12"/>
+		<property name="defaultEncoding" value="utf-8"/>
+		<property name="javaMailProperties">
+        <props>
+            <prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
+            <prop key="mail.smtp.starttls.enable">true</prop>
+            <prop key="mail.smtp.auth">true</prop>
+        </props>
+    </property>
+	</bean>
+	<bean id="mailService" class="kosta.finalproject.customer.dao.MailService">
+    	<property name="javaMailSender" ref="javaMailSender" />
+	</bean>
 </beans>

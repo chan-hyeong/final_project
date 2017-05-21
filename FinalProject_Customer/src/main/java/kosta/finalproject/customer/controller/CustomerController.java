@@ -1,7 +1,12 @@
 package kosta.finalproject.customer.controller;
 
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Properties;
+import java.util.Random;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +14,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import kosta.finalproject.customer.dao.CustomersDAO;
+import kosta.finalproject.customer.dao.MailService;
 import kosta.finalproject.customer.dao.MenuDAO;
 import kosta.finalproject.customer.dao.Order_DetailDAO;
 import kosta.finalproject.customer.dto.CustomersTDTO;
@@ -21,6 +29,7 @@ public class CustomerController {
 
 	@Autowired
 	private SqlSession sqlsession;
+
 
 	@RequestMapping("/index.do")
 	public String index() {
@@ -90,7 +99,33 @@ public class CustomerController {
 		System.out.println("로그아웃됨");
 		return "customer/index";
 	}
-
+	
+	//이메일 인증 
+	@RequestMapping("/email_check.do")
+	public String email(HttpSession session, @RequestParam String c_email) {
+		sendMailAuth(session, c_email);
+		return "customer/email";
+	}
+	
+	//이메일 인증
+	@RequestMapping(value = "/email.do", produces = "application/json")
+    @ResponseBody
+    public boolean sendMailAuth(HttpSession session, @RequestParam String c_email) {
+		System.out.println("이메일.do");
+        int ran = new Random().nextInt(100000) + 10000; // 10000 ~ 99999
+        System.out.println(ran);
+        String joinCode = String.valueOf(ran);
+        System.out.println(joinCode);
+        session.setAttribute("joinCode", joinCode);
+ 
+        String subject = "회원가입 인증 코드 발급 안내 입니다.";
+        StringBuilder sb = new StringBuilder();
+        sb.append("귀하의 인증 코드는 " + joinCode + " 입니다.");
+        return MailService.send(subject, sb.toString(), "wlgp123776@gmail.com", c_email, null);
+        
+ 
+    }
+	
 	@RequestMapping("/main.do")
 	public String main() {
 

@@ -6,16 +6,108 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 </head>
+<script type="text/javascript">
+	function checkIt(){
+		var obj =document.myform;
+        var regType = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+		
+		//이름 유효성
+		if(obj.c_name.value == ''){
+			alert('이름을 입력하세요');
+			return false;
+		}
+		//이메일 유효성
+		if(obj.c_email.value == ''){
+			alert('이메일을 입력하세요');
+			return false;
+		}
+		//성별 유효성
+		if(obj.c_gender.value == ''){
+			alert('성별을 체크하세요');
+			return false;
+		}
+		//생일 유효성
+		if(obj.c_birth.value == ''){
+			alert('생일을 입력하세요');
+			return false;
+		}
+		
+		if(obj.email_ch.value != "check"){
+			alert('이메일 인증은 필수입니다');
+			return false;
+		}
+
+	}
+	
+	function check_id(){
+		var obj =document.myform;
+        var regType = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+       
+		//id 유효성
+		if(obj.c_id.value == ''){
+			alert('id를 입력하세요');
+			return false;
+		}else if(obj.c_id.value.length < 4 || obj.c_id.value.length > 10){
+			document.getElementById("id_txt").innerHTML = "<font color = 'red'>아이디는 4~10자 사이로 입력하세요.</font>";
+			return false;
+		}else if(regType.test(obj.c_id.value)){
+			document.getElementById("id_txt").innerHTML = "<font color = 'red'>아이디가 조건에 맞지 않습니다.</font>";
+			return;
+		}else
+			document.getElementById("id_txt").innerHTML = "";
+	}
+	
+	function check_pw(){
+		var obj =document.myform;
+		//비밀번호 유효성
+		if(obj.c_pw.value == ''){
+			document.getElementById("pw_txt").innerHTML = "<font color = 'red'>비밀번호를 입력하세요.</font>";
+			return false;
+		}else if(obj.c_pw.value.length < 4 || obj.c_pw.value.length >8){
+			document.getElementById("pw_txt").innerHTML = "<font color = 'red'>비밀번호는 4~8자 사이로 입력하세요.</font>";
+			return false;
+		}else
+			document.getElementById("pw_txt").innerHTML = "";
+	}
+	
+	function check_birth(){
+		var obj =document.myform;
+		if(obj.c_birth.value.length > 6 ){
+			document.getElementById("c_birth").innerHTML = "<font color = 'red'>생일을 정확히 입력해주세요.</font>";
+			return false;
+		}else
+			document.getElementById("c_birth").innerHTML = "";
+	}
+	function email_check(myform){
+		
+		if(myform.c_email.value == ''){
+			alert('이메일을 입력해주세요');
+			return false;
+		}
+		
+		 url = "email_check.do?c_email=" + myform.c_email.value;
+		 
+	    open(url, "eamil_check", 
+	    "toolbar=no, location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=300, height=150");
+	    
+	}
+
+</script>
 <body>
 	<h1>조인폼</h1>
-	<form method="post" action="/customer/joinpro.do">
-		ID: <input type="text" name="c_id" /><br> 
-		pw: <input type="password" name="c_pw" /><br> 
-		이름: <input type="text" name="c_name" /><br> 
-		이메일: <input type="text" name="c_email" /><br>
-		성별 : <input type="radio" name="c_gender" value="M" />M
-			 <input type="radio" name="c_gender" value="F" />F<br>
-		생년월일: <input type="text" name="c_birth" /><br> 
+	<form name="myform" method="post" action="/customer/joinpro.do" onSubmit="return checkIt()">
+		ID: <input type="text" name="c_id" onkeyup="check_id()"/>
+			<span id="id_txt"></span><br> 
+		pw: <input type="password" name="c_pw" onkeyup="check_pw()"/>
+			<span id="pw_txt"></span><br>
+		이름: <input type="text" name="c_name" /> <br> 
+		이메일: <input type="email" name="c_email" />
+			<input type="button" value = "이메일 인증" onclick = "email_check(this.form);"/>
+		<br>
+		성별 : <input type="radio" name="c_gender" value="M"/>M
+			 <input type="radio" name="c_gender" value="F"/>F<br>
+		생년월일: <input type="text" name="c_birth" onkeyup="check_birth()"/>
+			<span id="c_birth"></span><br>
 		<input type="submit" value="등록"> <a href="index.do">홈</a>
 	</form>
 
