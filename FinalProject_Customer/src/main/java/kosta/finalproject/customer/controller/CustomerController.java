@@ -1,5 +1,7 @@
 package kosta.finalproject.customer.controller;
 
+import java.util.Enumeration;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -16,6 +18,7 @@ import kosta.finalproject.customer.dao.Order_DetailDAO;
 import kosta.finalproject.customer.dao.Order_ListDAO;
 import kosta.finalproject.customer.dto.CustomersTDTO;
 import kosta.finalproject.customer.dto.Order_DetailTDTO;
+import kosta.finalproject.customer.dto.Order_ListTDTO;
 
 @Controller
 public class CustomerController {
@@ -137,13 +140,53 @@ public class CustomerController {
 	
 	//0517 17:11 찬형 
 	@RequestMapping("/payment.do")
-	public String paymentform(Order_DetailTDTO dto/*HttpServletRequest request,@RequestParam("m_code") String m_code*/) {
-		//orderdtail 페이지로부터 order_detail DTO 타입으로 받아와야함 
-		
+	public String paymentform(Order_ListTDTO list_dto, Order_DetailTDTO detail_dto, HttpServletRequest request, HttpSession session) {
 		Order_ListDAO list_dao = sqlsession.getMapper(Order_ListDAO.class);
 		Order_DetailDAO detail_dao = sqlsession.getMapper(Order_DetailDAO.class);
 		
-		detail_dao.insert_order_detail(dto);
+		Enumeration<String> e=  request.getParameterNames();
+		while(e.hasMoreElements()){
+			String name = e.nextElement();
+			String value = request.getParameter(name);
+			System.out.println("\t" + name + " : " + value);
+		}
+		
+		
+		//command 로 분기 한다 
+		//1. 장바구니에 담는 경우 
+			//status = '장바구니', order~테이블에 row넣기, menulist 페이지로
+		//2. 결제한 경우 
+			//status = '주문완료', order~테이블에 row넣기,paymentform 페이지로 
+		
+		String c_id = session.getAttribute("id").toString();
+		String s_code = request.getParameter("s_code");
+		String order_status = "";// = request.getParameter("order_status");
+		String command = request.getParameter("command");
+		int o_totalprice = new Integer(request.getParameter("o_totalprice"));
+		
+		if (command.equalsIgnoreCase("basket")){
+			order_status = "장바구니";
+		}else if(command.equalsIgnoreCase("payment")){
+			order_status = "주문완료";
+		}else {
+			//command가 잘 못 넘어왔다면?
+		}
+		list_dto.setOrder_status(order_status);
+		/*	
+		Order_ListTDTO order_list_dto = new Order_ListTDTO();
+		order_list_dto.setC_id(c_id);//세션에서 
+		order_list_dto.setS_code(s_code); //매장정보도 어딘가에서 넘어올듯? 세션으로 하는게 편하려나??
+		order_list_dto.setO_totalprice(o_totalprice);//준혁이가 orderdetail 폼에서 넘긴 
+		order_list_dto.setOrder_status(order_status);
+		
+		*/
+		System.out.println("\n\n-------------------------------------------------------------------");
+		System.out.println(list_dto.toString());
+		System.out.println(detail_dto.toString());
+		System.out.println("-------------------------------------------------------------------\n\n");
+		
+//		list_dao.insert_order_list(list_dto);
+//		detail_dao.insert_order_detail(detail_dto);
 		
 		
 		
