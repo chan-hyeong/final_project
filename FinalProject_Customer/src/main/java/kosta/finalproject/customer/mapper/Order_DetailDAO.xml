@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kosta.finalproject.customer.dao.Order_DetailDAO">	
+	<select id="order_detail_list" resultType="kosta.finalproject.customer.dto.Order_DetailTDTO_basket">		
+		select 
+			ol.order_num,
+			(select c.code_name from code c where od.m_code=c.code) m_name,
+			(select m.m_price from menu m where od.m_code=m.m_code) o_price,
+			(select c.code_name from code c where od.o_option1=c.code) o_option1,
+			o_option1_num,
+			(select m.m_price from menu m where od.o_option1=m.m_code) o_option1_price,
+			(select c.code_name from code c where od.o_option2=c.code) o_option2,
+			o_option2_num,
+			(select m.m_price from menu m where od.o_option2=m.m_code) o_option2_price,
+			(select c.code_name from code c where od.o_option3=c.code) o_option3,
+			o_option3_num,
+			(select m.m_price from menu m where od.o_option3=m.m_code) o_option3_price
+		from order_detail od, order_list ol where ol.order_status='장바구니' and ol.order_num=od.order_num and c_id=#{id}
+	</select>
+	<delete id="order_detail_delete1" parameterType="Integer">
+		delete from order_list where order_num= #{order_num}
+	</delete>
+	<delete id="order_detail_delete2" parameterType="Integer">
+		delete from order_detail where order_num= #{order_num}
+	</delete>
+</mapper>

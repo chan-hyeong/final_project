@@ -7,7 +7,14 @@ public class CustomersTDTO {
 	private String c_email;
 	private int c_coin;
 	private int c_birth;
+	private char c_gender;
 	
+	public char getC_gender() {
+		return c_gender;
+	}
+	public void setC_gender(char c_gender) {
+		this.c_gender = c_gender;
+	}
 	public String getC_id() {
 		return c_id;
 	}

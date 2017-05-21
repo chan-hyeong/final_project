@@ -5,10 +5,11 @@
 
 <mapper namespace="kosta.finalproject.customer.dao.MenuDAO">
 	<select id="menulist" resultType="kosta.finalproject.customer.dto.MenuTDTO">
-		<!-- select 
- 			(select c.code_name from code c where m.m_code=c.code) m_name
-		from menu m -->
-		select m_code from menu
+		
+		select 
+			m_code,
+			(select c.code_name from code c where m.m_code=c.code) m_name
+		from menu m where m_code like 'm%'
 	</select>
 	<select id="menudetail" resultType="kosta.finalproject.customer.dto.MenuTDTO">
 		select 
