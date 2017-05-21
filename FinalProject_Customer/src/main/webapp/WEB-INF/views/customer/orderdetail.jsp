@@ -145,9 +145,6 @@
  	</div>
  	<br>
 	<div>
-		<a href="shoppingbag.do">장바구니담기</a>&nbsp;
-		<a href="menulist.do">취소</a>&nbsp;
-		<a href="payment.do">결제</a>&nbsp;
 		<button value="payment" name="command">결제</button>&nbsp;
 		<button value="cancle" name="command">취소</button>&nbsp;
 		<button value="basket" name="command">장바구니</button>&nbsp;	

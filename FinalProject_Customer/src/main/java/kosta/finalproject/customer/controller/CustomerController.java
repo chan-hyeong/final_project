@@ -140,12 +140,12 @@ public class CustomerController {
 		return "customer/paymentform";
 	}
 	
-	//0517 17:11 찬형 
+/*	//0517 17:11 찬형 
 	@RequestMapping("/payment.do")
-	public String paymentform(/*HttpServletRequest request,@RequestParam("m_code") String m_code*/) {
+	public String paymentform(HttpServletRequest request,@RequestParam("m_code") String m_code) {
 		
 		return "customer/paymentform";
-	}
+	}*/
 
 	@RequestMapping("/orderdetail.do")
 	public String orderdetail(HttpServletRequest request,@RequestParam("m_code") String m_code) {
