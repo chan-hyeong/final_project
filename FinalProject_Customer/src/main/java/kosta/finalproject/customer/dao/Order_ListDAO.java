@@ -9,6 +9,9 @@ public interface Order_ListDAO {
 	public List<Order_ListTDTO> order_list_list(String c_id);
 	//전체 리스트 가져오기 <--히스토리, 히스토리 디테일에서 사용 
 	
+	public Order_ListTDTO order_list_basket(String c_id);
+	//basket 가져오기  
+	
 	//insert 
 	public void insert_order_list(Order_ListTDTO dto);
 	//결제완료를 하면 주문한 내역이 order_list 테이블에 한줄 들어감 

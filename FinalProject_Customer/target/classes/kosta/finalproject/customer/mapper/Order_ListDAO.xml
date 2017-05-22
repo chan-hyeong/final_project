@@ -5,15 +5,26 @@
 
 <mapper namespace="kosta.finalproject.customer.dao.Order_ListDAO">
 	<select id="order_list_list" resultType="kosta.finalproject.customer.dto.Order_ListTDTO" >
-		<!-- select (select c.code_name from code c where m.m_code=c.code) m_name 
-			from menu m -->
 		select	order_num,
 				c_id, 
 				s_code,
 				order_status,
 				order_date,
 				o_totalprice
-		from order_list ol
+		from order_list ol 
+		where c_id=#{c_id}
+		order by ol.order_num desc
+	</select>
+	<select id="order_list_basket" resultType="kosta.finalproject.customer.dto.Order_ListTDTO" >
+		select	order_num,
+				c_id, 
+				s_code,
+				order_status,
+				order_date,
+				o_totalprice
+		from order_list ol  
+		where c_id=#{c_id} and order_status='장바구니'
+		<!-- where order_status='장바구니 and c_id=#{c_id} -->
 		order by ol.order_num desc
 	</select>
 

@@ -131,49 +131,51 @@ public class CustomerController {
 		return "customer/cashform";
 	}
 		
-	@RequestMapping("/payment.do")
-	public String paymentpro(HttpServletRequest request,@RequestParam("paymentMethod") String paymentMethod) {
-		
-		return "customer/history";
-	}
-	
-	//0517 17:11 찬형 
-	@RequestMapping("/paymentform.do")
-	public String paymentform(Order_ListTDTO list_dto, Order_DetailTDTO detail_dto , HttpServletRequest request, HttpSession session) {
+	@RequestMapping("/payment.do")//결제 완료 버튼을 눌렀을때 
+	public String paymentpro(HttpServletRequest request, @RequestParam("paymentMethod") String paymentMethod) {
+		//결제창에서 결제수단 선택 후 결제완료를 누르면 history로 보냄 
 		Order_ListDAO list_dao = sqlsession.getMapper(Order_ListDAO.class);
 		Order_DetailDAO detail_dao = sqlsession.getMapper(Order_DetailDAO.class);
 		
-		Enumeration<String> e=  request.getParameterNames();
-		while(e.hasMoreElements()){
-			String name = e.nextElement();
-			String value = request.getParameter(name);
-			System.out.println("\t" + name + " : " + value);
-		}
+	 	Order_ListTDTO list_dto = (Order_ListTDTO) request.getSession().getAttribute("list_dto");
+		Order_DetailTDTO detail_dto = (Order_DetailTDTO) request.getSession().getAttribute("detail_dto");
+//		list_dto.setPayment_method(paymentMethod);	//테이블 수정해야함 
 		
+//		System.out.println("\n\n-------------------------------------------------------------------");
+//		System.out.println(list_dto.toString());
+//		System.out.println(detail_dto.toString());
+//		System.out.println("-------------------------------------------------------------------\n\n");		
+		
+		//insert 
+		list_dao.insert_order_list(list_dto);
+		detail_dao.insert_order_detail(detail_dto);
+		
+		return "redirect:history.do";
+	}
+	
+	//0517 17:11 찬형 //menu에서 detail option을 선택하고 결제 창으로 보냄 
+	@RequestMapping("/paymentform.do")
+	public String paymentform(Order_ListTDTO list_dto, Order_DetailTDTO detail_dto , HttpServletRequest request, HttpSession session, @RequestParam("command")String command) {
+		String view = "customer/paymentform";
+		Order_ListDAO list_dao = sqlsession.getMapper(Order_ListDAO.class);
+		Order_DetailDAO detail_dao = sqlsession.getMapper(Order_DetailDAO.class);
+		
+		String c_id = session.getAttribute("id").toString();
+		
+//		Enumeration<String> e=  request.getParameterNames();
+//		while(e.hasMoreElements()){
+//			String name = e.nextElement();
+//			String value = request.getParameter(name);
+//			System.out.println("\t" + name + " : " + value);
+//		}
 		//command 로 분기 한다 
 		//1. 장바구니에 담는 경우 
 			//status = '장바구니', order~테이블에 row넣기, menulist 페이지로
 		//2. 결제한 경우 
 			//status = '주문완료', order~테이블에 row넣기,paymentform 페이지로 
 		
-		String c_id = session.getAttribute("id").toString();
-		String s_code = request.getParameter("s_code");
-		String order_status = "";// = request.getParameter("order_status");
-		String command = request.getParameter("command");
-		int o_totalprice = new Integer(request.getParameter("o_totalprice"));
-		
-		List<Order_ListTDTO> order_list = list_dao.order_list_list(c_id); //order_num만 구해오면 되니까 메서드 하나 만들자 
-		
-		int order_num = 0;
-		if (command.equalsIgnoreCase("basket")){//장바구니에 넣기  
-			order_status = "장바구니";
-			order_num = 0;
-		}else if(command.equalsIgnoreCase("payment")){//결제 페이지로 가기  
-			order_status = "주문완료";
-			if ( order_list.size() > 0 ) 
-				order_num = order_list.get(0).getOrder_num();
-			order_num ++;
-		}else if(command.equalsIgnoreCase("basketpayment")) {//장바구니에서 결제 
+		if( command.equalsIgnoreCase("basketpayment")){
+			//[3] 장바구니에서 결제를 누른 경우 
 			//update order_list 
 			//set status = "주문완료", order_num = "order_num" 구해서, order_date = sysdate 
 			//where status = "장바구니"
@@ -181,24 +183,54 @@ public class CustomerController {
 			//update order_detail
 			//set order_num = "order_num" 구해서 
 			//where order_num = 0
-		}else{
-			//command 가 잘못넘어온다면?
-		}
-		
-		list_dto.setOrder_status(order_status);
-		list_dto.setOrder_num(order_num);
-		
-		detail_dto.setOrder_num(order_num);
-		
-		System.out.println("\n\n-------------------------------------------------------------------");
-		System.out.println(list_dto.toString());
-		System.out.println(detail_dto.toString());
-		System.out.println("-------------------------------------------------------------------\n\n");
-		
-		list_dao.insert_order_list(list_dto);
-		detail_dao.insert_order_detail(detail_dto);
-		
-		return "customer/paymentform";
+			
+			list_dto = list_dao.order_list_basket(c_id);
+			List<Order_DetailTDTO> detail_dto_basket = detail_dao.order_detail_basket(c_id);
+			
+			session.setAttribute("list_dto", list_dto);
+			session.setAttribute("detail_dto_basket", detail_dto_basket);
+			
+			System.out.println("\n\n-------------------------------------------------------");
+			System.out.println(list_dto.toString());
+			System.out.println(detail_dto_basket.toString());
+			System.out.println("-------------------------------------------------------\n\n");
+			
+			request.setAttribute("command", "basketpayment");
+		}else {
+			String s_code = request.getParameter("s_code");
+			int o_totalprice = new Integer(request.getParameter("o_price"));
+			list_dto.setO_totalprice(o_totalprice);//장바구니라면 이거 바꿔줘야하는데 
+
+			List<Order_ListTDTO> order_list = list_dao.order_list_list(c_id); // order_num만 구해오면 되니까 메서드 하나 만들자
+
+			int order_num = 0;
+			
+			if (command.equalsIgnoreCase("basket")) {// [1] 장바구니에 넣기
+				list_dto.setOrder_num(order_num);
+				detail_dto.setOrder_num(order_num);
+				
+				list_dto.setOrder_status("장바구니");
+				
+				list_dao.insert_order_list(list_dto);
+				detail_dao.insert_order_detail(detail_dto);
+				
+				view = "redirect:menulist.do";
+			} else if (command.equalsIgnoreCase("payment")) {// [2] 바로 결제 페이지로 가기 (단일 메뉴 주문)
+				if (order_list.size() > 0)	
+					order_num = order_list.get(0).getOrder_num() + 1 ;
+				
+				list_dto.setOrder_num(order_num);
+				detail_dto.setOrder_num(order_num);
+				
+				list_dto.setOrder_status("주문완료");
+				
+				session.setAttribute("list_dto", list_dto);
+				session.setAttribute("detail_dto", detail_dto);
+				
+				request.setAttribute("command", "payment");
+			}
+		}//장바구니 or 결제 인 경우
+		return view;
 	}
 
 	@RequestMapping("/orderdetail.do")
@@ -215,7 +247,7 @@ public class CustomerController {
 		String c_id = request.getSession().getAttribute("id").toString();
 		
 		Order_DetailDAO detail_dao = sqlsession.getMapper(Order_DetailDAO.class);
-		request.setAttribute("detail_list", detail_dao.order_detail_list(c_id));
+		request.setAttribute("detail_list", detail_dao.order_detail_basket(c_id));
 
 		return "customer/shoppingbag";//장바구니 페이지 보여주기 vs 메뉴 리스트로 다시 돌아가기
 	}

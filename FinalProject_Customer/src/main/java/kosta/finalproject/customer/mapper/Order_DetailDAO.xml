@@ -37,7 +37,42 @@
 			o_vege8,
 			o_price
 		from order_detail
-		order by order_num desc, m_code asc;
+		order by order_num desc, m_code asc
+	</select>
+	
+	<select id="order_detail_basket" resultType="kosta.finalproject.customer.dto.Order_DetailTDTO">
+		select
+			order_num, 
+			m_code, 
+			o_pan, 
+			m_necessary1,
+			m_necessary1_num,
+			m_necessary2,
+			m_necessary2_num,
+			m_necessary3,
+			m_necessary3_num,
+			m_necessary4,
+			m_necessary4_num,
+			o_option1,
+			o_option1_num,
+			o_option2,
+			o_option2_num,
+			o_option3,
+			o_option3_num,
+			o_sauce1,
+			o_sauce2,
+			o_vege1,
+			o_vege2,
+			o_vege3,
+			o_vege4,
+			o_vege5,
+			o_vege6,
+			o_vege7,
+			o_vege8,
+			o_price
+		from order_detail
+		where order_num=0
+		order by order_num desc, m_code asc
 	</select>
 
 	<insert id="insert_order_detail" parameterType="kosta.finalproject.customer.dto.Order_DetailTDTO">

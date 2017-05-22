@@ -16,6 +16,7 @@ String id = (String)session.getAttribute("id");
 <a href="favorite.do">즐겨찾기</a><br>
 <a href="history.do">히스토리</a><br>
  <a href="modify.do">내정보</a><br>
+ <a href="shoppingbag.do">장바구니</a><br>
 <a href="logout.do">로그아웃</a><br>
 <<%-- form action="modify.do" method="get">
 <input type="hidden" name="c_id" value="<%=id %>" >

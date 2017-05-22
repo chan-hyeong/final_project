@@ -9,6 +9,9 @@ public interface Order_DetailDAO {
 	public List<Order_DetailTDTO> order_detail_list(String c_id);
 	//전체 리스트 가져오기 <--히스토리, 히스토리 디테일에서 사용 
 	
+	public List<Order_DetailTDTO> order_detail_basket(String c_id);
+	//장바구니 리스트 가져오기 <--장바구니 보기, 장바구니 결제에서 사용 
+	
 	//insert 
 	public void insert_order_detail(Order_DetailTDTO dto);
 	//주문 상세정보 입력하기 (한 줄씩) <-- 결제완료를 하면 주문한 내역이 order_detail 테이블에 들어감 

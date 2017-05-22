@@ -1,6 +1,8 @@
+<%@page import="java.util.Enumeration"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +25,7 @@ input#card, #credit, #ssg{
 	<h1>페이먼트 폼 페이지</h1>
 
 <form action="payment.do">
-
+<input type="hidden" name="order_num" value="${list_dto.order_num}"> 
 	<table cellpadding=15 cellspacing=0 align="center">
 		<tr>
 			<!-- 주문매장 표시 -->
@@ -78,59 +80,83 @@ input#card, #credit, #ssg{
 			<td colspan="2" bgcolor="gray">최종 결제할 메뉴</td>
 		</tr>
 
-
-
-		<!-- 선택한 메뉴 정보를 리스트로 받아서 반복문 돌림  -->
-		<c:forEach var="i" begin="1" end="1"> <%-- var="list" items="${orderMenuList }" --%>
-			<tr>
-				<td><strong>아이스 슈 크림 라떼</strong></td> <!-- ${list.name}-->
-				<td><a href="#">△</a> </td>
-			</tr>
-			<tr>
-				<td>￦ 7,000원</td><!-- ${list.price}-->
-				<td></td>
-			</tr>
-			<tr>
-				<td colspan="2"><hr></td>
-			</tr>
-			<tr>
-				<td>&nbsp;&nbsp;ICED / Tall / 머그컵</td> <!-- ${list.option1}-->
-				<td>5,800원</td>
-			</tr>
-			<tr>
-				<td>&nbsp;&nbsp;에스프레소 샷 2</td><!-- ${list.extra1}-->
-				<td>600원</td>
-			</tr>
-			<tr>
-				<td>&nbsp;&nbsp;바닐라 시럽 4</td><!-- ${list.vege}-->
-				<td>600원</td>
-			</tr>
-			<tr>
-				<td>&nbsp;&nbsp;SBC Free Extra D/C</td><!-- ${list}.할인내역??}-->
-				<td>-600원</td>
-			</tr>
-			<tr>
-				<td colspan="2"><hr></td>
-			</tr>
-		</c:forEach>
-
-
-
+		<c:if test="${command eq 'basketpayment' }">
+			<c:forEach var="item" items="${detail_dto_basket }">
+				<tr>
+					<td>${item.m_code }</td>
+					<td>${item.o_price }</td>
+				</tr>
+				<tr>
+					<td>&nbsp;&nbsp;${item.o_option1}이름으로 나와야할텐데...</td>
+					<td>${item.o_option1_num}개</td>
+				</tr>
+				<tr>
+					<td>&nbsp;&nbsp;${item.o_option2}</td>
+					<td>${item.o_option2_num}개</td>
+				</tr>
+				<tr>
+					<td>&nbsp;&nbsp;${item.o_option3}</td>
+					<td>${item.o_option3_num}개</td>
+				</tr>
+				<tr>
+					<td colspan="2"><hr></td>
+				</tr>
+				
+				
+			</c:forEach>
+		</c:if>
+		<c:if test="${command eq 'payment' }">
+			아아아
+			<!-- 선택한 메뉴 정보를 리스트로 받아서 반복문 돌림  -->
+			<c:forEach var="i" begin="1" end="1"> <%-- var="list" items="${orderMenuList }" --%>
+				<tr>
+					<td><strong>아이스 슈 크림 라떼</strong></td> <!-- ${list.name}-->
+					<td><a href="#">△</a> </td>
+				</tr>
+<!-- 				<tr>
+					<td>￦ 7,000원</td>${list.price}
+					<td></td>
+				</tr>
+				<tr>
+					<td colspan="2"><hr></td>
+				</tr>
+				<tr>
+					<td>&nbsp;&nbsp;ICED / Tall / 머그컵</td> ${list.option1}
+					<td>5,800원</td>
+				</tr>
+				<tr>
+					<td>&nbsp;&nbsp;에스프레소 샷 2</td>${list.extra1}
+					<td>600원</td>
+				</tr>
+				<tr>
+					<td>&nbsp;&nbsp;바닐라 시럽 4</td>${list.vege}
+					<td>600원</td>
+				</tr>
+				<tr>
+					<td>&nbsp;&nbsp;SBC Free Extra D/C</td>${list}.할인내역??}
+					<td>-600원</td>
+				</tr>
+				<tr>
+					<td colspan="2"><hr></td>
+				</tr> -->
+			</c:forEach>
+		</c:if>
+		
 		<tr bgcolor="gray">
 			<td>총 주문 금액</td>
-			<td>21,100원</td><!-- ${OrderMenu.totalPrice}-->
+			<td>${list_dto.o_totalprice }원</td><!-- ${OrderMenu.totalPrice}-->
 		</tr>
-		<tr bgcolor="gray">
+		<!-- <tr bgcolor="gray">
 			<td>총 할인 금액</td>
-			<td><font color=red>-1,200원</font></td>
-		</tr>
+			<td><font color=red>원</font></td>
+		</tr> -->
 
 		<tr>
 			<td colspan="2"><hr></td>
 		</tr>
 		<tr>
 			<td>최종 결제금액</td><!-- ${OrderMenu.totalPrice}-->
-			<td>19,900원</td>
+			<td>${list_dto.o_totalprice }원</td>
 		</tr>
 
 		<tr>

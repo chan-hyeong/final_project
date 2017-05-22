@@ -214,7 +214,7 @@ public class Order_DetailTDTO {
 	}
 
 	public void setO_vege2(char o_vege2) {
-		this.o_vege2 = 'o';//o_vege2;
+		this.o_vege2 = o_vege2;
 	}
 
 	public char getO_vege3() {
@@ -222,7 +222,7 @@ public class Order_DetailTDTO {
 	}
 
 	public void setO_vege3(char o_vege3) {
-		this.o_vege3 = 'o';//o_vege3;
+		this.o_vege3 = o_vege3;
 	}
 
 	public char getO_vege4() {
@@ -230,7 +230,7 @@ public class Order_DetailTDTO {
 	}
 
 	public void setO_vege4(char o_vege4) {
-		this.o_vege4 = 'o';//o_vege4;
+		this.o_vege4 = o_vege4;
 	}
 
 	public char getO_vege5() {
@@ -238,7 +238,7 @@ public class Order_DetailTDTO {
 	}
 
 	public void setO_vege5(char o_vege5) {
-		this.o_vege5 ='o';// o_vege5;
+		this.o_vege5 = o_vege5;
 	}
 
 	public char getO_vege6() {
@@ -246,7 +246,7 @@ public class Order_DetailTDTO {
 	}
 
 	public void setO_vege6(char o_vege6) {
-		this.o_vege6 ='o';// o_vege6;
+		this.o_vege6 = o_vege6;
 	}
 
 	public char getO_vege7() {
@@ -254,7 +254,7 @@ public class Order_DetailTDTO {
 	}
 
 	public void setO_vege7(char o_vege7) {
-		this.o_vege7 ='o';// o_vege7;
+		this.o_vege7 = o_vege7;
 	}
 
 	public char getO_vege8() {
@@ -262,7 +262,7 @@ public class Order_DetailTDTO {
 	}
 
 	public void setO_vege8(char o_vege8) {
-		this.o_vege8 ='o';// o_vege8;
+		this.o_vege8 = o_vege8;
 	}
 
 	public int getO_price() {
@@ -273,9 +273,6 @@ public class Order_DetailTDTO {
 		this.o_price = o_price;
 	}
 	
-	
-	
-
 
 	@Override
 	public String toString() {
