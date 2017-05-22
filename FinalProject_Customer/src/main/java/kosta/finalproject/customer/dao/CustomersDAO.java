@@ -9,4 +9,5 @@ public interface CustomersDAO {
 	public int customers(CustomersTDTO dto);
 	public CustomersTDTO getcustomers(String id);
 	public void update(CustomersTDTO dto);
+	public int getid(CustomersTDTO dto);
 }

@@ -17,17 +17,21 @@
 		}
 		if(obj.num.value == joincode){
 			alert('인증완료');
-			self.close();
+			opener.document.myform.email_Check.value="check";
+			window.close();
+			
 		}
 
 	}
 
+
 </script>
 </head>
 <body>
-<form name = "myform" method="post" onSubmit = "return check();">
+<form name = "myform" method="post">
 		번호: <input type="text" name="num" required />
-			<input type = "submit" value="인증하기">
+			<input type = "button" value="인증하기" onclick = "check();"/>
+			<!-- <input type = "button" value = "닫기" onclick = "close();"/> -->
 </form>
 </body>
 </html>

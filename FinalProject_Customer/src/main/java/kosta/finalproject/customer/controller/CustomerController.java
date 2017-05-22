@@ -126,6 +126,22 @@ public class CustomerController {
  
     }
 	
+	//아이디 중복체크
+	@RequestMapping("/id_check.do")
+	public String confirmID(CustomersTDTO dto, Model model) {
+		CustomersDAO dao = sqlsession.getMapper(CustomersDAO.class);
+		int result = dao.getid(dto);
+		
+		if(result == 0){
+			model.addAttribute("result", 0);//아이디 없음
+			model.addAttribute("id", dto.getC_id());
+		}else if(result == 1){
+			model.addAttribute("result", 1);//아이디 잇음
+		}
+		
+		return "customer/confirmID";
+	}
+	
 	@RequestMapping("/main.do")
 	public String main() {
 
