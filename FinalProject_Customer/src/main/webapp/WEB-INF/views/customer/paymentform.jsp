@@ -22,7 +22,7 @@ input#card, #credit, #ssg{
 <body>
 	<h1>페이먼트 폼 페이지</h1>
 
-<form action="">
+<form action="payment.do">
 
 	<table cellpadding=15 cellspacing=0 align="center">
 		<tr>

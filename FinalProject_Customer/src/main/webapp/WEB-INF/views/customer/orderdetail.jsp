@@ -8,6 +8,34 @@
 	<title>Insert title here</title>
 
 <script type="text/javascript">
+	var total_extra = 0;
+	function myplus(params1, params2, params3){
+		/* alert(params);
+		alert(params.value); */
+		if(total_extra >= 5){ 
+			alert("extra는 5개 이상 못해요");	
+			return false;
+		}
+		params1.value++; 
+		params2.value = eval(params2.value) + eval(params1.value*params3.value);
+		document.getElementsByName('o_price')[0].value = eval(document.getElementsByName('o_price')[0].value)  + eval(params2.value );
+		document.getElementsByName('o_price')[1].innerHTML = document.getElementsByName('o_price')[0].value  
+		total_extra ++;
+	}
+	function myminus(params1, params2, params3){
+		/* alert(params);
+		alert(params.value); */
+		
+		if(total_extra <= 0 || params1.value <= 0){ 
+			return false;
+		}
+		params1.value--; 
+		params2.value = eval(params2.value) - eval(params1.value*params3.value);
+		document.getElementsByName('o_price')[0].value = eval(document.getElementsByName('o_price')[0].value)  - eval(params2.value );
+		document.getElementsByName('o_price')[1].innerHTML = document.getElementsByName('o_price')[0].value  
+		total_extra --;
+	}
+
 	
 	var option_num = 0;
 	function test(params){
@@ -141,7 +169,7 @@ input{
  	
  	</div>
  	
- 	<div>
+<%--  	<div>
 		<c:forEach var="olist" items="${option}" begin="32" end="36" varStatus="status">
 		<div>
 			${olist.m_name} <input name="price" value="0"/>
@@ -151,7 +179,7 @@ input{
 			<input type="button" value="+" id="${status.count}" onclick="plus(this)"/>
 		</div>
 		</c:forEach>
- 	</div>
+ 	</div> --%>
  	<div>
  		<input value="${ menudto.m_price }" id="totalprice"/> 		
  	</div>
@@ -168,7 +196,7 @@ input{
 	
 	
 	
-	<form action="payment.do" onsubmit="before_submit()">
+	<form action="paymentform.do" onsubmit="before_submit()">
 	
 	
 		사용자 id : <input type="text" name="c_id" value="${id }"><br>
@@ -217,12 +245,19 @@ input{
  	</div>
 		
  		<br>옵션 : <br>
-		<input type="text" name="o_option1" value="">
-		<input type="text" name="o_option2" value="">
-		<input type="text" name="o_option3" value="">
-		<input type="text" name="o_option1_num" value="0"><br>
-		<input type="text" name="o_option2_num" value="0"><br>
-		<input type="text" name="o_option3_num" value="0"><br> 
+ 	<div>
+		<c:forEach var="olist" items="${option}" begin="32" end="36" varStatus="status">
+		<div>
+			${olist.m_name} 
+			<input id="price${status.count }" value="0"/>
+			<input type="hidden" value="${ olist.m_code}" name="o_option${status.count }"/>|
+			<input type="hidden" value="${ olist.m_price }" id="h_price${status.count }"/>
+			<input type="button" value="▼" id="${status.count}" onclick="myminus(o_option${status.count }_num, price${status.count }, h_price${status.count })"/>
+			<input readonly="readonly" value="0" name="o_option${status.count }_num">
+			<input type="button" value="▲" id="${status.count}" onclick="myplus(o_option${status.count }_num, price${status.count }, h_price${status.count })"/>
+		</div>
+		</c:forEach>
+ 	</div>
 		
 		<br>베지 : <br>
 		<c:forEach var="olist" items="${option}" begin="0" end="8" varStatus="i">
@@ -231,7 +266,7 @@ input{
  		</c:forEach>
 		
 		<br>가격 : <br>
-		<input hidden="hidden" type="text" name="o_price" value="${ menudto.m_price }"> <label >${ menudto.m_price } 원</label>
+		<input hidden="hidden" type="text" name="o_price" value="${ menudto.m_price }"> <label name="o_price">${ menudto.m_price } 원</label>
 		<br>
 		<button value="basket" name="command">장바구니</button>
 		<button value="payment" name="command">결제</button>

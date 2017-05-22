@@ -131,18 +131,15 @@ public class CustomerController {
 		return "customer/cashform";
 	}
 		
-//	@RequestMapping("/payment.do")
-	public String menudetail(/*HttpServletRequest request,@RequestParam("m_code") String m_code*/) {
-		/*MenuDAO dao=sqlsession.getMapper(MenuDAO.class);
-		request.setAttribute("menudto", dao.menudetail(m_code));
-		request.setAttribute("option",dao.menuoption());*/
-		return "customer/paymentform";
+	@RequestMapping("/payment.do")
+	public String paymentpro(HttpServletRequest request,@RequestParam("paymentMethod") String paymentMethod) {
+		
+		return "customer/history";
 	}
 	
 	//0517 17:11 찬형 
-	@RequestMapping("/payment.do")
+	@RequestMapping("/paymentform.do")
 	public String paymentform(Order_ListTDTO list_dto, Order_DetailTDTO detail_dto , HttpServletRequest request, HttpSession session) {
-		
 		Order_ListDAO list_dao = sqlsession.getMapper(Order_ListDAO.class);
 		Order_DetailDAO detail_dao = sqlsession.getMapper(Order_DetailDAO.class);
 		
@@ -165,21 +162,28 @@ public class CustomerController {
 		String command = request.getParameter("command");
 		int o_totalprice = new Integer(request.getParameter("o_totalprice"));
 		
-		List<Order_ListTDTO> order_list = list_dao.order_list_list(c_id);
+		List<Order_ListTDTO> order_list = list_dao.order_list_list(c_id); //order_num만 구해오면 되니까 메서드 하나 만들자 
 		
 		int order_num = 0;
-		if (command.equalsIgnoreCase("basket")){
+		if (command.equalsIgnoreCase("basket")){//장바구니에 넣기  
 			order_status = "장바구니";
 			order_num = 0;
-		}else if(command.equalsIgnoreCase("payment")){
+		}else if(command.equalsIgnoreCase("payment")){//결제 페이지로 가기  
 			order_status = "주문완료";
 			if ( order_list.size() > 0 ) 
 				order_num = order_list.get(0).getOrder_num();
 			order_num ++;
-		}else {
-			//command가 잘 못 넘어왔다면?
+		}else if(command.equalsIgnoreCase("basketpayment")) {//장바구니에서 결제 
+			//update order_list 
+			//set status = "주문완료", order_num = "order_num" 구해서, order_date = sysdate 
+			//where status = "장바구니"
+			
+			//update order_detail
+			//set order_num = "order_num" 구해서 
+			//where order_num = 0
+		}else{
+			//command 가 잘못넘어온다면?
 		}
-		
 		
 		list_dto.setOrder_status(order_status);
 		list_dto.setOrder_num(order_num);
@@ -194,7 +198,6 @@ public class CustomerController {
 		list_dao.insert_order_list(list_dto);
 		detail_dao.insert_order_detail(detail_dto);
 		
-		
 		return "customer/paymentform";
 	}
 
@@ -208,7 +211,11 @@ public class CustomerController {
 	}
 
 	@RequestMapping("/shoppingbag.do")
-	public String shoppingbag() {
+	public String shoppingbag(HttpServletRequest request) {
+		String c_id = request.getSession().getAttribute("id").toString();
+		
+		Order_DetailDAO detail_dao = sqlsession.getMapper(Order_DetailDAO.class);
+		request.setAttribute("detail_list", detail_dao.order_detail_list(c_id));
 
 		return "customer/shoppingbag";//장바구니 페이지 보여주기 vs 메뉴 리스트로 다시 돌아가기
 	}
