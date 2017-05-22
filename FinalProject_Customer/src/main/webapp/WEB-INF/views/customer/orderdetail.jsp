@@ -8,9 +8,17 @@
 	<title>Insert title here</title>
 </head>
 <script type="text/javascript">
-	function plus(params){	
+	function p_price(){
+		var price=document.getElementsByName('price');
+		var p_total=0;
+		for(var i=0; i<price.length; i++) {
+		    p_total=p_total+Number(price[i].value);		    
+		}
+		return p_total;
+	}
+	function plus(params){		
 		var quantity=document.getElementsByName('quantity');
-		var change=Number(quantity[params.id-1].value);		
+		var change=Number(quantity[params.id-1].value);
 		if(change<5){			
 			var total=0;
 			for(var i=0; i<quantity.length; i++) {
@@ -22,37 +30,66 @@
 			}
 			quantity[params.id-1].value=change+1;
 			document.getElementsByName('price')[params.id-1].value=quantity[params.id-1].value*document.getElementsByName('h_price')[params.id-1].value;
-			total=eval(document.getElementById('totalprice').value);
-			total=total+Number(document.getElementsByName('h_price')[params.id-1].value);
-			document.getElementById('totalprice').value=total;
+			total=p_price()+eval(document.getElementById('o_price').value);
+			document.getElementById('totalprice').value=total*eval(document.getElementById('m_quantity').value);
 		}else{
 			return;
 		}
 	}
 	function minus(params){
 		var quantity=document.getElementsByName('quantity');
-		var change=Number(quantity[params.id-1].value);		
+		var change=Number(quantity[params.id-1].value);			
 		if(change>0){			
 			quantity[params.id-1].value=change-1;
 			document.getElementsByName('price')[params.id-1].value=quantity[params.id-1].value*document.getElementsByName('h_price')[params.id-1].value
-			total=eval(document.getElementById('totalprice').value);
-			total=total-Number(document.getElementsByName('h_price')[params.id-1].value);
-			document.getElementById('totalprice').value=total;
+			total=p_price()+eval(document.getElementById('o_price').value);
+			document.getElementById('totalprice').value=total*eval(document.getElementById('m_quantity').value);
 		}else{
 			return;
 		}
 	}
-	
-
+	function m_minus(){
+		var quantity=document.getElementById('m_quantity');
+		var p_total=p_price();
+		var change=Number(quantity.value);
+		if(change>1){
+			var total=0;
+			quantity.value=change-1;
+			total=(p_total+Number(document.getElementById('o_price').value))*quantity.value;
+			document.getElementById('totalprice').value=total;
+			document.getElementById('h_m_quantity').value=change-1;
+		}else{
+			return;
+		}
+	}
+	function m_plus(){
+		var quantity=document.getElementById('m_quantity');
+		var p_total=p_price();
+		var change=Number(quantity.value);		
+		var total=0;
+		quantity.value=change+1;
+		total=(p_total+Number(document.getElementById('o_price').value))*quantity.value;
+		document.getElementById('totalprice').value=total;
+		document.getElementById('h_m_quantity').value=change+1;
+	}
 </script>
-<body>	
-	<img src="${pageContext.request.contextPath}/img/${menudto.m_code}.png">
-	${menudto.m_explain}<br>
-	${menudto.m_name}<br>
-	<br>
+<body>
+
+	<img src="${pageContext.request.contextPath}/img/${menudto.m_code}.png"/>
+	${menudto.m_explain}<br>	
+	<div>
+		${menudto.m_name}
+		<input type="button" value="-" id="m_minus" onclick="m_minus()"/>
+		<input readonly="" value="1" id="m_quantity" style="width: 25px; text-align: center;"/>
+		<input type="button" value="+" id="m_plus" onclick="m_plus()"/>
+	</div>
+	<form action="payment.do">
+	<input type="hidden" value="1" id="h_m_quantity">
+	<%-- <input type="hidden" value="${menudto.m_code}" name="m_code"> --%>
+	<br>	
  	<div>
- 		<c:forEach var="olist" items="${option}" begin="0" end="8">
- 			<input type="checkbox" id="${olist.m_code}" name="${olist.m_code}" value="${olist.m_name}" checked="true"><label for="${olist.m_code}">${olist.m_name}</label>&nbsp;
+ 		<c:forEach var="olist" items="${option}" begin="0" end="8" varStatus="status">
+ 			<input type="checkbox" id="${olist.m_code}" name="o_vege${status.count}" value="o" checked="true"><label for="${olist.m_code}">${olist.m_name}</label>&nbsp;
  		</c:forEach>
  	</div>
  	<br>
@@ -60,7 +97,7 @@
 		<select>
 			<option>빵선택</option>
 			<c:forEach var="olist" items="${option}" begin="9" end="14">
-				<option  value="${ olist.m_code }">${olist.m_name}</option>
+				<option  value="${ olist.m_code }" name="o_pan">${olist.m_name}</option>
 			</c:forEach>
 		</select> 		
  	</div>
@@ -69,36 +106,49 @@
 		<select>
 			<option>소스선택</option>
 			<c:forEach var="olist" items="${option}" begin="15" end="31">
-				<option  value="${ olist.m_code }">${olist.m_name}</option>
+				<option  value="${ olist.m_code }" name="o_sauce1">${olist.m_name}</option>
 			</c:forEach>
 		</select>
 		<select>
 			<option>소스선택</option>
 			<c:forEach var="olist" items="${option}" begin="15" end="31">
-				<option  value="${ olist.m_code }">${olist.m_name}</option>
+				<option  value="${ olist.m_code }" name="o_sauce2">${olist.m_name}</option>
 			</c:forEach>
 		</select>		
  	</div>
  	<br>
  	<div>
+ 		<%-- <select>
+			<option>option선택</option>
+			<c:forEach var="olist" items="${option}" begin="32" end="36" varStatus="status">
+				<option  value="${ olist.m_code }" name="o_option${status.count }">${olist.m_name}</option>
+			</c:forEach>
+			<input type="button" value="-" id="${status.count}" onclick="minus(this)"/>
+			<input readonly="" value="0" name="quantity" style="width: 25px; text-align: center;">
+			<input type="button" value="+" id="${status.count}" onclick="plus(this)"/>
+			<input name="price" value="0" style="width: 75px; text-align: center;"/>
+		</select> --%>
 		<c:forEach var="olist" items="${option}" begin="32" end="36" varStatus="status">
 		<div>
-			${olist.m_name} <input name="price" value="0"/>
+			<input type="hidden" value="${olist.m_code}" name="o_option${status.count}"/>
+			${olist.m_name} <input name="price" value="0" style="width: 75px; text-align: center;"/>
 			<input type="hidden" value="${ olist.m_price }" name="h_price"/>
 			<input type="button" value="-" id="${status.count}" onclick="minus(this)"/>
-			<input readonly="" value="0" name="quantity">
+			<input readonly="" value="0" name="quantity" style="width: 25px; text-align: center;">
 			<input type="button" value="+" id="${status.count}" onclick="plus(this)"/>
 		</div>
 		</c:forEach>
  	</div>
  	<div>
+ 		<input type="hidden" value="${ menudto.m_price }" id="o_price" name="o_price"/>
  		<input value="${ menudto.m_price }" id="totalprice"/> 		
  	</div>
  	<br>
 	<div>
-		<a href="shoppingbag.do">장바구니담기</a>&nbsp;
-		<a href="menulist.do">취소</a>&nbsp;
-		<a href="payment.do">결제</a>&nbsp;
+		<button value="payment" name="command">결제</button>&nbsp;
+		<button value="cancle" name="command">취소</button>&nbsp;
+		<button value="basket" name="command">장바구니</button>&nbsp;	
 	</div>
+</form>
 </body>
 </html>
