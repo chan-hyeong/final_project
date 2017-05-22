@@ -22,6 +22,6 @@ String id = (String)session.getAttribute("id");
 <input type="hidden" name="c_id" value="<%=id %>" >
 <input type="submit" value="내정보">
 </form> --%>
-
+뭐여 왜 안돼냐
 </body>
 </html>
