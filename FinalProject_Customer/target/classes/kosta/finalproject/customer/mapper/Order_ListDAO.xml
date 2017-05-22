@@ -7,20 +7,21 @@
 	<select id="order_list_list" resultType="kosta.finalproject.customer.dto.Order_ListTDTO">
 		<!-- select (select c.code_name from code c where m.m_code=c.code) m_name 
 			from menu m -->
-		select
-		m_code,
-		(select c.code_name from code c where m.m_code=c.code)
-		m_name
-		from menu m
-		where m_code like 'm%'
+		select	order_num,
+				c_id, 
+				s_code,
+				order_status,
+				order_date,
+				o_totalprice
+		from order_list ol
+		order by ol.order_num desc
 	</select>
 
 	<insert id="insert_order_list" parameterType="kosta.finalproject.customer.dto.Order_ListTDTO">
 		insert into
-		CUSTOMERS (c_id, c_pw, c_name, c_email, c_coin, c_birth,
-		c_gender)
+		ORDER_LIST (order_num, c_id, s_code, order_status, order_date, o_totalprice)
 		values
-		(#{c_id},#{c_pw},#{c_name},#{c_email},#{c_coin},#{c_birth},#{c_gender})
+		(#{order_num},#{c_id},#{s_code},#{order_status},sysdate,#{o_totalprice})
 	</insert>
 
 

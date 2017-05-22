@@ -164,6 +164,8 @@ input{
 	
 	<hr>
 	
+	-------------------
+	
 	
 	
 	<form action="payment.do" onsubmit="before_submit()">
@@ -198,17 +200,33 @@ input{
 		<input type="text" name="m_necessary4" value="${menudto.m_necessary4 }">
 		<input type="text" name="m_necessary4_num" value="${menudto.m_necessary4_num }"><br>
 		
-		<br>옵션 : <br>
+		 	
+ 	<div> 		
+		<select name="o_sauce1">
+			<option>소스선택</option>
+			<c:forEach var="olist" items="${option}" begin="15" end="31">
+				<option  value="${ olist.m_code }">${olist.m_name}</option>
+			</c:forEach>
+		</select>
+		<select name="o_sauce2">
+			<option>소스선택</option>
+			<c:forEach var="olist" items="${option}" begin="15" end="31">
+				<option  value="${ olist.m_code }">${olist.m_name}</option>
+			</c:forEach>
+		</select>		
+ 	</div>
+		
+ 		<br>옵션 : <br>
 		<input type="text" name="o_option1" value="">
-		<input type="text" name="o_option1_num" value=""><br>
 		<input type="text" name="o_option2" value="">
-		<input type="text" name="o_option2_num" value=""><br>
 		<input type="text" name="o_option3" value="">
-		<input type="text" name="o_option3_num" value=""><br>
+		<input type="text" name="o_option1_num" value="0"><br>
+		<input type="text" name="o_option2_num" value="0"><br>
+		<input type="text" name="o_option3_num" value="0"><br> 
 		
 		<br>베지 : <br>
 		<c:forEach var="olist" items="${option}" begin="0" end="8" varStatus="i">
- 			<input type="checkbox" id="o_${olist.m_code}" name="o_vage${i.count}" value="o" checked="checked"><label for="o_${olist.m_code}">${olist.m_name}</label>&nbsp;
+ 			<input type="checkbox" id="o_${olist.m_code}" name="o_vage${i.count}" maxlength="1" value="o" checked="checked"><label for="o_${olist.m_code}">${olist.m_name}</label>&nbsp;
  			<c:if test="${i.count%4 == 0 }"><br></c:if>
  		</c:forEach>
 		

@@ -1,6 +1,7 @@
 package kosta.finalproject.customer.controller;
 
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -140,7 +141,8 @@ public class CustomerController {
 	
 	//0517 17:11 찬형 
 	@RequestMapping("/payment.do")
-	public String paymentform(Order_ListTDTO list_dto, Order_DetailTDTO detail_dto, HttpServletRequest request, HttpSession session) {
+	public String paymentform(Order_ListTDTO list_dto, Order_DetailTDTO detail_dto , HttpServletRequest request, HttpSession session) {
+		
 		Order_ListDAO list_dao = sqlsession.getMapper(Order_ListDAO.class);
 		Order_DetailDAO detail_dao = sqlsession.getMapper(Order_DetailDAO.class);
 		
@@ -150,7 +152,6 @@ public class CustomerController {
 			String value = request.getParameter(name);
 			System.out.println("\t" + name + " : " + value);
 		}
-		
 		
 		//command 로 분기 한다 
 		//1. 장바구니에 담는 경우 
@@ -164,32 +165,34 @@ public class CustomerController {
 		String command = request.getParameter("command");
 		int o_totalprice = new Integer(request.getParameter("o_totalprice"));
 		
+		List<Order_ListTDTO> order_list = list_dao.order_list_list(c_id);
+		
+		int order_num = 0;
 		if (command.equalsIgnoreCase("basket")){
 			order_status = "장바구니";
+			order_num = 0;
 		}else if(command.equalsIgnoreCase("payment")){
 			order_status = "주문완료";
+			if ( order_list.size() > 0 ) 
+				order_num = order_list.get(0).getOrder_num();
+			order_num ++;
 		}else {
 			//command가 잘 못 넘어왔다면?
 		}
-		list_dto.setOrder_status(order_status);
-		/*	
-		Order_ListTDTO order_list_dto = new Order_ListTDTO();
-		order_list_dto.setC_id(c_id);//세션에서 
-		order_list_dto.setS_code(s_code); //매장정보도 어딘가에서 넘어올듯? 세션으로 하는게 편하려나??
-		order_list_dto.setO_totalprice(o_totalprice);//준혁이가 orderdetail 폼에서 넘긴 
-		order_list_dto.setOrder_status(order_status);
 		
-		*/
+		
+		list_dto.setOrder_status(order_status);
+		list_dto.setOrder_num(order_num);
+		
+		detail_dto.setOrder_num(order_num);
+		
 		System.out.println("\n\n-------------------------------------------------------------------");
 		System.out.println(list_dto.toString());
 		System.out.println(detail_dto.toString());
 		System.out.println("-------------------------------------------------------------------\n\n");
 		
-//		list_dao.insert_order_list(list_dto);
-//		detail_dao.insert_order_detail(detail_dto);
-		
-		
-		
+		list_dao.insert_order_list(list_dto);
+		detail_dao.insert_order_detail(detail_dto);
 		
 		
 		return "customer/paymentform";
