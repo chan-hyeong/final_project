@@ -1,6 +1,5 @@
 package kosta.finalproject.customer.controller;
 
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -125,15 +124,10 @@ public class CustomerController {
 		return "customer/history";
 	}
 
-	@RequestMapping("/cash.do")
-	public String cash() {
-
-		return "customer/cashform";
-	}
 		
 	@RequestMapping("/payment.do")//결제 완료 버튼을 눌렀을때 
 	public String paymentpro(HttpServletRequest request, @RequestParam("paymentMethod") String paymentMethod) {
-		//결제창에서 결제수단 선택 후 결제완료를 누르면 history로 보냄 
+		//결제창에서 결제수단 선택 후 결제완료를 누르면 --> [1]주문추가, [2]재고 조정, [3]history 페이지로 이동  
 		Order_ListDAO list_dao = sqlsession.getMapper(Order_ListDAO.class);
 		Order_DetailDAO detail_dao = sqlsession.getMapper(Order_DetailDAO.class);
 		
@@ -146,10 +140,13 @@ public class CustomerController {
 //		System.out.println(detail_dto.toString());
 //		System.out.println("-------------------------------------------------------------------\n\n");		
 		
-		//insert 
+		//[1] 주문 추가  
 		list_dao.insert_order_list(list_dto);
 		detail_dao.insert_order_detail(detail_dto);
 		
+		//[2]재고 조정
+		
+		//[3] history.do 로 이동 : 주문내역 보여주기 (이 경우에는 주문내역 상세페이지)
 		return "redirect:history.do";
 	}
 	
@@ -201,8 +198,6 @@ public class CustomerController {
 			int o_totalprice = new Integer(request.getParameter("o_price"));
 			list_dto.setO_totalprice(o_totalprice);//장바구니라면 이거 바꿔줘야하는데 
 
-			List<Order_ListTDTO> order_list = list_dao.order_list_list(c_id); // order_num만 구해오면 되니까 메서드 하나 만들자
-
 			int order_num = 0;
 			
 			if (command.equalsIgnoreCase("basket")) {// [1] 장바구니에 넣기
@@ -216,8 +211,9 @@ public class CustomerController {
 				
 				view = "redirect:menulist.do";
 			} else if (command.equalsIgnoreCase("payment")) {// [2] 바로 결제 페이지로 가기 (단일 메뉴 주문)
-				if (order_list.size() > 0)	
-					order_num = order_list.get(0).getOrder_num() + 1 ;
+				if(list_dao.get_order_num()!=null)
+					order_num = list_dao.get_order_num(); 
+				order_num++;
 				
 				list_dto.setOrder_num(order_num);
 				detail_dto.setOrder_num(order_num);

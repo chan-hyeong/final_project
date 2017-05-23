@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,8 +18,8 @@
 			return false;
 		}
 		params1.value++; 
-		params2.value = eval(params2.value) + eval(params1.value*params3.value);
-		document.getElementsByName('o_price')[0].value = eval(document.getElementsByName('o_price')[0].value)  + eval(params2.value );
+		params2.value = eval(params2.value) + eval(params3.value);
+		document.getElementsByName('o_price')[0].value = eval(document.getElementsByName('o_price')[0].value) + eval(params2.value );
 		document.getElementsByName('o_price')[1].innerHTML = document.getElementsByName('o_price')[0].value  
 		total_extra ++;
 	}
@@ -30,8 +31,8 @@
 			return false;
 		}
 		params1.value--; 
-		params2.value = eval(params2.value) - eval(params1.value*params3.value);
-		document.getElementsByName('o_price')[0].value = eval(document.getElementsByName('o_price')[0].value)  - eval(params2.value );
+		params2.value = eval(params2.value) - eval(params3.value);
+		document.getElementsByName('o_price')[0].value = eval(document.getElementsByName('o_price')[0].value) - eval(params2.value );
 		document.getElementsByName('o_price')[1].innerHTML = document.getElementsByName('o_price')[0].value  
 		total_extra --;
 	}
@@ -39,9 +40,10 @@
 	
 	var option_num = 0;
 	function test(params){
- 		if ( option_num >= 3)return false;
+ 		if ( option_num >= 3) return false;
  		alert(document.getElementById('option').innerHTML);
- 		option_num += 1;
+ 		option_num++;
+ 		var d = "div_" + option_num;
 		var code1 = "<select>";
 			 code1 += "<option value=\"dc\">더블치즈</option>";	
 			 code1 += "<option value=\"ac\">아보카도</option>";	
@@ -50,20 +52,32 @@
 			 code1 += "<option value=\"bk\">베이컨</option>";
 			 code1 += "</select>";
 		var code2 = "<select><option value=1>1</option><option value=2>2</option><option value=3>3</option></select>";
-		var code = "<div id=\"div_"+option_num+"\">"+code1+code2+"<button value=1 onclick=\"delete_div("+option_num+")\">X</button><div>";
-		document.getElementById('option').innerHTML += code+"<br>";
+		var code = code1+code2+"<button value=1 onclick=\"delete_div(div_"+option_num+")\">X</button>";
+		document.getElementById(d).innerHTML += code;
 		return;
 	}
 	
 	function delete_div(params){
-		var name = "div_" + params;
+		var name = params;
 		alert("눌린버튼 : " + name);
-		document.getElementById(name).innerHTML = "";
-		option_num -= 1;
+		name.innerHTML = "";
+		option_num --;
 	}
 	
-	function before_submit(){
+	function  sauce_select(params){
+		var o_sauce1 = document.getElementsByName('o_sauce1')[0].value;
+		var o_sauce2 = document.getElementsByName('o_sauce2')[0].value;
 		
+		if(o_sauce1=='none'){ 
+			alert("소스 선택해라");
+			return false;
+		}
+		if(o_sauce1==o_sauce2) {
+			alert("다른 소스를 선택하라 ");
+			params.value='none';
+			return false;
+		}
+		return true;
 	}
 
 	function plus(params) {
@@ -162,12 +176,7 @@ input{
  	</div>
  	<br>
  	
- 	<button onclick="test()">테스트버튼 </button>
- 	<br>
  	
- 	<div id="option">
- 	
- 	</div>
  	
 <%--  	<div>
 		<c:forEach var="olist" items="${option}" begin="32" end="36" varStatus="status">
@@ -192,11 +201,18 @@ input{
 	
 	<hr>
 	
+ 	<button onclick="test()">테스트버튼 </button>
+ 	<br>
+ 	
+ 	<div id="option">
+ 		<div id="div_1"></div>
+ 		<div id="div_2"></div>
+ 		<div id="div_3"></div>
+	</div>
+	
 	-------------------
 	
-	
-	
-	<form action="paymentform.do" onsubmit="before_submit()">
+	<form action="paymentform.do">
 	
 	
 		사용자 id : <input type="text" name="c_id" value="${id }"><br>
@@ -214,32 +230,32 @@ input{
 		<br>
 		
 		<br>필수 : <br>
-		<%-- <c:forEach var="i" begin="1" end="4" varStatus="s">
-			<input type="text" name="m_necessary${i}" value="">
-			<input type="text" name="m_necessary${i}_num" value="">
-			<input type="text" name="m_necessary${i}_num" value="${menudto.m_necessary+i_num }"><br>
-		</c:forEach> --%>
-		<input type="text" name="m_necessary1" value="${menudto.m_necessary1 }">
-		<input type="text" name="m_necessary1_num" value="${menudto.m_necessary1_num }"><br>
-		<input type="text" name="m_necessary2" value="${menudto.m_necessary2}">
-		<input type="text" name="m_necessary2_num" value="${menudto.m_necessary2_num}"><br>
-		<input type="text" name="m_necessary3" value="${menudto.m_necessary3}">
-		<input type="text" name="m_necessary3_num" value="${menudto.m_necessary3_num}"><br>
-		<input type="text" name="m_necessary4" value="${menudto.m_necessary4 }">
-		<input type="text" name="m_necessary4_num" value="${menudto.m_necessary4_num }"><br>
+		<hr>
+		
+		<input type="hidden" name="m_necessary1" value="${menudto.m_necessary1 }"><label>${menudto.m_necessary1_name }</label>
+		<input type="hidden" name="m_necessary1_num" value="${menudto.m_necessary1_num }"><label>${menudto.m_necessary1_num}개</label><br>
+		
+		<input type="hidden" name="m_necessary2" value="${menudto.m_necessary2}"><label>${menudto.m_necessary2_name }</label>
+		<input type="hidden" name="m_necessary2_num" value="${menudto.m_necessary2_num}"><label>${menudto.m_necessary1_num}개</label><br>
+		
+		<input type="hidden" name="m_necessary3" value="${menudto.m_necessary3}"><label>${menudto.m_necessary3_name }</label>
+		<input type="hidden" name="m_necessary3_num" value="${menudto.m_necessary3_num}"><label>${menudto.m_necessary3_num}개</label><br>
+		
+		<input type="hidden" name="m_necessary4" value="${menudto.m_necessary4 }"><label>${menudto.m_necessary4_name }</label>
+		<input type="hidden" name="m_necessary4_num" value="${menudto.m_necessary4_num }"><label>${menudto.m_necessary4_num}개</label><br>
 		
 		 	
  	<div> 		
-		<select name="o_sauce1">
-			<option>소스선택</option>
+		<select name="o_sauce1" onchange="sauce_select(o_sauce1)">
+			<option value="none">소스선택</option>
 			<c:forEach var="olist" items="${option}" begin="15" end="31">
-				<option  value="${ olist.m_code }">${olist.m_name}</option>
+				<option value="${ olist.m_code }">${olist.m_name}</option>
 			</c:forEach>
 		</select>
-		<select name="o_sauce2">
-			<option>소스선택</option>
+		<select name="o_sauce2" onchange="sauce_select(o_sauce2)">
+			<option value="none">소스선택</option>
 			<c:forEach var="olist" items="${option}" begin="15" end="31">
-				<option  value="${ olist.m_code }">${olist.m_name}</option>
+				<option value="${ olist.m_code }">${olist.m_name}</option>
 			</c:forEach>
 		</select>		
  	</div>
@@ -270,10 +286,7 @@ input{
 		<br>
 		<button value="basket" name="command">장바구니</button>
 		<button value="payment" name="command">결제</button>
-	
 	</form>
-	
-	
 	
 	
 	

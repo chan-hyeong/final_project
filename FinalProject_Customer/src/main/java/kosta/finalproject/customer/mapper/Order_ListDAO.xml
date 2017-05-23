@@ -27,6 +27,10 @@
 		<!-- where order_status='장바구니 and c_id=#{c_id} -->
 		order by ol.order_num desc
 	</select>
+	
+	<select id="get_order_num" resultType="Integer">
+		select max(order_num) from order_list
+	</select>
 
 	<insert id="insert_order_list" parameterType="kosta.finalproject.customer.dto.Order_ListTDTO">
 		insert into
