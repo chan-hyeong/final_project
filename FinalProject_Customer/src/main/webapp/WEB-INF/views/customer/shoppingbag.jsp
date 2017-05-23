@@ -12,10 +12,10 @@
 	<c:set var="total" value="0"/>
 	<form action="shoppingbag.do">
 	<c:set var="index" value="0"/>
-		<c:forEach var="dlist" items="${order_detail}">			
-			${dlist.m_name}${dlist.o_price}<br>
-			<input type="text" value="${dlist.order_num}" name="order_num">
-			<input type="text" value="${dlist.order_detail_num}" name="order_detail_num">
+		<c:forEach var="dlist" items="${order_detail}">
+			<input type="hidden" value="${dlist.order_num}" name="order_num">
+			<input type="hidden" value="${dlist.order_detail_num}" name="order_detail_num">			
+			${dlist.m_name}${dlist.o_price}<br>			
 			<c:set var="sum" value="${dlist.o_price}"/>
 			<br>
 			<c:if test="${dlist.o_option1_num > 0 }">
@@ -49,10 +49,14 @@
 			<c:set var="index">${index+1}</c:set>
 		<hr>
 		</c:forEach>
-		${total}
+		<div>${total}
+		</div>
+		<div>
+			<button value="deleteall" name="command">deleteall</button>
+			<button >결제하기</button>
+		</div>
 		</form>
-	<div>
-		<input type="button" value="결제하기">
+	<div>		
 		<a href="main.do">main</a>
 	</div>
 </body>

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 import java.util.StringTokenizer;
@@ -162,14 +163,7 @@ public class CustomerController {
 		
 	@RequestMapping("/payment.do")
 	public String menudetail(HttpServletRequest request,Order_DetailTDTO d_dto,Order_ListTDTO l_dto,@RequestParam("h_m_quantity") int quantity) {
-		
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-		/*Map paramMap = request.getParameterMap();		
-		String[] vege = (String[]) paramMap.get("vege");
-		for(int i=0;i<vege.length;i++){
-			System.out.println(vege[i]);
-		}*/
-//////////////////////////////////////////////////////////////////////////////////////////////////////			
+	
 		String command = request.getParameter("command");
 		HttpSession session = request.getSession();	
 		if(command!=null&&command.equals("basket")){
@@ -223,12 +217,26 @@ public class CustomerController {
 	}
 
 	@RequestMapping("/shoppingbag.do")
-	public String shoppingbag(HttpServletRequest request) {		
+	public String shoppingbag(HttpServletRequest request) {	
+		//////////////미로그인시 로그인창으로 돌리기////////////////////
 		HttpSession session = request.getSession();
 		String ID = (String) session.getAttribute("id");
 		if(ID==null) return "customer/loginform";	
+		/////////////////////////////////////////////////////
 		
+		Order_DetailDAO dao=sqlsession.getMapper(Order_DetailDAO.class);
+		
+		/////////////////////////장바구니 delete작업////////////////////////////////////////
 		String command = request.getParameter("command");
+		System.out.println("command : "+command);
+		if(command!=null&&command.equals("deleteall")){
+			ArrayList<Integer> list=dao.select_onum_list(ID);
+			dao.deleteall_list(ID);
+			for(int i=0;i<list.size();i++){
+				dao.deleteall_detail(list.get(i));
+			}
+			return "redirect:shoppingbag.do";
+		}
 		int index=0;
 		String order_num[]=null;
 		String order_detail_num[]=null;
@@ -239,17 +247,17 @@ public class CustomerController {
 			order_num=(String[])(request.getParameterValues("order_num"));
 			order_detail_num=(String[])(request.getParameterValues("order_detail_num"));
 		}
-		Order_DetailDAO dao=sqlsession.getMapper(Order_DetailDAO.class);
+		
 		if(command!=null&&command.equals("delete")){
 			
 			if(dao.select_onum1(Integer.parseInt(order_num[index]))==1){
-				dao.order_detail_delete1(Integer.parseInt(order_num[index]));				
-				System.out.println("list삭제");
+				dao.order_detail_delete1(Integer.parseInt(order_num[index]));
 			}
 			dao.order_detail_delete2(Integer.parseInt(order_detail_num[index]));
 			return "redirect:shoppingbag.do";
 		}		
 		request.setAttribute("order_detail", dao.order_detail_list(ID));
+		//////////////////////////////장바구니 delete작업/////////////////////////////////
 		return "customer/shoppingbag";
 	}
 }
