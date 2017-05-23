@@ -5,8 +5,10 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Properties;
+
+import java.util.Date;
 import java.util.Random;
+import java.util.StringTokenizer;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import kosta.finalproject.customer.dao.MenuDAO;
 import kosta.finalproject.customer.dao.Order_DetailDAO;
 import kosta.finalproject.customer.dto.CustomersTDTO;
 import kosta.finalproject.customer.dto.Order_DetailTDTO;
+import kosta.finalproject.customer.dto.Order_ListTDTO;
 
 @Controller
 public class CustomerController {
@@ -158,7 +161,7 @@ public class CustomerController {
 	}
 		
 	@RequestMapping("/payment.do")
-	public String menudetail(HttpServletRequest request,Order_DetailTDTO dto) {
+	public String menudetail(HttpServletRequest request,Order_DetailTDTO d_dto,Order_ListTDTO l_dto,@RequestParam("h_m_quantity") int quantity) {
 		
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 		/*Map paramMap = request.getParameterMap();		
@@ -166,10 +169,39 @@ public class CustomerController {
 		for(int i=0;i<vege.length;i++){
 			System.out.println(vege[i]);
 		}*/
-//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////			
 		String command = request.getParameter("command");
+		HttpSession session = request.getSession();	
 		if(command!=null&&command.equals("basket")){
+			l_dto.setC_id((String)session.getAttribute("id"));			
+			Date today = new Date();
+			l_dto.setOrder_date(today);
+			Order_DetailDAO dao=sqlsession.getMapper(Order_DetailDAO.class);
 			
+			//vegetable null값 넘어오면 오류 나는 부분 임시 해결
+			if(d_dto.getO_vege1()== null) d_dto.setO_vege1("temp");
+			if(d_dto.getO_vege2()== null) d_dto.setO_vege2("temp");
+			if(d_dto.getO_vege3()== null) d_dto.setO_vege3("temp");
+			if(d_dto.getO_vege4()== null) d_dto.setO_vege4("temp");
+			if(d_dto.getO_vege5()== null) d_dto.setO_vege5("temp");
+			if(d_dto.getO_vege6()== null) d_dto.setO_vege6("temp");
+			if(d_dto.getO_vege7()== null) d_dto.setO_vege7("temp");
+			if(d_dto.getO_vege8()== null) d_dto.setO_vege8("temp");
+			//vegetable null값 넘어오면 오류 나는 부분 임시 해결
+			
+			//동시 주문시 order_num 통일시키기 위해
+			int order_num=dao.select_onum();
+			d_dto.setOrder_num(order_num);
+			l_dto.setOrder_num(order_num);
+			//동시 주문시 order_num 통일시키기 위해
+			
+			for(int i=0;i<quantity;i++)	dao.insert_shoppingbag_detail(d_dto);
+			dao.insert_shoppingbag_list(l_dto);
+			/*System.out.println("=========================================================");			
+			System.out.println(d_dto.toString());			
+			System.out.println("=========================================================");
+			System.out.println(l_dto.toString());			
+			System.out.println("=========================================================");*/
 			return "redirect:shoppingbag.do";
 		}
 		return "customer/paymentform";
@@ -194,17 +226,29 @@ public class CustomerController {
 	public String shoppingbag(HttpServletRequest request) {		
 		HttpSession session = request.getSession();
 		String ID = (String) session.getAttribute("id");
-		if(ID==null) return "customer/loginform";
+		if(ID==null) return "customer/loginform";	
 		
 		String command = request.getParameter("command");
-		Order_DetailDAO dao=sqlsession.getMapper(Order_DetailDAO.class);	
-		if(command!=null&&command.equals("delete")){
-			int order_num1=Integer.parseInt(request.getParameter("order_num"));
-			dao.order_detail_delete1(order_num1);
-			dao.order_detail_delete2(order_num1);	
-			return "redirect:shoppingbag.do";
+		int index=0;
+		String order_num[]=null;
+		String order_detail_num[]=null;
+		if(command!=null){
+			StringTokenizer st = new StringTokenizer( command, "/" );
+			command=st.nextToken();
+			index=Integer.parseInt(st.nextToken());
+			order_num=(String[])(request.getParameterValues("order_num"));
+			order_detail_num=(String[])(request.getParameterValues("order_detail_num"));
 		}
+		Order_DetailDAO dao=sqlsession.getMapper(Order_DetailDAO.class);
+		if(command!=null&&command.equals("delete")){
 			
+			if(dao.select_onum1(Integer.parseInt(order_num[index]))==1){
+				dao.order_detail_delete1(Integer.parseInt(order_num[index]));				
+				System.out.println("list삭제");
+			}
+			dao.order_detail_delete2(Integer.parseInt(order_detail_num[index]));
+			return "redirect:shoppingbag.do";
+		}		
 		request.setAttribute("order_detail", dao.order_detail_list(ID));
 		return "customer/shoppingbag";
 	}

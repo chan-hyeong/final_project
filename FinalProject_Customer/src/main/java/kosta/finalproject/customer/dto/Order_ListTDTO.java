@@ -45,5 +45,10 @@ public class Order_ListTDTO {
 	public void setO_totalprice(int o_totalprice) {
 		this.o_totalprice = o_totalprice;
 	}
+	@Override
+	public String toString() {
+		return "Order_ListTDTO [order_num=" + order_num + ", c_id=" + c_id + ", s_code=" + s_code + ", order_status="
+				+ order_status + ", order_date=" + order_date + ", o_totalprice=" + o_totalprice + "]";
+	}
 	
 }
