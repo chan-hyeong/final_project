@@ -7,12 +7,16 @@ public class MenuTDTO {
 	private String m_explain;
 	private String m_necessary1;
 	private int m_necessary1_num;
+	private String m_necessary1_name;
 	private String m_necessary2;
 	private int m_necessary2_num;
+	private String m_necessary2_name;
 	private String m_necessary3;
 	private int m_necessary3_num;
+	private String m_necessary3_name;
 	private String m_necessary4;
 	private int m_necessary4_num;
+	private String m_necessary4_name;
 	public String getM_code() {
 		return m_code;
 	}
@@ -84,6 +88,30 @@ public class MenuTDTO {
 	}
 	public void setM_necessary4_num(int m_necessary4_num) {
 		this.m_necessary4_num = m_necessary4_num;
+	}
+	public String getM_necessary1_name() {
+		return m_necessary1_name;
+	}
+	public void setM_necessary1_name(String m_necessary1_name) {
+		this.m_necessary1_name = m_necessary1_name;
+	}
+	public String getM_necessary2_name() {
+		return m_necessary2_name;
+	}
+	public void setM_necessary2_name(String m_necessary2_name) {
+		this.m_necessary2_name = m_necessary2_name;
+	}
+	public String getM_necessary3_name() {
+		return m_necessary3_name;
+	}
+	public void setM_necessary3_name(String m_necessary3_name) {
+		this.m_necessary3_name = m_necessary3_name;
+	}
+	public String getM_necessary4_name() {
+		return m_necessary4_name;
+	}
+	public void setM_necessary4_name(String m_necessary4_name) {
+		this.m_necessary4_name = m_necessary4_name;
 	}
 	
 	

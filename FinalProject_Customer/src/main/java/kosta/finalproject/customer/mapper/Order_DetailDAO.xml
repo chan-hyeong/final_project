@@ -3,10 +3,11 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kosta.finalproject.customer.dao.Order_DetailDAO">	
+<mapper namespace="kosta.finalproject.customer.dao.Order_DetailDAO">
 	<select id="order_detail_list" resultType="kosta.finalproject.customer.dto.Order_DetailTDTO_basket">		
 		select 
 			ol.order_num,
+			od.order_detail_num,
 			(select c.code_name from code c where od.m_code=c.code) m_name,
 			(select m.m_price from menu m where od.m_code=m.m_code) o_price,
 			(select c.code_name from code c where od.o_option1=c.code) o_option1,
@@ -17,13 +18,92 @@
 			(select m.m_price from menu m where od.o_option2=m.m_code) o_option2_price,
 			(select c.code_name from code c where od.o_option3=c.code) o_option3,
 			o_option3_num,
-			(select m.m_price from menu m where od.o_option3=m.m_code) o_option3_price
-		from order_detail od, order_list ol where ol.order_status='장바구니' and ol.order_num=od.order_num and c_id=#{id}
+			(select m.m_price from menu m where od.o_option3=m.m_code) o_option3_price,
+			(select c.code_name from code c where od.o_option3=c.code) o_option4,
+			o_option4_num,
+			(select m.m_price from menu m where od.o_option3=m.m_code) o_option4_price,
+			(select c.code_name from code c where od.o_option3=c.code) o_option5,
+			o_option5_num,
+			(select m.m_price from menu m where od.o_option3=m.m_code) o_option5_price
+		from order_detail od, order_list ol 
+		where ol.order_status='장바구니' and ol.order_num=od.order_num and c_id=#{id}
 	</select>
 	<delete id="order_detail_delete1" parameterType="Integer">
 		delete from order_list where order_num= #{order_num}
 	</delete>
 	<delete id="order_detail_delete2" parameterType="Integer">
-		delete from order_detail where order_num= #{order_num}
+		delete from order_detail where order_detail_num= #{order_detail_num}
 	</delete>
+	
+	<delete id="deleteall_detail" parameterType="Integer">
+		delete from order_detail where order_num=#{order_num}
+	</delete>
+	<delete id="deleteall_list" parameterType="String">
+		delete from order_list where order_status='장바구니' and c_id=#{id}
+	</delete>
+	<select id="select_onum_list" resultType="Integer" parameterType="String">
+		select order_num from order_list where order_status='장바구니'  and c_id=#{id}
+	</select>
+	
+	<insert id="insert_shoppingbag_detail" parameterType="kosta.finalproject.customer.dto.Order_DetailTDTO">
+		insert  into order_detail
+		(order_detail_num,order_num,m_code,o_pan,o_option1,o_option1_num,o_option2,o_option2_num,
+		o_option3,o_option3_num,o_option4,o_option4_num,o_option5,o_option5_num,
+		o_sauce1,o_sauce2,o_vege1,o_vege2,o_vege3,o_vege4,o_vege5,o_vege6,o_vege7,o_vege8,
+		m_necessary1,m_necessary1_num,m_necessary2,m_necessary2_num,
+		m_necessary3,m_necessary3_num,m_necessary4,m_necessary4_num
+		) 
+		values(
+		  (select max(order_detail_num)+1 from order_detail),
+		  #{order_num},
+		  #{m_code},
+		  #{o_pan},
+		  #{o_option1},
+		  #{o_option1_num},
+		  #{o_option2},
+		  #{o_option2_num},
+		  #{o_option3},
+		  #{o_option3_num},
+		  #{o_option4},
+		  #{o_option4_num},
+		  #{o_option5},
+		  #{o_option5_num},
+		  #{o_sauce1},
+		  #{o_sauce2},
+		  #{o_vege1},
+		  #{o_vege2},
+		  #{o_vege3},
+		  #{o_vege4},
+		  #{o_vege5},
+		  #{o_vege6},
+		  #{o_vege7},
+		  #{o_vege8},
+		  #{m_necessary1},
+		  #{m_necessary1_num},
+		  #{m_necessary2},
+		  #{m_necessary2_num},
+		  #{m_necessary3},
+		  #{m_necessary3_num},
+		  #{m_necessary4},
+		  #{m_necessary4_num}
+		)
+	</insert>
+	<insert id="insert_shoppingbag_list" parameterType="kosta.finalproject.customer.dto.Order_ListTDTO">
+		insert into order_list(
+			order_num,c_id,s_code,order_status,order_date,o_totalprice
+			) values(
+			  #{order_num},
+			  #{c_id},
+			  'test', <!-- 지점명 연동시켜야함 -->
+			  '장바구니',
+			  #{order_date}, 
+			  #{o_totalprice}
+			)
+	</insert>
+	<select id="select_onum" resultType="Integer">		
+		select max(order_num)+1 from order_detail
+	</select>
+	<select id="select_onum1" resultType="Integer">		
+		select count(order_num) from order_detail where order_num=#{order_num}
+	</select>
 </mapper>
