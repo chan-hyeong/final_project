@@ -91,26 +91,22 @@
 	</div>	
 	<form action="payment.do">
 	<div>
-		<c:if test="${ !empty menudto.m_necessary1 }">
-			<input type="text" value="${menudto.m_necessary1_name}">
-			<input type="hidden" value="${menudto.m_necessary1}" name="m_necessary1">
-			<input type="text" value="${menudto.m_necessary1_num}" name="m_necessary1_num">
-		</c:if><br>
-		<c:if test="${ !empty menudto.m_necessary2 }">
-			<input type="text" value="${menudto.m_necessary2_name}">
-			<input type="hidden" value="${menudto.m_necessary2}" name="m_necessary2">
-			<input type="text" value="${menudto.m_necessary2_num}" name="m_necessary2_num">
-		</c:if><br>
-		<c:if test="${ !empty menudto.m_necessary3 }">
-			<input type="text" value="${menudto.m_necessary3_name}">
-			<input type="hidden" value="${menudto.m_necessary3}" name="m_necessary3">
-			<input type="text" value="${menudto.m_necessary3_num}" name="m_necessary3_num">
-		</c:if><br>
-		<c:if test="${ !empty menudto.m_necessary4 }">
-			<input type="text" value="${menudto.m_necessary4_name}">
-			<input type="hidden" value="${menudto.m_necessary4}" name="m_necessary4">
-			<input type="text" value="${menudto.m_necessary4_num}" name="m_necessary4_num">
-		</c:if><br>
+		<input type="${menudto.m_necessary1_num >0? 'text':'hidden'} " value="${menudto.m_necessary1_name}">
+		<input type="hidden" value="${menudto.m_necessary1}" name="m_necessary1">
+		<input type="${menudto.m_necessary1_num >0? 'text':'hidden'}" value="${menudto.m_necessary1_num}" name="m_necessary1_num">
+		<c:if test="${menudto.m_necessary1_num >0}"><br></c:if>
+		<input type="${menudto.m_necessary2_num >0? 'text':'hidden'}" value="${menudto.m_necessary2_name}">
+		<input type="hidden" value="${menudto.m_necessary2}" name="m_necessary2">
+		<input type="${menudto.m_necessary2_num >0? 'text':'hidden'}" value="${menudto.m_necessary2_num}" name="m_necessary2_num">
+		<c:if test="${menudto.m_necessary2_num >0}"><br></c:if>
+		<input type="${menudto.m_necessary3_num >0? 'text':'hidden'}" value="${menudto.m_necessary3_name}">
+		<input type="hidden" value="${menudto.m_necessary3}" name="m_necessary3">
+		<input type="${menudto.m_necessary3_num >0? 'text':'hidden'}" value="${menudto.m_necessary3_num}" name="m_necessary3_num">
+		<c:if test="${menudto.m_necessary3_num >0}"><br></c:if>
+		<input type="${menudto.m_necessary4_num >0? 'text':'hidden'}" value="${menudto.m_necessary4_name}">
+		<input type="hidden" value="${menudto.m_necessary4}" name="m_necessary4">
+		<input type="${menudto.m_necessary4_num >0? 'text':'hidden'}" value="${menudto.m_necessary4_num}" name="m_necessary4_num">
+		<c:if test="${menudto.m_necessary4_num >0}"><br></c:if>		
 	</div>
 	<input type="text" value="1" id="h_m_quantity" name="h_m_quantity">
 	<input type="hidden" value="${menudto.m_code}" name="m_code">

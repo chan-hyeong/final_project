@@ -165,9 +165,9 @@ public class CustomerController {
 	public String menudetail(HttpServletRequest request,Order_DetailTDTO d_dto,Order_ListTDTO l_dto,@RequestParam("h_m_quantity") int quantity) {
 	
 		String command = request.getParameter("command");
-		HttpSession session = request.getSession();	
+		HttpSession session = request.getSession();
+		l_dto.setC_id((String)session.getAttribute("id"));
 		if(command!=null&&command.equals("basket")){
-			l_dto.setC_id((String)session.getAttribute("id"));			
 			Date today = new Date();
 			l_dto.setOrder_date(today);
 			Order_DetailDAO dao=sqlsession.getMapper(Order_DetailDAO.class);
@@ -182,6 +182,9 @@ public class CustomerController {
 			if(d_dto.getO_vege7()== null) d_dto.setO_vege7("temp");
 			if(d_dto.getO_vege8()== null) d_dto.setO_vege8("temp");
 			//vegetable null값 넘어오면 오류 나는 부분 임시 해결
+			
+			//
+			//
 			
 			//동시 주문시 order_num 통일시키기 위해
 			int order_num=dao.select_onum();
