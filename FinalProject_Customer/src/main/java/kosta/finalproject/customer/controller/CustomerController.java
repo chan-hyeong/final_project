@@ -43,15 +43,20 @@ public class CustomerController {
 	}
 
 	@RequestMapping("/loginpro.do")
-	public String loginpro(CustomersTDTO dto, HttpSession session) {
+	public String loginpro(CustomersTDTO dto, HttpSession session, Model model) {
 		CustomersDAO dao = sqlsession.getMapper(CustomersDAO.class);
 		int result = dao.customers(dto);
 		if (result == 1) {
-			System.out.println(result);
+			System.out.println("result : "+result);
+			model.addAttribute("result", 1);
 			session.setAttribute("id", dto.getC_id());
 			return "customer/main";
 		} else
-			System.out.println(result);
+			
+			
+//			model.addAttribute("result", 0);
+		model.addAttribute("result", "아이디와 비밀번호를 확인하세요.");
+		
 		return "customer/loginform";
 	}
 
