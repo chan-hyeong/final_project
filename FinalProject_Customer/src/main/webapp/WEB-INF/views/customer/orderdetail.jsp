@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -80,54 +82,12 @@
 		return true;
 	}
 
-	function plus(params) {
-		//var quantity=document.getElementsByName('quantity');
-		var name = "o_option" + params.id + "_num";
-		alert("이렇게 되나 " + name);
-		var test = document.getElementById(name);
-
-		alert("이게 나와야지 되는거임 " + test.value);
+	function check(){
+		if( document.testfrm.o_pan.value == 'none' ) return false;
+		if( !sauce_select(document.testfrm.o_sauce2)) return false;
 		
-		
-		
-		
-		
-		var change = Number(quantity[params.id - 1].value);
-		if (change < 5) {
-			var total = 0;
-			for (var i = 0; i < quantity.length; i++) {
-				total = total + Number(quantity[i].value);
-				if (total >= 5) {
-					alert("option이 너무 많습니다");
-					return;
-				}
-			}
-			quantity[params.id - 1].value = change + 1;
-			document.getElementsByName('price')[params.id - 1].value = quantity[params.id - 1].value
-					* document.getElementsByName('h_price')[params.id - 1].value;
-			total = eval(document.getElementById('totalprice').value);
-			total = total
-					+ Number(document.getElementsByName('h_price')[params.id - 1].value);
-			document.getElementById('totalprice').value = total;
-		} else {
-			return;
-		}
 	}
-	function minus(params) {
-		var quantity = document.getElementsByName('quantity');
-		var change = Number(quantity[params.id - 1].value);
-		if (change > 0) {
-			quantity[params.id - 1].value = change - 1;
-			document.getElementsByName('price')[params.id - 1].value = quantity[params.id - 1].value
-					* document.getElementsByName('h_price')[params.id - 1].value
-			total = eval(document.getElementById('totalprice').value);
-			total = total
-					- Number(document.getElementsByName('h_price')[params.id - 1].value);
-			document.getElementById('totalprice').value = total;
-		} else {
-			return;
-		}
-	}
+	
 </script>
 <style type="text/css">
 input{
@@ -137,13 +97,14 @@ input{
 </style>
 </head>
 <body>	
+
 	<img src="${pageContext.request.contextPath}/img/${menudto.m_code}.png">
 	${menudto.m_explain}<br>
 	${menudto.m_name}<br>
 	<br>
- 	<div>
+ <%-- 	<div>
  		<c:forEach var="olist" items="${option}" begin="0" end="8" varStatus="i">
- <%-- 			<input type="checkbox" id="${olist.m_code}" name="${olist.m_code}" value="${olist.m_name}" checked="true"><label for="${olist.m_code}">${olist.m_name}</label>&nbsp; --%>
+ 			<input type="checkbox" id="${olist.m_code}" name="${olist.m_code}" value="${olist.m_name}" checked="true"><label for="${olist.m_code}">${olist.m_name}</label>&nbsp;
  			<input type="checkbox" id="${olist.m_code}" name="o_vage${i.count}" value="o" checked="true"><label for="${olist.m_code}">${olist.m_name}</label>&nbsp;
  		</c:forEach>
  	</div>
@@ -178,7 +139,7 @@ input{
  	
  	
  	
-<%--  	<div>
+  	<div>
 		<c:forEach var="olist" items="${option}" begin="32" end="36" varStatus="status">
 		<div>
 			${olist.m_name} <input name="price" value="0"/>
@@ -188,7 +149,7 @@ input{
 			<input type="button" value="+" id="${status.count}" onclick="plus(this)"/>
 		</div>
 		</c:forEach>
- 	</div> --%>
+ 	</div> 
  	<div>
  		<input value="${ menudto.m_price }" id="totalprice"/> 		
  	</div>
@@ -199,20 +160,20 @@ input{
 		<a href="payment.do">결제</a>&nbsp;
 	</div>
 	
-	<hr>
+	<hr> --%>
 	
  	<button onclick="test()">테스트버튼 </button>
  	<br>
- 	
  	<div id="option">
  		<div id="div_1"></div>
  		<div id="div_2"></div>
  		<div id="div_3"></div>
 	</div>
 	
-	-------------------
+	<hr>
+	테스트 폼 :<br>
 	
-	<form action="paymentform.do">
+	<form name="testfrm" action="paymentform.do" method="post" onsubmit="check();">
 	
 	
 		사용자 id : <input type="text" name="c_id" value="${id }"><br>
@@ -222,7 +183,7 @@ input{
 		메뉴 코드 : <input type="text" name="m_code" value="${menudto.m_code }"><br>
 		빵 선택 : 
 		<select name="o_pan">
-			<option >빵선택</option>
+			<option value="none">빵선택</option>
 			<c:forEach var="olist" items="${option}" begin="9" end="14">
 				<option  value="${ olist.m_code }">${olist.m_name}</option>
 			</c:forEach>
@@ -230,8 +191,6 @@ input{
 		<br>
 		
 		<br>필수 : <br>
-		<hr>
-		
 		<input type="hidden" name="m_necessary1" value="${menudto.m_necessary1 }"><label>${menudto.m_necessary1_name }</label>
 		<input type="hidden" name="m_necessary1_num" value="${menudto.m_necessary1_num }"><label>${menudto.m_necessary1_num}개</label><br>
 		
@@ -281,7 +240,7 @@ input{
  			<c:if test="${i.count%4 == 0 }"><br></c:if>
  		</c:forEach>
 		
-		<br>가격 : <br>
+		<br>총 가격 : 
 		<input hidden="hidden" type="text" name="o_price" value="${ menudto.m_price }"> <label name="o_price">${ menudto.m_price } 원</label>
 		<br>
 		<button value="basket" name="command">장바구니</button>
