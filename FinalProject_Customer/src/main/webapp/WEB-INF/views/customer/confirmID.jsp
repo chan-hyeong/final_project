@@ -6,31 +6,25 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>중복확인</title>
-</head>
-<body>
+<script type="text/javascript">
+	var result = "${result}";
 
-<c:set var="msg" value="${result }"></c:set>
-<c:if test="${msg!=null }">
-<c:choose>
-	<c:when test="${msg=='1' }">
-		<script type="text/javascript">
+	if(result == "1"){
 		alert("사용중인 아이디입니다.");
-		history.go(-1);
-		</script>
-		<form action="/customer/id_check.do">
-			<input type = "text" name ="c_id" />
-			<input type = "submit" value = "ID중복확인"/>
-		</form>
-	</c:when>
-	<c:when test="${msg=='0' }">
-		<script type="text/javascript">
+	}else if(result == "0"){
 		alert("사용가능");
 		opener.document.myform.idDuplication.value="idCheck";
 		opener.document.myform.c_id.value="${id}";
 		self.close();
-		</script>
-	</c:when>
-</c:choose>
-</c:if>
+	}
+
+</script>
+</head>
+<body>
+		<form action="/customer/id_check.do">
+			<input type = "text" name ="c_id" />
+			<input type = "submit" value = "ID중복확인"/>
+			<input type = "hidden" value = "${result }">
+		</form>
 </body>
 </html>
