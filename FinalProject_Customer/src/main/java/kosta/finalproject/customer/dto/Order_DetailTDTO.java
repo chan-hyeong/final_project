@@ -29,14 +29,14 @@ public class Order_DetailTDTO {
 	private int o_option3_num; // number
 	private String o_sauce1;// varchar2(14)
 	private String o_sauce2;// varchar2(14)
-	private char o_vege1; // char(1)
-	private char o_vege2; // char(1)
-	private char o_vege3; // char(1)
-	private char o_vege4; // char(1)
-	private char o_vege5; // char(1)
-	private char o_vege6; // char(1)
-	private char o_vege7; // char(1)
-	private char o_vege8; // char(1)
+	private String o_vege1; // char(1)
+	private String o_vege2; // char(1)
+	private String o_vege3; // char(1)
+	private String o_vege4; // char(1)
+	private String o_vege5; // char(1)
+	private String o_vege6; // char(1)
+	private String o_vege7; // char(1)
+	private String o_vege8; // char(1)
 	
 	private int o_price;// number
 
@@ -200,68 +200,67 @@ public class Order_DetailTDTO {
 		this.o_sauce2 = o_sauce2;
 	}
 
-	public char getO_vege1() {
+	public String getO_vege1() {
 		return o_vege1;
 	}
 
-	public void setO_vege1(char o_vege1) {
-//		this.o_vege1 = o_vege1;
-		this.o_vege1 = 'o';
+	public void setO_vege1(String o_vege1) {
+		this.o_vege1 = o_vege1;
 	}
 
-	public char getO_vege2() {
+	public String getO_vege2() {
 		return o_vege2;
 	}
 
-	public void setO_vege2(char o_vege2) {
+	public void setO_vege2(String o_vege2) {
 		this.o_vege2 = o_vege2;
 	}
 
-	public char getO_vege3() {
+	public String getO_vege3() {
 		return o_vege3;
 	}
 
-	public void setO_vege3(char o_vege3) {
+	public void setO_vege3(String o_vege3) {
 		this.o_vege3 = o_vege3;
 	}
 
-	public char getO_vege4() {
+	public String getO_vege4() {
 		return o_vege4;
 	}
 
-	public void setO_vege4(char o_vege4) {
+	public void setO_vege4(String o_vege4) {
 		this.o_vege4 = o_vege4;
 	}
 
-	public char getO_vege5() {
+	public String getO_vege5() {
 		return o_vege5;
 	}
 
-	public void setO_vege5(char o_vege5) {
+	public void setO_vege5(String o_vege5) {
 		this.o_vege5 = o_vege5;
 	}
 
-	public char getO_vege6() {
+	public String getO_vege6() {
 		return o_vege6;
 	}
 
-	public void setO_vege6(char o_vege6) {
+	public void setO_vege6(String o_vege6) {
 		this.o_vege6 = o_vege6;
 	}
 
-	public char getO_vege7() {
+	public String getO_vege7() {
 		return o_vege7;
 	}
 
-	public void setO_vege7(char o_vege7) {
+	public void setO_vege7(String o_vege7) {
 		this.o_vege7 = o_vege7;
 	}
 
-	public char getO_vege8() {
+	public String getO_vege8() {
 		return o_vege8;
 	}
 
-	public void setO_vege8(char o_vege8) {
+	public void setO_vege8(String o_vege8) {
 		this.o_vege8 = o_vege8;
 	}
 
@@ -286,6 +285,50 @@ public class Order_DetailTDTO {
 				+ ", o_sauce2=" + o_sauce2 + ", o_vege1=" + o_vege1 + ", o_vege2=" + o_vege2 + ", o_vege3=" + o_vege3
 				+ ", o_vege4=" + o_vege4 + ", o_vege5=" + o_vege5 + ", o_vege6=" + o_vege6 + ", o_vege7=" + o_vege7
 				+ ", o_vege8=" + o_vege8 + ", o_price=" + o_price + "]";
+	}
+
+	public Order_DetailTDTO(int order_detail_num, int order_num, String m_code, String o_pan, String m_necessary1,
+			int m_necessary1_num, String m_necessary2, int m_necessary2_num, String m_necessary3, int m_necessary3_num,
+			String m_necessary4, int m_necessary4_num, String o_option1, int o_option1_num, String o_option2,
+			int o_option2_num, String o_option3, int o_option3_num, String o_sauce1, String o_sauce2, String o_vege1,
+			String o_vege2, String o_vege3, String o_vege4, String o_vege5, String o_vege6, String o_vege7,
+			String o_vege8, int o_price) {
+		super();
+		this.order_detail_num = order_detail_num;
+		this.order_num = order_num;
+		this.m_code = m_code;
+		this.o_pan = o_pan;
+		this.m_necessary1 = m_necessary1;
+		this.m_necessary1_num = m_necessary1_num;
+		this.m_necessary2 = m_necessary2;
+		this.m_necessary2_num = m_necessary2_num;
+		this.m_necessary3 = m_necessary3;
+		this.m_necessary3_num = m_necessary3_num;
+		this.m_necessary4 = m_necessary4;
+		this.m_necessary4_num = m_necessary4_num;
+		this.o_option1 = o_option1;
+		this.o_option1_num = o_option1_num;
+		this.o_option2 = o_option2;
+		this.o_option2_num = o_option2_num;
+		this.o_option3 = o_option3;
+		this.o_option3_num = o_option3_num;
+		this.o_sauce1 = o_sauce1;
+		this.o_sauce2 = o_sauce2;
+		this.o_vege1 = o_vege1;
+		this.o_vege2 = o_vege2;
+		this.o_vege3 = o_vege3;
+		this.o_vege4 = o_vege4;
+		this.o_vege5 = o_vege5;
+		this.o_vege6 = o_vege6;
+		this.o_vege7 = o_vege7;
+		this.o_vege8 = o_vege8;
+		this.o_price = o_price;
+	}
+
+	public Order_DetailTDTO() {
+		super();
+		// TODO Auto-generated constructor stub
+		o_vege1 = o_vege2 = o_vege3 = o_vege4 = o_vege5 = o_vege6 = o_vege7 = o_vege8 = "";
 	}
 
 }

@@ -20,6 +20,9 @@ public class MenuTDTO {
 	private String m_necessary3_name;
 	private String m_necessary4_name;
 	
+	private String m_group;
+	////////////////////////////////////////////
+	
 	
 	public String getM_code() {
 		return m_code;
@@ -126,6 +129,12 @@ public class MenuTDTO {
 				+ m_necessary4_num + ", m_necessary1_name=" + m_necessary1_name + ", m_necessary2_name="
 				+ m_necessary2_name + ", m_necessary3_name=" + m_necessary3_name + ", m_necessary4_name="
 				+ m_necessary4_name + "]";
+	}
+	public String getM_group() {
+		return m_group;
+	}
+	public void setM_group(String m_group) {
+		this.m_group = m_group;
 	}
 	
 	

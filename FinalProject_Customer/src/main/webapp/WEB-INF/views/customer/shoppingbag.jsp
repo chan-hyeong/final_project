@@ -16,7 +16,7 @@
 		<table>
 			<c:forEach var="i" items="${detail_list }">
 				<tr>
-					<td>${i }<br>
+					<td><br>${i }<br>
 					</td>
 					<td></td>
 				</tr>

@@ -1,7 +1,5 @@
 package kosta.finalproject.customer.dao;
 
-import java.util.ArrayList;
-
 import kosta.finalproject.customer.dto.CustomersTDTO;
 
 public interface CustomersDAO {

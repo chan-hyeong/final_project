@@ -162,7 +162,7 @@ input#card, #credit, #ssg{
 		<tr>
 			<td colspan="2">
 			<a href="menulist.do"><button style="width: 25%;">취 소</button></a>&nbsp;&nbsp;
-			<button style="width: 70%;">결제 및 주문하기</button>
+			<button name="command" value="${command }" style="width: 70%;">결제 및 주문하기</button>
 			</td>
 		</tr>
 

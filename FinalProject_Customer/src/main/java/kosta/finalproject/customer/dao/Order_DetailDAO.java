@@ -23,4 +23,7 @@ public interface Order_DetailDAO {
 	//update는 흠..  
 	public void update_order_detail(Order_DetailTDTO dto);
 	//장바구니 --> 주문완료 상태 , update보단 delete하고 insert 하는게 깔끔하지 않을려나 
+	
+	public void update_order_details(List<Order_DetailTDTO> dtos);
+	//장바구니인 애들이 여러개 있을텐데 파라미터도 여러개 받아야하지않을까 
 }

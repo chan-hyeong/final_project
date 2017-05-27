@@ -5,8 +5,6 @@
 
 <mapper namespace="kosta.finalproject.customer.dao.Order_DetailDAO">
 	<select id="order_detail_list" resultType="kosta.finalproject.customer.dto.Order_DetailTDTO">
-		<!-- select (select c.code_name from code c where m.m_code=c.code) m_name 
-			from menu m -->
 		select
 			order_num, 
 			m_code, 
@@ -37,6 +35,7 @@
 			o_vege8,
 			o_price
 		from order_detail
+		where order_num in (select order_num from order_list where c_id=#{c_id})
 		order by order_num desc, m_code asc
 	</select>
 	
@@ -123,7 +122,12 @@
 	
 	</delete>
 	<update id="update_order_detail" parameterType="kosta.finalproject.customer.dto.Order_DetailTDTO">
-	
-
-	</update>	
+		update order_detail 
+		set order_num = ( select max(order_num) from order_list )  
+		where order_num = #{order_num} 
+	</update>
+		
+	<update id="update_order_details" parameterType="List">
+	</update>
+		
 </mapper>

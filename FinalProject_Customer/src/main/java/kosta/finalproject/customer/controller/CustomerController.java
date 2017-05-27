@@ -1,5 +1,9 @@
 package kosta.finalproject.customer.controller;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +21,7 @@ import kosta.finalproject.customer.dao.MenuDAO;
 import kosta.finalproject.customer.dao.Order_DetailDAO;
 import kosta.finalproject.customer.dao.Order_ListDAO;
 import kosta.finalproject.customer.dto.CustomersTDTO;
+import kosta.finalproject.customer.dto.MenuTDTO;
 import kosta.finalproject.customer.dto.Order_DetailTDTO;
 import kosta.finalproject.customer.dto.Order_ListTDTO;
 
@@ -118,8 +123,43 @@ public class CustomerController {
 		return "customer/favorite";
 	}
 
+	@RequestMapping("/history_detail.do")
+	public String history_detail(HttpServletRequest request, HttpSession session, @RequestParam("order_num") String order_num) {
+		Order_DetailDAO detail_dao = sqlsession.getMapper(Order_DetailDAO.class);
+		
+		String c_id = session.getAttribute("id").toString();
+		List<Order_DetailTDTO> orderdetail_all = detail_dao.order_detail_list(c_id);
+		List<Order_DetailTDTO> orderdetail = new ArrayList<Order_DetailTDTO>();
+		
+		System.out.println("\n 세션에서 넘겨받은 아이디 : " + c_id + " : ");
+		for( Order_DetailTDTO item : orderdetail_all){
+			System.out.println(item.toString());
+			if ( item.getOrder_num() == Integer.parseInt(order_num)){
+				orderdetail.add(item);
+			}
+		}
+		
+		request.setAttribute("orderdetail", orderdetail);
+//		request.setAttribute("orderdetail", orderdetail_all);
+		
+		
+		return "customer/history_detail";
+	}
 	@RequestMapping("/history.do")
-	public String history() {
+	public String history(HttpServletRequest request, HttpSession session) {
+		Order_ListDAO list_dao = sqlsession.getMapper(Order_ListDAO.class);
+		
+		String c_id = session.getAttribute("id").toString();
+		List<Order_ListTDTO> orderlist = list_dao.order_list_list(c_id);
+		
+		System.out.println("\n 세션에서 넘겨받은 아이디 : " + c_id + " : ");
+		for( Order_ListTDTO item : orderlist){
+			System.out.println(item.toString());
+		}
+		
+		request.setAttribute("orderlist", orderlist);
+		
+		
 
 		return "customer/history";
 	}
@@ -133,18 +173,30 @@ public class CustomerController {
 		
 	 	Order_ListTDTO list_dto = (Order_ListTDTO) request.getSession().getAttribute("list_dto");
 		Order_DetailTDTO detail_dto = (Order_DetailTDTO) request.getSession().getAttribute("detail_dto");
-//		list_dto.setPayment_method(paymentMethod);	//테이블 수정해야함 
+		List<Order_DetailTDTO> detail_dto_basket = (List<Order_DetailTDTO>) request.getSession().getAttribute("detail_dto_basket");
 		
-//		System.out.println("\n\n-------------------------------------------------------------------");
-//		System.out.println(list_dto.toString());
-//		System.out.println(detail_dto.toString());
-//		System.out.println("-------------------------------------------------------------------\n\n");		
+		list_dto.setOrder_payment(paymentMethod);	//결제 수단 반영 
 		
+		System.out.println("\n\n-------------------------------------------------------------------");
+		System.out.println(list_dto.toString());
+		if ( detail_dto !=null) System.out.println(detail_dto.toString());
+		if ( detail_dto_basket !=null) System.out.println(detail_dto_basket.size() +" : " + detail_dto_basket.toString());
+		System.out.println("-------------------------------------------------------------------\n\n");		
+//		
 		//[1] 주문 추가  
-		list_dao.insert_order_list(list_dto);
-		detail_dao.insert_order_detail(detail_dto);
+		if ( request.getParameter("command").equalsIgnoreCase("basketpayment")){
+			//테이블에 이미 들어간 데이터를 수정 
+			list_dao.update_order_list(list_dto);
+			detail_dao.update_order_detail(detail_dto_basket.get(0));
+			
+		}else {
+			list_dao.insert_order_list(list_dto);
+			detail_dao.insert_order_detail(detail_dto);
+		}
 		
 		//[2]재고 조정
+		//★★★★★★★★★★
+		//
 		
 		//[3] history.do 로 이동 : 주문내역 보여주기 (이 경우에는 주문내역 상세페이지)
 		return "redirect:history.do";
@@ -159,12 +211,12 @@ public class CustomerController {
 		
 		String c_id = session.getAttribute("id").toString();
 		
-//		Enumeration<String> e=  request.getParameterNames();
-//		while(e.hasMoreElements()){
-//			String name = e.nextElement();
-//			String value = request.getParameter(name);
-//			System.out.println("\t" + name + " : " + value);
-//		}
+		Enumeration<String> e=  request.getParameterNames();
+		while(e.hasMoreElements()){
+			String name = e.nextElement();
+			String value = request.getParameter(name);
+			System.out.println("\t" + name + " : " + value);
+		}
 		//command 로 분기 한다 
 		//1. 장바구니에 담는 경우 
 			//status = '장바구니', order~테이블에 row넣기, menulist 페이지로
@@ -205,8 +257,18 @@ public class CustomerController {
 				detail_dto.setOrder_num(order_num);
 				
 				list_dto.setOrder_status("장바구니");
-				
-				list_dao.insert_order_list(list_dto);
+				list_dto.setOrder_payment("basket");
+//				
+//				System.out.println("----------------------------------------------");
+//				System.out.println( list_dao.order_list_basket(c_id)); 
+//				System.out.println( detail_dto.toString()); 
+//				System.out.println("----------------------------------------------");
+//				
+				if ( list_dao.order_list_basket(c_id) == null ) { //order_list가 없으면 (처음 들어가는 장바구니)
+					list_dao.insert_order_list(list_dto);
+				}else{//order_list에 이미 들어가있으면
+					list_dao.update_order_list(list_dto);
+				}
 				detail_dao.insert_order_detail(detail_dto);
 				
 				view = "redirect:menulist.do";
@@ -233,8 +295,31 @@ public class CustomerController {
 	public String orderdetail(HttpServletRequest request,@RequestParam("m_code") String m_code) {
 		MenuDAO dao=sqlsession.getMapper(MenuDAO.class);
 		request.setAttribute("menudto", dao.menudetail(m_code));
-		request.setAttribute("option",dao.menuoption());
-
+		List<MenuTDTO> option_bread = new ArrayList<MenuTDTO>(), option_sauces = new ArrayList<MenuTDTO>(), option_extra = new ArrayList<MenuTDTO>(), option_vege = new ArrayList<MenuTDTO>();
+		for(MenuTDTO item : dao.menuoption()){
+			if ( item.getM_group().equalsIgnoreCase("bread") )
+				option_bread.add(item);
+			else if( item.getM_group().equalsIgnoreCase("sauces") )
+				option_sauces.add(item);
+			else if( item.getM_group().equalsIgnoreCase("add_option") )
+				option_extra.add(item);
+			else if( item.getM_group().equalsIgnoreCase("vegetable") )
+				option_vege.add(item);
+		}
+		
+		System.out.println(option_bread.toString());
+		System.out.println(option_extra.toString());
+		System.out.println(option_sauces.toString());
+		System.out.println(option_vege.toString());
+		
+//		request.setAttribute("option",dao.menuoption());
+		request.setAttribute("option_bread",option_bread);
+		request.setAttribute("option_sauces",option_sauces);
+		request.setAttribute("option_extra",option_extra);
+		request.setAttribute("option_vege",option_vege);
+		
+//		System.out.println(dao.menuoption().toString());
+		
 		return "customer/orderdetail";
 	}
 

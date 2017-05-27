@@ -12,9 +12,10 @@
 				order_date,
 				o_totalprice
 		from order_list ol 
-		where c_id=#{c_id}
+		where c_id=#{c_id} and order_status not in ('장바구니')
 		order by ol.order_num desc
 	</select>
+	
 	<select id="order_list_basket" resultType="kosta.finalproject.customer.dto.Order_ListTDTO" >
 		select	order_num,
 				c_id, 
@@ -34,18 +35,32 @@
 
 	<insert id="insert_order_list" parameterType="kosta.finalproject.customer.dto.Order_ListTDTO">
 		insert into
-		ORDER_LIST (order_num, c_id, s_code, order_status, order_date, o_totalprice)
+		ORDER_LIST (order_num, c_id, s_code, order_status, order_payment, order_date, o_totalprice)
 		values
-		(#{order_num},#{c_id},#{s_code},#{order_status},sysdate,#{o_totalprice})
+		(#{order_num},#{c_id},#{s_code},#{order_status}, #{order_payment}, sysdate, #{o_totalprice})
 	</insert>
 
 
 	<delete id="delete_order_list" parameterType="kosta.finalproject.customer.dto.Order_ListTDTO">
-
-
+		delete from order_list
+		where order_num = #{order_num}  
 	</delete>
 	<update id="update_order_list" parameterType="kosta.finalproject.customer.dto.Order_ListTDTO">
-
-
+		update order_list
+			set 
+				order_date = sysdate, o_totalprice = o_totalprice + #{o_totalprice} 
+			where c_id = #{c_id} and order_status = '장바구니' 
 	</update>
+	
+	<update id="update_order_list_basket" parameterType="kosta.finalproject.customer.dto.Order_ListTDTO">
+		update order_list
+			set 
+				order_num = (select max(order_num) from order_lis)
+				, order_date = sysdate
+				, order_payment = #{order_payment}
+				, order_status = '결제완료' 
+			where c_id = #{c_id} 
+				and order_status = '장바구니' 
+	</update>
+	
 </mapper>

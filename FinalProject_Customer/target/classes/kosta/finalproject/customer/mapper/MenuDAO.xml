@@ -32,11 +32,18 @@
 		where m_code=#{m_code}
 	</select>
 	
+	
 	<select id="menuoption" resultType="kosta.finalproject.customer.dto.MenuTDTO">
 		select 
-			m_code,  
-			(select c.code_name from code c where m.m_code=c.code) m_name,
-			m_price
-		from menu m where m.m_price between 0 and 2000
+			M.m_code,  
+			C.code_name as m_name,
+			M.m_price,
+			C.code_group m_group
+		from menu M, code C
+		where M.m_code = C.code
+			and C.code_group in ('bread', 'sauces', 'add_option', 'vegetable')
+		order by C.code
 	</select>
+	
+	
 </mapper>
