@@ -329,7 +329,7 @@ public class Order_DetailTDTO {
 				+ ", o_option4_num=" + o_option4_num + ", o_option5=" + o_option5 + ", o_option5_num=" + o_option5_num
 				+ "\n\t, o_sauce1=" + o_sauce1 + ", o_sauce2=" + o_sauce2 + ", o_vege1=" + o_vege1 + ", o_vege2=" + o_vege2
 				+ ", o_vege3=" + o_vege3 + ", o_vege4=" + o_vege4 + ", o_vege5=" + o_vege5 + "\n\t, o_vege6=" + o_vege6
-				+ ", o_vege7=" + o_vege7 + ", o_vege8=" + o_vege8 + ", o_price=" + o_price + "]";
+				+ ", o_vege7=" + o_vege7 + ", o_vege8=" + o_vege8 + ", o_price=" + o_price + "]\n";
 	}
 
 	public Order_DetailTDTO(int order_detail_num, int order_num, String m_code, String o_pan, String m_necessary1,
