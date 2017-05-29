@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import kosta.finalproject.customer.dao.CustomersDAO;
+import kosta.finalproject.customer.dao.InventoryDAO;
 import kosta.finalproject.customer.dao.MenuDAO;
 import kosta.finalproject.customer.dao.Order_DetailDAO;
 import kosta.finalproject.customer.dao.Order_ListDAO;
@@ -123,28 +125,45 @@ public class CustomerController {
 		return "customer/favorite";
 	}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	@RequestMapping("/history_detail.do")
 	public String history_detail(HttpServletRequest request, HttpSession session, @RequestParam("order_num") String order_num) {
+		System.out.println("\n----------------history detail.do 진입 ");
 		Order_DetailDAO detail_dao = sqlsession.getMapper(Order_DetailDAO.class);
+		Order_ListDAO list_dao = sqlsession.getMapper(Order_ListDAO.class);
 		
 		String c_id = session.getAttribute("id").toString();
 		List<Order_DetailTDTO> orderdetail_all = detail_dao.order_detail_list(c_id);
 		List<Order_DetailTDTO> orderdetail = new ArrayList<Order_DetailTDTO>();
 		
-		System.out.println("\n 세션에서 넘겨받은 아이디 : " + c_id + " : ");
+		System.out.println("\n\t 세션에서 넘겨받은 아이디 : " + c_id + " : ");
 		for( Order_DetailTDTO item : orderdetail_all){
 			System.out.println(item.toString());
 			if ( item.getOrder_num() == Integer.parseInt(order_num)){
 				orderdetail.add(item);
+				System.out.println("\t히스토리 디테일 아이템 : " + item);
+				continue;
+			}
+		}
+		for( Order_ListTDTO item : list_dao.order_list_list(c_id)){
+			if ( item.getOrder_num() == Integer.parseInt(order_num)){
+				System.out.println("\t히스토리 list아이템 : " + item);
+				request.setAttribute("orderitem", item);
+				//★★이러느니 order_num이랑 c_id 로 단일 행 select 하는 기능을 매퍼에 추가하는게 나을 듯 
+				break;
 			}
 		}
 		
 		request.setAttribute("orderdetail", orderdetail);
 //		request.setAttribute("orderdetail", orderdetail_all);
 		
-		
+		System.out.println("\t retunr 값 : customer/history_detail ");
+		System.out.println("----------------history detail.do 아웃 \n");
 		return "customer/history_detail";
 	}
+	
+	
 	@RequestMapping("/history.do")
 	public String history(HttpServletRequest request, HttpSession session) {
 		Order_ListDAO list_dao = sqlsession.getMapper(Order_ListDAO.class);
@@ -152,7 +171,7 @@ public class CustomerController {
 		String c_id = session.getAttribute("id").toString();
 		List<Order_ListTDTO> orderlist = list_dao.order_list_list(c_id);
 		
-		System.out.println("\n 세션에서 넘겨받은 아이디 : " + c_id + " : ");
+		System.out.println("\n\t 세션에서 넘겨받은 아이디 : " + c_id + " : ");
 		for( Order_ListTDTO item : orderlist){
 			System.out.println(item.toString());
 		}
@@ -167,6 +186,7 @@ public class CustomerController {
 		
 	@RequestMapping("/payment.do")//결제 완료 버튼을 눌렀을때 
 	public String paymentpro(HttpServletRequest request, @RequestParam("paymentMethod") String paymentMethod) {
+		System.out.println("\n---------------------------payment.do 진입");
 		//결제창에서 결제수단 선택 후 결제완료를 누르면 --> [1]주문추가, [2]재고 조정, [3]history 페이지로 이동  
 		Order_ListDAO list_dao = sqlsession.getMapper(Order_ListDAO.class);
 		Order_DetailDAO detail_dao = sqlsession.getMapper(Order_DetailDAO.class);
@@ -177,27 +197,52 @@ public class CustomerController {
 		
 		list_dto.setOrder_payment(paymentMethod);	//결제 수단 반영 
 		
-		System.out.println("\n\n-------------------------------------------------------------------");
-		System.out.println(list_dto.toString());
-		if ( detail_dto !=null) System.out.println(detail_dto.toString());
-		if ( detail_dto_basket !=null) System.out.println(detail_dto_basket.size() +" : " + detail_dto_basket.toString());
-		System.out.println("-------------------------------------------------------------------\n\n");		
+		System.out.println("\n\t-------------------------------------------------------------------");
+		System.out.println("\t"+list_dto.toString());
+		if ( detail_dto !=null) System.out.println("\t"+detail_dto.toString());
+		if ( detail_dto_basket !=null) System.out.println("\t"+detail_dto_basket.size() +" : " + detail_dto_basket.toString());
+		System.out.println("\t"+"-------------------------------------------------------------------\n\n");		
 //		
 		//[1] 주문 추가  
-		if ( request.getParameter("command").equalsIgnoreCase("basketpayment")){
-			//테이블에 이미 들어간 데이터를 수정 
-			list_dao.update_order_list(list_dto);
-			detail_dao.update_order_detail(detail_dto_basket.get(0));
+		if (  request.getParameter("command")!=null && request.getParameter("command").equalsIgnoreCase("basketpayment")){  //장바구니에서 넘어온 경우 
+			list_dao.update_order_list_basket(list_dto); //장바구니로 들어가있던 데이터를 주문상태로 변경 
 			
-		}else {
+//			for (Order_DetailTDTO item : detail_dto_basket){
+//				System.out.println("\t 장바구니 결제 진입 order_detail update !!!!");
+//				detail_dao.update_order_detail(item);
+//			}
+			//업데이트를 해버리면 테이블이 나눠져있어서 힘듬 
+			//없애고 다시 넣는게 나을듯 
+			//★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+			
+			//1) delete from order_list , delete from order_detail
+			//2) insert into order_list , insert from order_detail
+			
+			
+			
+		}else {//일반 주문 (단품) 
 			list_dao.insert_order_list(list_dto);
 			detail_dao.insert_order_detail(detail_dto);
+			System.out.println("\t인서트 완료 : ");
+
 		}
 		
 		//[2]재고 조정
 		//★★★★★★★★★★
+		///////////////////////////////////// inventory 변경 test 중 ★★★★★★★★★
+		InventoryDAO inven_dao = sqlsession.getMapper(InventoryDAO.class);
+		
+		System.out.println("\t 업데이트할 order_list : " + list_dto.getOrder_num() + " / " + list_dto.getS_code()  + " / " + list_dto.getOrder_date() );
+//		System.out.println(" 재고 수정 결과는1 ? : " + inven_dao.wow_update_inventory_by_order(list_dto));
+//		System.out.println(" 재고 수정 결과는1 ? : " + inven_dao.wow_update_inventory_by_order(list_dto.getOrder_num(), list_dto.getS_code()));
+		System.out.println(" 재고 수정 결과는1 ? : " + inven_dao.test1(list_dto.getOrder_num(), list_dto.getS_code()));
+		System.out.println(" 재고 수정 결과는2 ? : " + inven_dao.wow_update_inventory_by_order(list_dto.getOrder_num(), list_dto.getS_code()));
+		
+		///////////////////////////////////// inventory 변경 test 중 ★★★★★★★★★
 		//
 		
+		System.out.println("\n-----return redirect:history.do");
+		System.out.println("---------------------------payment.do 아웃");
 		//[3] history.do 로 이동 : 주문내역 보여주기 (이 경우에는 주문내역 상세페이지)
 		return "redirect:history.do";
 	}
@@ -239,10 +284,10 @@ public class CustomerController {
 			session.setAttribute("list_dto", list_dto);
 			session.setAttribute("detail_dto_basket", detail_dto_basket);
 			
-			System.out.println("\n\n-------------------------------------------------------");
-			System.out.println(list_dto.toString());
-			System.out.println(detail_dto_basket.toString());
-			System.out.println("-------------------------------------------------------\n\n");
+			System.out.println("\n\t\n-------------------------------------------------------");
+			System.out.println("\t"+list_dto.toString());
+			System.out.println("\t"+detail_dto_basket.toString());
+			System.out.println("\t"+"-------------------------------------------------------\n\n");
 			
 			request.setAttribute("command", "basketpayment");
 		}else {
@@ -251,10 +296,14 @@ public class CustomerController {
 			list_dto.setO_totalprice(o_totalprice);//장바구니라면 이거 바꿔줘야하는데 
 
 			int order_num = 0;
+			if(list_dao.get_order_num()!=null)
+				order_num = list_dao.get_order_num(); 
+			order_num++;
+			
+			list_dto.setOrder_num(order_num);
+			detail_dto.setOrder_num(order_num);
 			
 			if (command.equalsIgnoreCase("basket")) {// [1] 장바구니에 넣기
-				list_dto.setOrder_num(order_num);
-				detail_dto.setOrder_num(order_num);
 				
 				list_dto.setOrder_status("장바구니");
 				list_dto.setOrder_payment("basket");
@@ -264,22 +313,19 @@ public class CustomerController {
 //				System.out.println( detail_dto.toString()); 
 //				System.out.println("----------------------------------------------");
 //				
-				if ( list_dao.order_list_basket(c_id) == null ) { //order_list가 없으면 (처음 들어가는 장바구니)
+				Order_ListTDTO order_list_basket = list_dao.order_list_basket(c_id); 
+				if ( order_list_basket == null ) { //order_list가 없으면 (처음 들어가는 장바구니)
 					list_dao.insert_order_list(list_dto);
 				}else{//order_list에 이미 들어가있으면
-					list_dao.update_order_list(list_dto);
+					list_dao.update_order_list(list_dto);//토탈 가격이랑 order_date 바꿔주고 
+					
+					order_num = order_list_basket.getOrder_num();
+					detail_dto.setOrder_num(order_num);	//장바구니에 추가될 dto에 order_num 일치시켜준다음
 				}
-				detail_dao.insert_order_detail(detail_dto);
+				detail_dao.insert_order_detail(detail_dto);//삽입
 				
 				view = "redirect:menulist.do";
 			} else if (command.equalsIgnoreCase("payment")) {// [2] 바로 결제 페이지로 가기 (단일 메뉴 주문)
-				if(list_dao.get_order_num()!=null)
-					order_num = list_dao.get_order_num(); 
-				order_num++;
-				
-				list_dto.setOrder_num(order_num);
-				detail_dto.setOrder_num(order_num);
-				
 				list_dto.setOrder_status("주문완료");
 				
 				session.setAttribute("list_dto", list_dto);
@@ -307,10 +353,10 @@ public class CustomerController {
 				option_vege.add(item);
 		}
 		
-		System.out.println(option_bread.toString());
-		System.out.println(option_extra.toString());
-		System.out.println(option_sauces.toString());
-		System.out.println(option_vege.toString());
+		System.out.println("\t"+option_bread.toString());
+		System.out.println("\t"+option_extra.toString());
+		System.out.println("\t"+option_sauces.toString());
+		System.out.println("\t"+option_vege.toString());
 		
 //		request.setAttribute("option",dao.menuoption());
 		request.setAttribute("option_bread",option_bread);

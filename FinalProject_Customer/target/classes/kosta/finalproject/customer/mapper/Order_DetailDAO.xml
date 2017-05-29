@@ -6,6 +6,7 @@
 <mapper namespace="kosta.finalproject.customer.dao.Order_DetailDAO">
 	<select id="order_detail_list" resultType="kosta.finalproject.customer.dto.Order_DetailTDTO">
 		select
+			order_detail_num,
 			order_num, 
 			m_code, 
 			o_pan, 
@@ -41,6 +42,7 @@
 	
 	<select id="order_detail_basket" resultType="kosta.finalproject.customer.dto.Order_DetailTDTO">
 		select
+			order_detail_num,
 			order_num, 
 			m_code, 
 			o_pan, 
@@ -70,7 +72,7 @@
 			o_vege8,
 			o_price
 		from order_detail
-		where order_num=0
+		where order_num=(select order_num from order_list where order_status='장바구니' and c_id=#{c_id})
 		order by order_num desc, m_code asc
 	</select>
 
@@ -118,13 +120,15 @@
 
 
 	<delete id="delete_order_detail" parameterType="kosta.finalproject.customer.dto.Order_DetailTDTO">
-	
+		
 	
 	</delete>
-	<update id="update_order_detail" parameterType="kosta.finalproject.customer.dto.Order_DetailTDTO">
+	
+	
+	<update id="update_order_detail">
 		update order_detail 
 		set order_num = ( select max(order_num) from order_list )  
-		where order_num = #{order_num} 
+		where order_num = #{order_detail_num} 
 	</update>
 		
 	<update id="update_order_details" parameterType="List">

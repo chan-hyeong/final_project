@@ -27,6 +27,13 @@ public class Order_DetailTDTO {
 	private int o_option2_num; // number
 	private String o_option3; // varchar2(14)
 	private int o_option3_num; // number
+
+	private String o_option4; // varchar2(14)
+	private int o_option4_num; // number
+
+	private String o_option5; // varchar2(14)
+	private int o_option5_num; // number
+
 	private String o_sauce1;// varchar2(14)
 	private String o_sauce2;// varchar2(14)
 	private String o_vege1; // char(1)
@@ -37,7 +44,7 @@ public class Order_DetailTDTO {
 	private String o_vege6; // char(1)
 	private String o_vege7; // char(1)
 	private String o_vege8; // char(1)
-	
+
 	private int o_price;// number
 
 	public int getOrder_detail_num() {
@@ -271,28 +278,67 @@ public class Order_DetailTDTO {
 	public void setO_price(int o_price) {
 		this.o_price = o_price;
 	}
-	
+
+	public Order_DetailTDTO() {
+		super();
+		// TODO Auto-generated constructor stub
+		o_vege1 = o_vege2 = o_vege3 = o_vege4 = o_vege5 = o_vege6 = o_vege7 = o_vege8 = "";
+	}
+
+	public String getO_option4() {
+		return o_option4;
+	}
+
+	public void setO_option4(String o_option4) {
+		this.o_option4 = o_option4;
+	}
+
+	public int getO_option4_num() {
+		return o_option4_num;
+	}
+
+	public void setO_option4_num(int o_option4_num) {
+		this.o_option4_num = o_option4_num;
+	}
+
+	public String getO_option5() {
+		return o_option5;
+	}
+
+	public void setO_option5(String o_option5) {
+		this.o_option5 = o_option5;
+	}
+
+	public int getO_option5_num() {
+		return o_option5_num;
+	}
+
+	public void setO_option5_num(int o_option5_num) {
+		this.o_option5_num = o_option5_num;
+	}
 
 	@Override
 	public String toString() {
 		return "Order_DetailTDTO [order_detail_num=" + order_detail_num + ", order_num=" + order_num + ", m_code="
-				+ m_code + ", o_pan=" + o_pan + ", m_necessary1=" + m_necessary1 + ", m_necessary1_num="
+				+ m_code + "\n\t, o_pan=" + o_pan + ", m_necessary1=" + m_necessary1 + ", m_necessary1_num="
 				+ m_necessary1_num + ", m_necessary2=" + m_necessary2 + ", m_necessary2_num=" + m_necessary2_num
 				+ ", m_necessary3=" + m_necessary3 + ", m_necessary3_num=" + m_necessary3_num + ", m_necessary4="
-				+ m_necessary4 + ", m_necessary4_num=" + m_necessary4_num + ", o_option1=" + o_option1
+				+ m_necessary4 + ", m_necessary4_num=" + m_necessary4_num + "\n\t, o_option1=" + o_option1
 				+ ", o_option1_num=" + o_option1_num + ", o_option2=" + o_option2 + ", o_option2_num=" + o_option2_num
-				+ ", o_option3=" + o_option3 + ", o_option3_num=" + o_option3_num + ", o_sauce1=" + o_sauce1
-				+ ", o_sauce2=" + o_sauce2 + ", o_vege1=" + o_vege1 + ", o_vege2=" + o_vege2 + ", o_vege3=" + o_vege3
-				+ ", o_vege4=" + o_vege4 + ", o_vege5=" + o_vege5 + ", o_vege6=" + o_vege6 + ", o_vege7=" + o_vege7
-				+ ", o_vege8=" + o_vege8 + ", o_price=" + o_price + "]";
+				+ ", o_option3=" + o_option3 + ", o_option3_num=" + o_option3_num + ", o_option4=" + o_option4
+				+ ", o_option4_num=" + o_option4_num + ", o_option5=" + o_option5 + ", o_option5_num=" + o_option5_num
+				+ "\n\t, o_sauce1=" + o_sauce1 + ", o_sauce2=" + o_sauce2 + ", o_vege1=" + o_vege1 + ", o_vege2=" + o_vege2
+				+ ", o_vege3=" + o_vege3 + ", o_vege4=" + o_vege4 + ", o_vege5=" + o_vege5 + "\n\t, o_vege6=" + o_vege6
+				+ ", o_vege7=" + o_vege7 + ", o_vege8=" + o_vege8 + ", o_price=" + o_price + "]";
 	}
 
 	public Order_DetailTDTO(int order_detail_num, int order_num, String m_code, String o_pan, String m_necessary1,
 			int m_necessary1_num, String m_necessary2, int m_necessary2_num, String m_necessary3, int m_necessary3_num,
 			String m_necessary4, int m_necessary4_num, String o_option1, int o_option1_num, String o_option2,
-			int o_option2_num, String o_option3, int o_option3_num, String o_sauce1, String o_sauce2, String o_vege1,
-			String o_vege2, String o_vege3, String o_vege4, String o_vege5, String o_vege6, String o_vege7,
-			String o_vege8, int o_price) {
+			int o_option2_num, String o_option3, int o_option3_num, String o_option4, int o_option4_num,
+			String o_option5, int o_option5_num, String o_sauce1, String o_sauce2, String o_vege1, String o_vege2,
+			String o_vege3, String o_vege4, String o_vege5, String o_vege6, String o_vege7, String o_vege8,
+			int o_price) {
 		super();
 		this.order_detail_num = order_detail_num;
 		this.order_num = order_num;
@@ -312,6 +358,10 @@ public class Order_DetailTDTO {
 		this.o_option2_num = o_option2_num;
 		this.o_option3 = o_option3;
 		this.o_option3_num = o_option3_num;
+		this.o_option4 = o_option4;
+		this.o_option4_num = o_option4_num;
+		this.o_option5 = o_option5;
+		this.o_option5_num = o_option5_num;
 		this.o_sauce1 = o_sauce1;
 		this.o_sauce2 = o_sauce2;
 		this.o_vege1 = o_vege1;
@@ -324,11 +374,8 @@ public class Order_DetailTDTO {
 		this.o_vege8 = o_vege8;
 		this.o_price = o_price;
 	}
-
-	public Order_DetailTDTO() {
-		super();
-		// TODO Auto-generated constructor stub
-		o_vege1 = o_vege2 = o_vege3 = o_vege4 = o_vege5 = o_vege6 = o_vege7 = o_vege8 = "";
-	}
+	
+	
+	
 
 }

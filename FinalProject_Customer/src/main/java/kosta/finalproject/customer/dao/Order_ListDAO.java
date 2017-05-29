@@ -23,7 +23,12 @@ public interface Order_ListDAO {
 	public void delete_order_list(Order_ListTDTO dto);//param을 뭘 받을까 c_id, order_num 은 필수일텐데 
 	//주문취소(준비완료 상태에서는 불가?) / 장바구니에서 삭제  
 	
+	
+	////////// 장바구니에서 주문이 들어온 경우 어케 처리할지
 	//update는 흠..  
 	public void update_order_list(Order_ListTDTO dto);
+	//장바구니 --> 주문완료 상태 , update보단 delete하고 insert 하는게 깔끔하지 않을려나 
+	
+	public void update_order_list_basket(Order_ListTDTO dto);
 	//장바구니 --> 주문완료 상태 , update보단 delete하고 insert 하는게 깔끔하지 않을려나 
 }

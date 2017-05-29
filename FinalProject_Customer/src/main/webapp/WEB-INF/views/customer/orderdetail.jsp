@@ -184,7 +184,7 @@ input{
 	
 	
 		사용자 id : <input type="text" name="c_id" value="${id }"><br>
-		매장 코드 : <input type="text" name="s_code" value="testscode"><br>
+		매장 코드 : <input type="text" name="s_code" value="d004"><br>
 		기본 가격 : <input type="text" name="o_totalprice" value="${ menudto.m_price }">원<br>
 		<br>
 		메뉴 코드 : <input type="text" name="m_code" value="${menudto.m_code }"><br>

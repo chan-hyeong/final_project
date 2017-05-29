@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,8 +25,8 @@
       <tr><td colspan="2"><hr></td></tr>
       
       <tr>
-         <td>order_status<%-- ${orderdetail[0].status} --%><br> 
-            <fmt:formatDate value="<%-- ${orderdetail[0].payment_date} --%>" pattern="yyyy-MM-dd"/>
+         <td><!-- order_status --><b>${orderitem.order_status }<br> 
+            <fmt:formatDate value="${orderitem.order_date}" pattern="yyyy-MM-dd HH:mm:ss"/></b>
          </td>
          <td style="float:right;width:45%;">지점정보 나와야함</td>
       </tr>
@@ -37,7 +38,7 @@
       <tr><td colspan="2"><hr></td></tr>
       
       <tr>
-         <td colspan="2"><b>----주문매장정보가 여기 나와야함----</b><br> ----매장 내
+         <td colspan="2"><b> ${orderitem.s_code } ←----주문매장정보가 여기 나와야함----</b><br> ----매장 내
             직접 수령---- <br> ----매장 주소----</td>
       </tr>
       <tr><td colspan="2"><hr></td></tr>

@@ -33,6 +33,7 @@
 		select max(order_num) from order_list
 	</select>
 
+	<!-- order_list 에 삽입 (1. 결제, 2.장바구니 ) : 현재 order_num은 호출하는 부분에서 지정해줌 -->
 	<insert id="insert_order_list" parameterType="kosta.finalproject.customer.dto.Order_ListTDTO">
 		insert into
 		ORDER_LIST (order_num, c_id, s_code, order_status, order_payment, order_date, o_totalprice)
@@ -40,27 +41,32 @@
 		(#{order_num},#{c_id},#{s_code},#{order_status}, #{order_payment}, sysdate, #{o_totalprice})
 	</insert>
 
-
+	
 	<delete id="delete_order_list" parameterType="kosta.finalproject.customer.dto.Order_ListTDTO">
 		delete from order_list
 		where order_num = #{order_num}  
 	</delete>
+	
+	<!-- 장바구니에 아이템 추가시 totalprice, order_date 를 변경  -->
 	<update id="update_order_list" parameterType="kosta.finalproject.customer.dto.Order_ListTDTO">
 		update order_list
 			set 
 				order_date = sysdate, o_totalprice = o_totalprice + #{o_totalprice} 
 			where c_id = #{c_id} and order_status = '장바구니' 
 	</update>
-	
+		
+	<!-- order_list 에서 장바구니였던 row를 결제 상태로 변경 -->
 	<update id="update_order_list_basket" parameterType="kosta.finalproject.customer.dto.Order_ListTDTO">
 		update order_list
 			set 
-				order_num = (select max(order_num) from order_lis)
-				, order_date = sysdate
+				<!-- order_num = (select max(order_num)+1 from order_list) -->
+				order_date = sysdate
 				, order_payment = #{order_payment}
 				, order_status = '결제완료' 
-			where c_id = #{c_id} 
-				and order_status = '장바구니' 
+			where 
+				order_num = #{order_num}
+				<!-- c_id = #{c_id} 
+				and order_status = '장바구니' --> 
 	</update>
 	
 </mapper>
