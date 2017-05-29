@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+   <mapper namespace="kosta.finalproject.customer.dao.HistoryDAO">
+   <select id="historylist" resultType="kosta.finalproject.customer.dto.HistoryTDTO">
+
+select
+ ol.ORDER_NUM,
+  listagg
+  ((select c.code_name from code c 
+   where 
+  1=1 
+   and
+ od.m_code = c.code
+   and 
+ ol.order_num = od.order_num), ', ') 
+   within group (order by od.ORDER_NUM)
+   as m_name,
+ ( select c.code_name from code c 
+   where 1=1
+   and
+ ol.s_code = c.code) as stores,
+ max(ol.order_status)as status,
+ max(ol.order_date)as order_date,
+ sum(od.O_PRICE) as totalprice
+  from order_list ol join order_detail od
+  on 
+  ol.order_num = od.ORDER_NUM
+  where 1=1
+  and
+  ol.c_id = #{c_id}
+  group by ol.ORDER_NUM, ol.S_CODE
+  
+   
+   </select>
+   <select id="historydetaillist" resultType="kosta.finalproject.customer.dto.HistoryDetailTDTO">
+ select 
+  order_num,
+  (select c.code_name from code c where od.m_code = c.code) as m_code,
+  (select c.code_name from code c where od.o_pan = c.code) as o_pan,
+  (select c.code_name from code c where od.m_necessary1 = c.code) as m_necessary1,
+  (select c.code_name from code c where od.m_necessary2=c.code) as m_necessary2,
+  (select c.code_name from code c where od.m_necessary3=c.code) as m_necessary3,
+  (select c.code_name from code c where od.m_necessary4=c.code) as m_necessary4,
+  (select c.code_name from code c where od.o_option1=c.code) as o_option1,
+  o_option1_num,
+  (select c.code_name from code c where od.o_option2=c.code) as o_option2,
+  o_option2_num,
+  (select c.code_name from code c where od.o_option3=c.code) as o_option3,
+  o_option3_num,
+  (select c.code_name from code c where od.o_option4=c.code) as o_option4,
+  o_option4_num,
+  (select c.code_name from code c where od.o_option5=c.code) as o_option5,
+  o_option5_num,
+  ((select c.code_name from code c where od.o_sauce1=c.code)||' '||
+  (select c.code_name from code c where od.o_sauce2=c.code)) as sauce,
+  ((select c.code_name from code c where od.o_vege1=c.code)||' '||
+  (select c.code_name from code c where od.o_vege2=c.code) ||' '||
+  (select c.code_name from code c where od.o_vege3=c.code) ||' '||
+  (select c.code_name from code c where od.o_vege4=c.code) ||' '||
+  (select c.code_name from code c where od.o_vege5=c.code) ||' '||
+  (select c.code_name from code c where od.o_vege6=c.code) ||' '||
+  (select c.code_name from code c where od.o_vege7=c.code) ||' '||
+  (select c.code_name from code c where od.o_vege8=c.code) ) as vege,
+  o_price 
+  from order_detail od
+    where
+    1=1 and
+    order_num = #{order_num}
+   
+   </select>
+   
+   </mapper>

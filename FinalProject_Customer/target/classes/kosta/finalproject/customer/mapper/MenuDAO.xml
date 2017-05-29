@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kosta.finalproject.customer.dao.MenuDAO">
+	<select id="menulist" resultType="kosta.finalproject.customer.dto.MenuTDTO">
+		<!-- select 
+ 			(select c.code_name from code c where m.m_code=c.code) m_name
+		from menu m -->
+		select m_code from menu
+	</select>
+	<select id="menudetail" resultType="kosta.finalproject.customer.dto.MenuTDTO">
+		select 
+			m_code,
+			(select c.code_name from code c where m.m_code=c.code) m_name,
+			m_price,
+			m_explain,
+			(select c.code_name from code c where m.m_necessary1=c.code) m_necessary1,
+	  		m_necessary1_num,
+	 		(select c.code_name from code c where m.m_necessary2=c.code) m_necessary2,
+	  		m_necessary2_num,
+	  		(select c.code_name from code c where m.m_necessary3=c.code) m_necessary3,
+	  		m_necessary3_num,
+	  		(select c.code_name from code c where m.m_necessary4=c.code) m_necessary4,
+	 		m_necessary4_num
+		from menu m where m_code=#{m_code}
+	</select>
+	<select id="menuoption" resultType="kosta.finalproject.customer.dto.MenuTDTO">
+		select 
+			m_code,  
+			(select c.code_name from code c where m.m_code=c.code) m_name,
+			m_price
+		from menu m where m.m_price between 0 and 2000
+	</select>
+</mapper>
