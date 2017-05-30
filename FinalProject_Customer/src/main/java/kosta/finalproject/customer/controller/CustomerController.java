@@ -2,10 +2,18 @@ package kosta.finalproject.customer.controller;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 
+
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -16,8 +24,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import kosta.finalproject.customer.dao.CustomersDAO;
+import kosta.finalproject.customer.dao.MailService;
 import kosta.finalproject.customer.dao.InventoryDAO;
 import kosta.finalproject.customer.dao.MenuDAO;
 import kosta.finalproject.customer.dao.Order_DetailDAO;
@@ -45,15 +55,20 @@ public class CustomerController {
 	}
 
 	@RequestMapping("/loginpro.do")
-	public String loginpro(CustomersTDTO dto, HttpSession session) {
+	public String loginpro(CustomersTDTO dto, HttpSession session, Model model) {
 		CustomersDAO dao = sqlsession.getMapper(CustomersDAO.class);
 		int result = dao.customers(dto);
 		if (result == 1) {
-			System.out.println(result);
+			System.out.println("result : "+result);
+			model.addAttribute("result", 1);
 			session.setAttribute("id", dto.getC_id());
 			return "customer/main";
 		} else
-			System.out.println(result);
+			
+			
+//			model.addAttribute("result", 0);
+		model.addAttribute("result", "아이디와 비밀번호를 확인하세요.");
+		
 		return "customer/loginform";
 	}
 
@@ -65,38 +80,40 @@ public class CustomerController {
 
 	@RequestMapping("/joinpro.do")
 	public String joinpro(CustomersTDTO dto) {
+		System.out.println("this is joinpro.do ");
 		CustomersDAO dao = sqlsession.getMapper(CustomersDAO.class);
-		System.out.println("tetetstst");
-		dao.insert(dto);
-		System.out.println("sucea");
+		if ( dao.insert(dto) > 0 ) 
+			System.out.println("join success");
 		return "customer/index";
 	}
 
 	// 내정보 보기
 	@RequestMapping("/modify.do")
 	public String modify(Model model, HttpSession session) {
+		System.out.println("this is modify.do");
 		CustomersDAO dao = sqlsession.getMapper(CustomersDAO.class);
-		System.out.println("모디처음");
 		String id = (String) session.getAttribute("id");
 		System.out.println("id : " + id);
 		CustomersTDTO dto = null;
 		dto = dao.getcustomers(id);
 		System.out.println(dto.getC_id());
 		model.addAttribute("info", dto);
-		System.out.println("모디파이");
+		
+		System.out.println("\n---------------- out modify.do");
 		return "customer/modify";
 	}
 
 	@RequestMapping("/modify_update.do")
 	public String modify_update(CustomersTDTO dto, HttpSession session) {
-		CustomersDAO dao = sqlsession.getMapper(CustomersDAO.class);
 		System.out.println("모디처음");
+		CustomersDAO dao = sqlsession.getMapper(CustomersDAO.class);
 		String id = (String) session.getAttribute("id");
 		System.out.println("id : " + id);
 		dao.update(dto);
 		return "customer/main";
 	}
-	//로그아웃 수정 - 지혜
+
+	// 로그아웃 수정 - 지혜
 	@RequestMapping("/logout.do")
 	public String logout(HttpSession session) {
 		session.setAttribute("id", null);
@@ -105,6 +122,47 @@ public class CustomerController {
 		return "customer/index";
 	}
 
+	// 이메일 인증
+	@RequestMapping("/email_check.do")
+	public String email(HttpSession session, @RequestParam String c_email) {
+		sendMailAuth(session, c_email);
+		return "customer/email";
+	}
+
+	// 이메일 인증
+	@RequestMapping(value = "/email.do", produces = "application/json")
+	@ResponseBody
+	public boolean sendMailAuth(HttpSession session, @RequestParam String c_email) {
+		System.out.println("이메일.do");
+		int ran = new Random().nextInt(100000) + 10000; // 10000 ~ 99999
+		System.out.println(ran);
+		String joinCode = String.valueOf(ran);
+		System.out.println(joinCode);
+		session.setAttribute("joinCode", joinCode);
+
+		String subject = "회원가입 인증 코드 발급 안내 입니다.";
+		StringBuilder sb = new StringBuilder();
+		sb.append("귀하의 인증 코드는 " + joinCode + " 입니다.");
+		return MailService.send(subject, sb.toString(), "wlgp123776@gmail.com", c_email, null);
+
+	}
+
+	// 아이디 중복체크
+	@RequestMapping("/id_check.do")
+	public String confirmID(CustomersTDTO dto, Model model) {
+		CustomersDAO dao = sqlsession.getMapper(CustomersDAO.class);
+		int result = dao.getid(dto);
+
+		if (result == 0) {
+			model.addAttribute("result", 0);// 아이디 없음
+			model.addAttribute("id", dto.getC_id());
+		} else if (result == 1) {
+			model.addAttribute("result", 1);// 아이디 잇음
+		}
+
+		return "customer/confirmID";
+	}
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 	@RequestMapping("/main.do")
 	public String main() {
 
@@ -178,8 +236,7 @@ public class CustomerController {
 		
 		request.setAttribute("orderlist", orderlist);
 		
-		
-
+	
 		return "customer/history";
 	}
 
@@ -195,6 +252,7 @@ public class CustomerController {
 		Order_DetailTDTO detail_dto = (Order_DetailTDTO) request.getSession().getAttribute("detail_dto");
 		List<Order_DetailTDTO> detail_dto_basket = (List<Order_DetailTDTO>) request.getSession().getAttribute("detail_dto_basket");
 		
+		list_dto.setOrder_status("결제완료");
 		list_dto.setOrder_payment(paymentMethod);	//결제 수단 반영 
 		
 		System.out.println("\n\t-------------------------------------------------------------------");
@@ -235,8 +293,8 @@ public class CustomerController {
 		System.out.println("\t 업데이트할 order_list : " + list_dto.getOrder_num() + " / " + list_dto.getS_code()  + " / " + list_dto.getOrder_date() );
 //		System.out.println(" 재고 수정 결과는1 ? : " + inven_dao.wow_update_inventory_by_order(list_dto));
 //		System.out.println(" 재고 수정 결과는1 ? : " + inven_dao.wow_update_inventory_by_order(list_dto.getOrder_num(), list_dto.getS_code()));
-		System.out.println(" 재고 수정 결과는1 ? : " + inven_dao.test1(list_dto.getOrder_num(), list_dto.getS_code()));
-		System.out.println(" 재고 수정 결과는2 ? : " + inven_dao.wow_update_inventory_by_order(list_dto.getOrder_num(), list_dto.getS_code()));
+//		System.out.println(" 재고 수정 결과는1 ? : " + inven_dao.test1(list_dto.getOrder_num(), list_dto.getS_code()));
+		System.out.println(" 재고 수정 결과는2 ? : " + inven_dao.update_inventory_by_order(list_dto.getOrder_num(), list_dto.getS_code()));
 		
 		///////////////////////////////////// inventory 변경 test 중 ★★★★★★★★★
 		//

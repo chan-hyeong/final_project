@@ -10,7 +10,10 @@
 				s_code,
 				order_status,
 				order_date,
-				o_totalprice
+				o_totalprice,
+				(select m_code from order_detail where order_num=ol.order_num and rownum=1) as m_code,
+				(select count(*) from order_detail where order_num=ol.order_num) as m_count
+				
 		from order_list ol 
 		where c_id=#{c_id} and order_status not in ('장바구니')
 		order by ol.order_num desc

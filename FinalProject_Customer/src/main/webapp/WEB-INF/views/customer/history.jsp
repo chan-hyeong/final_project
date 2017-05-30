@@ -17,7 +17,6 @@
 
 
 <h1>히스토리 페이지 </h1>
-<a href="orderdetail.do">상세페이지</a><br>
 
 <table border="0" style="align:center;width:90%;"> 
       <tr>
@@ -44,15 +43,15 @@
          <td colspan="2">
          <c:forEach var="list" items="${ orderlist }" varStatus="status">
          <a href="history_detail.do?order_num=${list.order_num}">
-            <button style="border:none;background-color:white;width:100%;" 
-                  id="listitem" value="${list.order_num }">
-               <img style="width:60px;float:left"src="${pageContext.request.contextPath}/img/${status.count}.png">
-               <p style="float:right;">${ list.order_status}</p>
+            <button style="border:none;background-color:white; width:100%;"
+                  id="listitem" value="${list.order_num }" >
+               <img style="width:60px;float:left"src="${pageContext.request.contextPath}/img/${list.m_code}.png">
+               <p style="float:right;">&nbsp;${ list.order_status}&nbsp;</p>
                <p style="float:right;"><b>${ '메뉴 이름이 나올자리'}&nbsp; [${ '수량'}]</b></p><br><br>
                
                <div style="float:right">
                <fmt:formatDate value="${ list.order_date }" pattern="yyyy-MM-dd HH:mm:ss"/> / 
-               ${ list.o_totalprice }원
+               <fmt:formatNumber>${ list.o_totalprice }</fmt:formatNumber> 원
                </div>
             </button>
          </a>

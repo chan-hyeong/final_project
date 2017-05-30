@@ -6,13 +6,6 @@
 <mapper namespace="kosta.finalproject.customer.dao.InventoryDAO">
 
 	<!-- 주문이 들어온 경우 (결제가 완료된 경우) or 주문이 취소된 경우 (결제 취소) 재고를 수정해야함  -->
-	<update id="update_inventory_by_order">
-		update inventory
-		set 
-			i_amount = i_amount - #{param1}
-		where 
-			i_code = #{param2}
-	</update>
 	<update id="test_update_inventory_by_order" parameterType="hashmap">
 		update inventory
 		set 
@@ -20,8 +13,9 @@
 		where 
 			${field} = #{i_code}
 	</update>
-	
-	<select id="test1" resultType="kosta.finalproject.customer.dto.TestDTO">
+
+<!-- order_detail 의 한 row를 decode sum 하여 어떤 재고(code)가 얼만큼 사용됐는지 파악 -->	
+<!-- 	<select id="test1" resultType="kosta.finalproject.customer.dto.TestDTO">
 		select *
 				 from ( select i.i_code
 							, i.i_amount
@@ -45,9 +39,9 @@
         				 from inventory i
      					 where i.s_code = #{param2})  
      	where changed_i_amount > 0 
-	</select>
+	</select> -->
 	
-	<update id="wow_update_inventory_by_order" >
+	<update id="update_inventory_by_order" >
 		update ( select * 
 				 from ( select i.i_code
 							, i.i_amount

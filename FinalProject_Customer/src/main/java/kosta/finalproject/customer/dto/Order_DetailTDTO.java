@@ -320,16 +320,16 @@ public class Order_DetailTDTO {
 	@Override
 	public String toString() {
 		return "Order_DetailTDTO [order_detail_num=" + order_detail_num + ", order_num=" + order_num + ", m_code="
-				+ m_code + "\n\t, o_pan=" + o_pan + ", m_necessary1=" + m_necessary1 + ", m_necessary1_num="
+				+ m_code + "\n\t, o_pan=" + o_pan + "\n, m_necessary1=" + m_necessary1 + ", m_necessary1_num="
 				+ m_necessary1_num + ", m_necessary2=" + m_necessary2 + ", m_necessary2_num=" + m_necessary2_num
-				+ ", m_necessary3=" + m_necessary3 + ", m_necessary3_num=" + m_necessary3_num + ", m_necessary4="
+				+ "\n, m_necessary3=" + m_necessary3 + ", m_necessary3_num=" + m_necessary3_num + ", m_necessary4="
 				+ m_necessary4 + ", m_necessary4_num=" + m_necessary4_num + "\n\t, o_option1=" + o_option1
 				+ ", o_option1_num=" + o_option1_num + ", o_option2=" + o_option2 + ", o_option2_num=" + o_option2_num
 				+ ", o_option3=" + o_option3 + ", o_option3_num=" + o_option3_num + ", o_option4=" + o_option4
 				+ ", o_option4_num=" + o_option4_num + ", o_option5=" + o_option5 + ", o_option5_num=" + o_option5_num
 				+ "\n\t, o_sauce1=" + o_sauce1 + ", o_sauce2=" + o_sauce2 + ", o_vege1=" + o_vege1 + ", o_vege2=" + o_vege2
 				+ ", o_vege3=" + o_vege3 + ", o_vege4=" + o_vege4 + ", o_vege5=" + o_vege5 + "\n\t, o_vege6=" + o_vege6
-				+ ", o_vege7=" + o_vege7 + ", o_vege8=" + o_vege8 + ", o_price=" + o_price + "]\n";
+				+ ", o_vege7=" + o_vege7 + ", o_vege8=" + o_vege8 + ",\n o_price=" + o_price + "]\n";
 	}
 
 	public Order_DetailTDTO(int order_detail_num, int order_num, String m_code, String o_pan, String m_necessary1,

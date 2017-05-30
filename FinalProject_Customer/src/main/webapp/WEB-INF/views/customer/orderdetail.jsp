@@ -169,14 +169,14 @@ input{
 	
 	<hr> --%>
 	
- 	<button onclick="test()">테스트버튼 </button>
+ 	<!-- <button onclick="test()">테스트버튼 </button>
  	<br>
  	<div id="option">
  		<div id="div_1"></div>
  		<div id="div_2"></div>
  		<div id="div_3"></div>
 	</div>
-	
+	 -->
 	<hr>
 	테스트 폼 :<br>
 	

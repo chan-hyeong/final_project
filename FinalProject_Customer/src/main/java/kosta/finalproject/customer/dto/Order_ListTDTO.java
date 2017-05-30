@@ -13,6 +13,9 @@ public class Order_ListTDTO {
 	
 	private String order_payment;
 
+	private String m_code;
+	
+	
 	
 	
 	
@@ -119,6 +122,20 @@ public class Order_ListTDTO {
 
 	public void setOrder_payment(String order_payment) {
 		this.order_payment = order_payment;
+	}
+
+
+
+
+	public String getM_code() {
+		return m_code;
+	}
+
+
+
+
+	public void setM_code(String m_code) {
+		this.m_code = m_code;
 	}
 
 	

@@ -3,27 +3,34 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-  <mapper namespace="kosta.finalproject.customer.dao.CustomersDAO">
-   <insert id="insert" parameterType="kosta.finalproject.customer.dto.CustomersTDTO">
-	 insert into CUSTOMERS (c_id, c_pw, c_name, c_email, c_coin, c_birth, c_gender) values
-	 (#{c_id},#{c_pw},#{c_name},#{c_email},#{c_coin},#{c_birth},#{c_gender})
-  </insert>
-  
-  <select id="customers" resultType="integer" parameterType="kosta.finalproject.customer.dto.CustomersTDTO">
-  	select count(*) from CUSTOMERS where c_id=#{c_id} and c_pw=#{c_pw}
-  </select>
-  
-  <select id="getcustomers"  resultType="kosta.finalproject.customer.dto.CustomersTDTO">
-  	select * from CUSTOMERS where c_id=#{c_id}
-  </select>
-  
-  	<update id="update" parameterType="kosta.finalproject.customer.dto.CustomersTDTO">
-		update CUSTOMERS set c_pw=#{c_pw}, c_name=#{c_name}, c_email=#{c_email}, c_coin=#{c_coin}, c_birth=#{c_birth} 
+<mapper namespace="kosta.finalproject.customer.dao.CustomersDAO">
+	<insert id="insert" parameterType="kosta.finalproject.customer.dto.CustomersTDTO">
+		insert into CUSTOMERS (c_id, c_pw, c_name, c_email, c_coin, c_birth,
+		c_gender) values
+		(#{c_id},#{c_pw},#{c_name},#{c_email},#{c_coin},#{c_birth},#{c_gender})
+	</insert>
+
+	<select id="customers" resultType="integer"
+		parameterType="kosta.finalproject.customer.dto.CustomersTDTO">
+		select count(*) from CUSTOMERS where c_id=#{c_id} and c_pw=#{c_pw}
+	</select>
+
+	<select id="getcustomers" resultType="kosta.finalproject.customer.dto.CustomersTDTO">
+		select * from CUSTOMERS where c_id=#{c_id}
+	</select>
+
+	<update id="update" parameterType="kosta.finalproject.customer.dto.CustomersTDTO">
+		update CUSTOMERS set
+		c_pw=#{c_pw}, c_name=#{c_name}, c_email=#{c_email}, c_coin=#{c_coin},
+		c_birth=#{c_birth}
 		where c_id = #{c_id}
 	</update>
-  
 
-  
-  
-  
-  </mapper>
+	<select id="getid" resultType="integer"
+		parameterType="kosta.finalproject.customer.dto.CustomersTDTO">
+		select count(*) from CUSTOMERS where c_id=#{c_id}
+	</select>
+
+
+
+</mapper>
