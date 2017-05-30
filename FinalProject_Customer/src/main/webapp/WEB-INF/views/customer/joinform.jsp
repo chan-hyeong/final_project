@@ -50,15 +50,20 @@
 		//id 유효성
 		if(obj.c_id.value == ''){
 			alert('id를 입력하세요');
+			document.getElementsByName("confirm_id")[0].disabled = true;
 			return false;
 		}else if(obj.c_id.value.length < 4 || obj.c_id.value.length > 10){
 			document.getElementById("id_txt").innerHTML = "<font color = 'red'>아이디는 4~10자 사이로 입력하세요.</font>";
+			document.getElementsByName("confirm_id")[0].disabled = true;
 			return false;
 		}else if(regType.test(obj.c_id.value)){
 			document.getElementById("id_txt").innerHTML = "<font color = 'red'>아이디가 조건에 맞지 않습니다.</font>";
+			document.getElementsByName("confirm_id")[0].disabled = true;
 			return;
 		}else
 			document.getElementById("id_txt").innerHTML = "";
+		
+		document.getElementsByName("confirm_id")[0].disabled = false;
 	}
 	
 	function check_pw(){
@@ -83,7 +88,6 @@
 			document.getElementById("c_birth").innerHTML = "";
 	}
 	function email_check(myform){
-
 		if(myform.c_email.value == ''){
 			alert('이메일을 입력해주세요');
 			return false;
@@ -97,7 +101,6 @@
 	}
 	
 	function id_check(myform){
-
 		if(myform.c_id.value == ''){
 			alert('id를 입력해주세요');
 			return false;
@@ -106,10 +109,9 @@
 		 url = "id_check.do?c_id=" + myform.c_id.value;
 		 
 	    open(url, "id_check", 
-	    "toolbar=no, location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=300, height=150");
+	    "toolbar=no, location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400, height=150");
 		
 	}
-
 </script>
 <body>
 	<h1>조인폼</h1>
@@ -118,15 +120,20 @@
 			<input type="button" name="confirm_id" value="ID중복체크" onclick = "id_check(this.form);"/>
 			<input type="hidden" name = "idDuplication" value="idUncheck">
 			<span id="id_txt"></span><br> 
+			
 		pw: <input type="password" name="c_pw" onkeyup="check_pw()"/>
 			<span id="pw_txt"></span><br>
+			
 		이름: <input type="text" name="c_name" /> <br> 
+		
 		이메일: <input type="email" name="c_email" />
 			<input type="button" id="e_btn" value = "이메일 인증" onclick = "email_check(this.form);"/>
 			 <input type="hidden" name = "email_Check" value="Uncheck">
 		<br>
+		
 		성별 : <input type="radio" name="c_gender" value="M"/>M
 			 <input type="radio" name="c_gender" value="F"/>F<br>
+			 
 		생년월일: <input type="text" name="c_birth" onkeyup="check_birth()"/>
 			<span id="c_birth"></span><br>
 		<input type="submit" value="등록"> <a href="index.do">홈</a>

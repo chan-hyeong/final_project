@@ -5,11 +5,12 @@
 
 <mapper namespace="kosta.finalproject.customer.dao.MenuDAO">
 	<select id="menulist" resultType="kosta.finalproject.customer.dto.MenuTDTO">
-		
 		select 
-			m_code,
-			(select c.code_name from code c where m.m_code=c.code) m_name
-		from menu m where m_code like 'm%'
+				m_code
+				, (select c.code_name from code c where m.m_code=c.code) m_name
+				, m_price
+		from menu m 
+		where m_code like 'm%'
 	</select>
 	<select id="menudetail" resultType="kosta.finalproject.customer.dto.MenuTDTO">
 		select 
@@ -18,9 +19,9 @@
 			m_price,
 			m_explain,
 			m_necessary1,
-			(select c.code_name from code c where m.m_necessary1=c.code) m_necessary1_name,
-	  		m_necessary1_num,	  		
-	  		m_necessary2,
+			(select c.code_name from code c where m.m_necessary1=c.code) m_necessary1_name ,
+	  		m_necessary1_num,
+	 		m_necessary2,
 	 		(select c.code_name from code c where m.m_necessary2=c.code) m_necessary2_name,
 	  		m_necessary2_num,
 	  		m_necessary3,
@@ -29,13 +30,22 @@
 	  		m_necessary4,
 	  		(select c.code_name from code c where m.m_necessary4=c.code) m_necessary4_name,
 	 		m_necessary4_num
-		from menu m where m_code=#{m_code}
+		from menu m 
+		where m_code=#{m_code}
 	</select>
+	
+	
 	<select id="menuoption" resultType="kosta.finalproject.customer.dto.MenuTDTO">
 		select 
-			m_code,  
-			(select c.code_name from code c where m.m_code=c.code) m_name,
-			m_price
-		from menu m where m.m_price between 0 and 2000
+			M.m_code,  
+			C.code_name as m_name,
+			M.m_price,
+			C.code_group m_group
+		from menu M, code C
+		where M.m_code = C.code
+			and C.code_group in ('bread', 'sauces', 'add_option', 'vegetable')
+		order by C.code
 	</select>
+	
+	
 </mapper>

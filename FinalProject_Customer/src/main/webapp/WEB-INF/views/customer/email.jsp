@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Insert title here</title>
+<title>email authorize</title>
 <script type="text/javascript">
 	function check(){
 		var obj = document.myform;
@@ -21,10 +21,7 @@
 			window.close();
 			
 		}
-
 	}
-
-
 </script>
 </head>
 <body>

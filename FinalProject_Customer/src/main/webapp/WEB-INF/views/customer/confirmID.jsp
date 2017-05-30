@@ -8,7 +8,6 @@
 <title>중복확인</title>
 <script type="text/javascript">
 	var result = "${result}";
-
 	if(result == "1"){
 		alert("사용중인 아이디입니다.");
 	}else if(result == "0"){
@@ -17,9 +16,9 @@
 		opener.document.myform.c_id.value="${id}";
 		self.close();
 	}
-
 </script>
 </head>
+
 <body>
 		<form action="/customer/id_check.do">
 			<input type = "text" name ="c_id" />

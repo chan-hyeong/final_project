@@ -7,16 +7,23 @@ public class MenuTDTO {
 	private String m_explain;
 	private String m_necessary1;
 	private int m_necessary1_num;
-	private String m_necessary1_name;
 	private String m_necessary2;
 	private int m_necessary2_num;
-	private String m_necessary2_name;
 	private String m_necessary3;
 	private int m_necessary3_num;
-	private String m_necessary3_name;
 	private String m_necessary4;
 	private int m_necessary4_num;
+	
+	//테이블에는 없는 필드 
+	private String m_necessary1_name;
+	private String m_necessary2_name;
+	private String m_necessary3_name;
 	private String m_necessary4_name;
+	
+	private String m_group;
+	////////////////////////////////////////////
+	
+	
 	public String getM_code() {
 		return m_code;
 	}
@@ -112,6 +119,22 @@ public class MenuTDTO {
 	}
 	public void setM_necessary4_name(String m_necessary4_name) {
 		this.m_necessary4_name = m_necessary4_name;
+	}
+	@Override
+	public String toString() {
+		return "MenuTDTO [m_code=" + m_code + ", m_name=" + m_name + ", m_price=" + m_price + ", m_explain=" + m_explain
+				+ ", m_necessary1=" + m_necessary1 + ", m_necessary1_num=" + m_necessary1_num + ", m_necessary2="
+				+ m_necessary2 + ", m_necessary2_num=" + m_necessary2_num + ", m_necessary3=" + m_necessary3
+				+ ", m_necessary3_num=" + m_necessary3_num + ", m_necessary4=" + m_necessary4 + ", m_necessary4_num="
+				+ m_necessary4_num + ", m_necessary1_name=" + m_necessary1_name + ", m_necessary2_name="
+				+ m_necessary2_name + ", m_necessary3_name=" + m_necessary3_name + ", m_necessary4_name="
+				+ m_necessary4_name + "]";
+	}
+	public String getM_group() {
+		return m_group;
+	}
+	public void setM_group(String m_group) {
+		this.m_group = m_group;
 	}
 	
 	

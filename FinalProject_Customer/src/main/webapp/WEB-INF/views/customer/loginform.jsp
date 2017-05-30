@@ -6,20 +6,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<title>Insert title here</title>
+<title>Please Login</title>
 <script type="text/javascript">
-
-
 	function check() {
-
 		var obj = document.myform;
-
 		if (obj.c_id.value.length == '') {
 			document.getElementById("id_txt").innerHTML = "<font color = 'red'>아이디는 필수 값입니다.</font>";
 			return false;
 		} else
 			document.getElementById("id_txt").innerHTML = "";
-
 		if (obj.c_pw.value.length == '') {
 			document.getElementById("pwd_txt").innerHTML = "<font color = 'red'>비밀번호는 필수 값입니다.</font>";
 			return false;
@@ -50,7 +45,6 @@
 <script type="text/javascript">
 	var msg = "${result}";
 	if (typeof msg != "undefined" && msg != null && msg != "") {
-
 		document.getElementById("login_txt").innerHTML = "<font color = 'red'>"+msg+"</font>"
 		//alert(msg);
 	}
