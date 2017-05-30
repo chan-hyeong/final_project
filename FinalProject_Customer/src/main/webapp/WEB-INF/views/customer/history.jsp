@@ -16,9 +16,9 @@
 <a href="main.do">메인으로 돌아가기</a><br>
 
 
-<h1>히스토리 페이지 </h1>
+<h1>인엽이형이 수정할 히스토리 페이지 </h1>
 
-<table border="0" style="align:center;width:90%;"> 
+<table style="align:center;width:90%;"> 
       <tr>
          <td colspan="2">
             <select name="category" style="width:200px;">
