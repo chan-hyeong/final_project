@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="kosta.finalproject.customer.dao.HistoryDAO">
+
+	<select id="history" resultType="kosta.finalproject.customer.dto.HistoryTDTO">
+	select	ol.order_num,
+        listagg((select c.code_name
+          from code c
+         where 1=1
+          and od.m_code = c.code
+        ),',') 
+         within GROUP(order by m_code) as m_name,
+				(select c.code_name 
+          from code c 
+         where 1=1 
+          and ol.s_code = c.code
+        )as stores,
+				max(ol.order_date) as order_date,
+				sum(od.o_price) as totalprice
+    from order_list ol left outer join order_detail od
+    on ol.order_num = od.order_num
+		where 1=1
+     and c_id = #{c_id} 
+     and order_status not in ('장바구니')
+		group by ol.order_num ,s_code
+	
+	
+	</select>
+
+
+	<select id="historydetail" resultMap="historydetail">
+	select
+			order_num, 
+			(select c.code_name 
+        from code c
+       where 1=1
+        and od.m_code = c.code
+      ) as m_name, 
+			(select c.code_name
+        from code c
+       where 1=1
+        and od.o_pan = c.code
+      ) as pan, 
+			(select c.CODE_NAME
+        from code c
+       where 1=1
+        and od.m_necessary1 = c.CODE
+      ) as necessary1,
+			(select c.CODE_NAME
+        from code c
+       where 1=1
+        and od.m_necessary2 = c.CODE
+      ) as necessary2,
+			(select c.CODE_NAME
+        from code c
+       where 1=1
+        and od.m_necessary3 = c.CODE
+      ) as necessary3,
+			(select c.CODE_NAME
+        from code c
+       where 1=1
+        and od.m_necessary4 = c.CODE
+      ) as necessary4,
+			(select c.CODE_NAME
+        from code c
+       where 1=1
+        and od.o_option1 = c.CODE
+      ) as o_option1,
+			o_option1_num,
+			(select c.CODE_NAME
+        from code c
+       where 1=1
+        and od.o_option2 = c.CODE
+      ) as o_option2,
+			o_option2_num,
+			(select c.CODE_NAME
+        from code c
+       where 1=1
+        and od.o_option3 = c.CODE
+      ) as o_option3,
+			o_option3_num,
+      (select c.CODE_NAME
+        from code c
+       where 1=1
+        and od.o_option4 = c.CODE
+      ) as o_option4,
+			o_option4_num,
+      (select c.CODE_NAME
+        from code c
+       where 1=1
+        and od.o_option5 = c.CODE
+      ) as o_option5,
+			o_option5_num,
+			(select c.CODE_NAME
+        from code c
+       where 1=1
+        and od.o_sauce1 = c.code
+      ) ||','||
+			(select c.code_name
+        from code c
+       where 1=1
+        and od.o_sauce2 = c.code
+      ) as sauce,
+			(select c.code_name
+        from code c
+       where 1=1
+        and od.o_vege1 = c.CODE
+      )||','||
+			(select c.code_name
+        from code c
+       where 1=1
+        and od.o_vege2 = c.CODE
+      )||','||
+			(select c.code_name
+        from code c
+       where 1=1
+        and od.o_vege3 = c.CODE
+      )||','||
+			(select c.code_name
+        from code c
+       where 1=1
+        and od.o_vege4 = c.CODE
+      )||','||
+			(select c.code_name
+        from code c
+       where 1=1
+        and od.o_vege5 = c.CODE
+      )||','||
+			(select c.code_name
+        from code c
+       where 1=1
+        and od.o_vege6 = c.CODE
+      )||','||
+			(select c.code_name
+        from code c
+       where 1=1
+        and od.o_vege7 = c.CODE
+      )||','||
+			(select c.code_name
+        from code c
+       where 1=1
+        and od.o_vege8 = c.CODE
+      )as vege,
+			o_price
+		from order_detail od
+		where 1=1
+		and order_num = #{order_num}
+		order by order_num desc, m_code asc
+	
+	</select>
+
+
+<resultMap type="java.util.HashMap" id="historydetail">
+
+<result property="order_no" column="order_num" javaType="integer" />
+<result property="m_name" column="m_name" javaType="java.lang.String" />
+<result property="necessary1" column="necessary1" javaType="java.lang.String" />
+<result property="necessary2" column="necessary2" javaType="java.lang.String" />
+<result property="necessary3" column="necessary3" javaType="java.lang.String" />
+<result property="necessary4" column="necessary4" javaType="java.lang.String" />
+<result property="o_option1" column="o_option1" javaType="java.lang.String" />
+<result property="o_option1_num" column="o_option1_num" javaType="integer" />
+<result property="o_option2" column="o_option2" javaType="java.lang.String" />
+<result property="o_option2_num" column="o_option2_num" javaType="integer" />
+<result property="o_option3" column="o_option3" javaType="java.lang.String" />
+<result property="o_option3_num" column="o_option3_num" javaType="integer" />
+<result property="o_option4" column="o_option4" javaType="java.lang.String" />
+<result property="o_option4_num" column="o_option4_num" javaType="integer" />
+<result property="o_option5" column="o_option5" javaType="java.lang.String" />
+<result property="o_option5_num" column="o_option5_num" javaType="integer" />
+<result property="sauce" column="sauce" javaType="java.lang.String" />
+<result property="vege" column="vege" javaType="java.lang.String" />
+<result property="o_price" column="o_price" javaType="integer" />
+
+</resultMap>
+
+
+
+</mapper>
