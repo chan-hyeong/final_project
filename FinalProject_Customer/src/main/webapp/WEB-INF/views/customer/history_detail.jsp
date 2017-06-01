@@ -3,6 +3,7 @@
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,6 +18,7 @@
 <a href="history.do">히스토리로 </a><br>
 
 
+
    <!-- 장바구니 테이블 -->
    <table border="0" style="align:center;width:90%;">
       <tr id="header1">
@@ -26,7 +28,7 @@
       
       <tr>
          <td><!-- order_status --><b>${orderitem.order_status }<br> 
-            <fmt:formatDate value="${orderitem.order_date}" pattern="yyyy-MM-dd HH:mm:ss"/></b>
+            <fmt:formatDate value="${orderitem.order_date}" pattern="yyyy-MM-dd HH:mm"/></b>
          </td>
          <td style="float:right;width:45%;">지점정보 나와야함</td>
       </tr>
@@ -47,23 +49,42 @@
          <td colspan="2">주문 상세 내역</td>
       </tr>
       <tr><td colspan="2"><hr></td></tr>
-      
-      <c:set var="total_price" value="0"></c:set>
-      <c:set var="total_amount" value="0"></c:set>
    
       <c:forEach var="list" items="${orderdetail}" varStatus="status">
          <tr>
-            <td id="menu_name">${list.m_code} X 수량</td>
+            <td id="menu_name">${list.m_code}</td>
             <td style="float:right;" id="menu_price">${list.o_price} 원</td>
          </tr>
          <tr><td colspan="2"><hr></td></tr>
          <tr>
-            <td id="option">
-                 <p style="float:left"class="option_cup_size"> ${ list.o_option1} / </p>
-            <p style="float:left"class="option_cup_size"> &nbsp;${ list.o_option2 } </p>
-            <p style="float:left"class="option_bake"> ${ list.o_option3 } </p>
+            <td id="option" style="padding-left: 5%;">
+                <p style="float:left"class="option_cup_size"> ${ list.o_option1} / </p>
+            	<p style="float:left"class="option_cup_size"> &nbsp;${ list.o_option2 } / </p>
+	            <p style="float:left"class="option_bake"> ${ list.o_option3 } / </p>
+	            <p style="float:left"class="option_bake"> ${ list.o_option4 } / </p>
+	            <p style="float:left"class="option_bake"> ${ list.o_option5 }  </p>
             </td>
-            <td  style="float:right;" id="option"></td>
+            <td  style="float:right;" id="option">
+            	<p style="float:left"class="option_cup_size"> ${ list.o_option1_num} / </p>
+	            <p style="float:left"class="option_cup_size"> &nbsp;${ list.o_option2_num } / </p>
+	            <p style="float:left"class="option_bake"> ${ list.o_option3_num } / </p>
+	            <p style="float:left"class="option_bake"> ${ list.o_option4_num } / </p>
+	            <p style="float:left"class="option_bake"> ${ list.o_option5_num }  </p>
+            </td>
+         </tr>
+         <tr>
+            <td id="vege" style="padding-left: 5%;">
+                <p style="float:left"class="option_cup_size"> ${ list.o_vege1} / </p>
+            	<p style="float:left"class="option_cup_size"> &nbsp;${ list.o_vege2 } / </p>
+	            <p style="float:left"class="option_bake"> ${ list.o_vege3 } / </p>
+	            <p style="float:left"class="option_bake"> ${ list.o_vege4 } / </p>
+	            <p style="float:left"class="option_bake"> ${ list.o_vege5 } / </p>
+	            <p style="float:left"class="option_bake"> ${ list.o_vege6 } / </p>
+	            <p style="float:left"class="option_bake"> ${ list.o_vege7 } / </p>
+	            <p style="float:left"class="option_bake"> ${ list.o_vege8 }  </p>
+            </td>
+            <td  style="float:right;" id="option">
+            </td>
          </tr>
          <tr><td colspan="2"><hr></td></tr>
          
@@ -87,8 +108,8 @@
 
    
       <tr>
-         <td>총 ${total_amount}개</td>
-         <td  style="float:right;" id="highlight">${total_price}원</td>
+         <td>총  ${fn:length(orderdetail)}개</td>
+         <td  style="float:right;" id="highlight"> <b><fmt:formatNumber>${orderitem.o_totalprice}</fmt:formatNumber></b>원</td>
       </tr>
    </table>
    <!-- 장바구니 테이블 end -->

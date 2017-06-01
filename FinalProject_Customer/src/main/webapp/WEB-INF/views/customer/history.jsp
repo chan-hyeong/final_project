@@ -41,17 +41,17 @@
 
       <tr>
          <td colspan="2">
-         <c:forEach var="list" items="${ orderlist }" varStatus="status">
-         <a href="history_detail.do?order_num=${list.order_num}">
+         <c:forEach var="listitem" items="${ orderlist }" varStatus="status">
+         <a href="history_detail.do?order_num=${listitem.order_num}">
             <button style="border:none;background-color:white; width:100%;"
-                  id="listitem" value="${list.order_num }" >
-               <img style="width:60px;float:left"src="${pageContext.request.contextPath}/img/${list.m_code}.png">
-               <p style="float:right;">&nbsp;${ list.order_status}&nbsp;</p>
-               <p style="float:right;"><b>${ '메뉴 이름이 나올자리'}&nbsp; [${ '수량'}]</b></p><br><br>
+                  id="listitem" value="${listitem.order_num }" >
+               <img style="width:60px;float:left"src="${pageContext.request.contextPath}/img/${listitem.m_code}.png">
+               <p style="float:right;">&nbsp;${ listitem.order_status}&nbsp;</p>
+               <p style="float:right;"><b>${ listitem.m_code}&nbsp; [${ '수량'}]</b></p><br><br>
                
                <div style="float:right">
-               <fmt:formatDate value="${ list.order_date }" pattern="yyyy-MM-dd HH:mm:ss"/> / 
-               <fmt:formatNumber>${ list.o_totalprice }</fmt:formatNumber> 원
+               <fmt:formatDate value="${ listitem.order_date }" pattern="yyyy-MM-dd HH:mm:ss"/> / 
+               <fmt:formatNumber>${ listitem.o_totalprice }</fmt:formatNumber> 원
                </div>
             </button>
          </a>

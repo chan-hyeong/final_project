@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html>
@@ -12,29 +12,33 @@
 
 <script type="text/javascript">
 	var total_extra = 0;
-	function extra_add(params1, params2, params3){
+	function extra_add(target_o_num, target_o_price, o_price){
 		/* alert(params);
 		alert(params.value); */
 		if(total_extra >= 5){ 
 			alert("extra는 5개 이상 못해요");	
 			return false;
 		}
-		params1.value++; 
-		params2.value = eval(params2.value) + eval(params3.value);
-		document.getElementsByName('o_price')[0].value = eval(document.getElementsByName('o_price')[0].value) + eval(params2.value );
+		target_o_num.value++; 
+		target_o_price.value = eval(target_o_price.value) + eval(o_price.value);
+		
+ 		document.getElementsByName('o_price')[0].value = eval(document.getElementsByName('o_price')[0].value) + eval(o_price.value ); 
+ 
 		document.getElementsByName('o_price')[1].innerHTML = document.getElementsByName('o_price')[0].value  
 		total_extra ++;
 	}
-	function extra_sub(params1, params2, params3){
+	function extra_sub(target_o_num, target_o_price, o_price){
 		/* alert(params);
 		alert(params.value); */
 		
-		if(total_extra <= 0 || params1.value <= 0){ 
+		if(total_extra <= 0 || target_o_num.value <= 0){ 
 			return false;
 		}
-		params1.value--; 
-		params2.value = eval(params2.value) - eval(params3.value);
-		document.getElementsByName('o_price')[0].value = eval(document.getElementsByName('o_price')[0].value) - eval(params2.value );
+		target_o_num.value--; 
+		target_o_price.value = eval(target_o_price.value) - eval(o_price.value);
+		
+		document.getElementsByName('o_price')[0].value = eval(document.getElementsByName('o_price')[0].value) - eval(o_price.value );
+		
 		document.getElementsByName('o_price')[1].innerHTML = document.getElementsByName('o_price')[0].value  
 		total_extra --;
 	}
@@ -231,9 +235,9 @@ input{
 		<c:forEach var="olist" items="${option_extra}" varStatus="i">
 			<div>
 				${olist.m_name} 
-				<input id="price${i.count }" value="0"/>
+				<input id="price${i.count }" value="0" />
 				<input type="hidden" value="${ olist.m_code}" name="o_option${i.count }"/>|
-				<input type="hidden" value="${ olist.m_price }" id="h_price${i.count }"/>
+				<input type="hidden" value="${ olist.m_price }" id="h_price${i.count }" readonly="readonly"/>
 				<input type="button" value="▼" id="${i.count}" onclick="extra_sub(o_option${i.count }_num, price${i.count }, h_price${i.count })"/>
 				<input readonly="readonly" value="0" name="o_option${i.count }_num">
 				<input type="button" value="▲" id="${i.count}" onclick="extra_add(o_option${i.count }_num, price${i.count }, h_price${i.count })"/>
@@ -250,7 +254,8 @@ input{
  		</c:forEach>
 		
 		<br>총 가격 : 
-		<input hidden="hidden" type="text" name="o_price" value="${ menudto.m_price }"> <label name="o_price">${ menudto.m_price } 원</label>
+		<input hidden="hidden" type="text" name="o_price" value="${ menudto.m_price }"> <label name="o_price">
+		<fmt:formatNumber>${ menudto.m_price}</fmt:formatNumber>  원</label>
 		<br>
 		<button value="basket" name="command">장바구니</button>
 		<button value="payment" name="command">결제</button>

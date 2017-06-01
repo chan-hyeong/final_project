@@ -13,9 +13,7 @@ public class Order_ListTDTO {
 	
 	private String order_payment;
 
-	private String m_code;
-	
-	
+	private String m_code;//테이블에는 엇는거지만.. 
 	
 	
 	
@@ -23,7 +21,7 @@ public class Order_ListTDTO {
 	public String toString() {
 		return "Order_ListTDTO [order_num=" + order_num + ", c_id=" + c_id + ", s_code=" + s_code + ", order_status="
 				+ order_status + ", order_date=" + order_date + ", o_totalprice=" + o_totalprice + ", order_payment="
-				+ order_payment + "]\n";
+				+ order_payment + "]\n\n";
 	}
 
 

@@ -13,33 +13,6 @@
 		where 
 			${field} = #{i_code}
 	</update>
-
-<!-- order_detail 의 한 row를 decode sum 하여 어떤 재고(code)가 얼만큼 사용됐는지 파악 -->	
-<!-- 	<select id="test1" resultType="kosta.finalproject.customer.dto.TestDTO">
-		select *
-				 from ( select i.i_code
-							, i.i_amount
-	               			, (		select sum( decode(i.i_code , 
-				                                        m_necessary1, m_necessary1_num, 
-				                                        m_necessary2, m_necessary2_num, 
-				                                        m_necessary3, m_necessary3_num, 
-				                                        m_necessary4, m_necessary4_num, 
-				                                        o_option1, o_option1_num, 
-				                                        o_option2, o_option2_num, 
-				                                        o_option3, o_option3_num, 
-				                                        o_option4, o_option4_num, 
-				                                        o_option5, o_option5_num, 
-				                                        o_vege1, 1, o_vege2, 1, 
-				                                        o_vege3, 1, o_vege4, 1, 
-				                                        o_vege5, 1, o_vege6, 1, 
-				                                        o_vege7, 1, o_vege8, 1, 0))
-	                    			from order_detail
-	                    			where order_num = #{param1} 
-              					) as changed_i_amount 
-        				 from inventory i
-     					 where i.s_code = #{param2})  
-     	where changed_i_amount > 0 
-	</select> -->
 	
 	<update id="update_inventory_by_order" >
 		update ( select * 
@@ -68,36 +41,6 @@
      			 where changed_i_amount > 0) 
 		set i_amount =  i_amount - changed_i_amount
 	</update>
-	
-<!-- 	
-	<update id="wow_update_inventory_by_order" parameterType="kosta.finalproject.customer.dto.Order_ListTDTO">
-		update ( select * 
-				 from ( select i.i_code
-							, i.i_amount
-	               			, (		select sum( decode(i.i_code , 
-	               										o_pan, 1,
-				                                        m_necessary1, m_necessary1_num, 
-				                                        m_necessary2, m_necessary2_num, 
-				                                        m_necessary3, m_necessary3_num, 
-				                                        m_necessary4, m_necessary4_num, 
-				                                        o_option1, o_option1_num, 
-				                                        o_option2, o_option2_num, 
-				                                        o_option3, o_option3_num, 
-				                                        o_option4, o_option4_num, 
-				                                        o_option5, o_option5_num, 
-				                                        o_vege1, 1, o_vege2, 1, 
-				                                        o_vege3, 1, o_vege4, 1, 
-				                                        o_vege5, 1, o_vege6, 1, 
-				                                        o_vege7, 1, o_vege8, 1, 0))
-	                    			from order_detail
-	                    			where order_num = #{order_num} 
-              					) as changed_i_amount 
-        				 from inventory i
-     					 where i.s_code = #{s_code}) 
-     			 where changed_i_amount > 0) 
-		set i_amount =  i_amount - changed_i_amount
-	</update>
-	 -->
 	
 	<!-- 소비자가 메뉴 선택시 재료의 재고가 없는 메뉴는 선택불가하게, 또는 결제불가하게 만들어야함 체크 인벤토리 --> 
 	<select id="select_invetory_check_for_customer">

@@ -4,72 +4,102 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kosta.finalproject.customer.dao.Order_ListDAO">
-	<select id="order_list_list" resultType="kosta.finalproject.customer.dto.Order_ListTDTO" >
-		select	order_num,
+	<!-- 코드로 넘겨받는 order_list -->
+	<select id="get_order_list" resultType="kosta.finalproject.customer.dto.Order_ListTDTO" >
+		select	
+				order_num,
 				c_id, 
 				s_code,
 				order_status,
 				order_date,
 				o_totalprice,
+				order_payment,
 				(select m_code from order_detail where order_num=ol.order_num and rownum=1) as m_code,
 				(select count(*) from order_detail where order_num=ol.order_num) as m_count
-				
 		from order_list ol 
-		where c_id=#{c_id} and order_status not in ('장바구니')
+		where c_id=#{c_id} 
+			and order_status not in ('장바구니')
 		order by ol.order_num desc
 	</select>
 	
-	<select id="order_list_basket" resultType="kosta.finalproject.customer.dto.Order_ListTDTO" >
-		select	order_num,
+	<select id="get_order_list_for_customer" resultType="kosta.finalproject.customer.dto.Order_ListTDTO" >
+		select	
+				order_num,
+				c_id, 
+				(select code_name from code where code=ol.s_code) as s_code,
+				order_status,
+				order_date,
+				o_totalprice,
+				order_payment,
+				(select listagg((select code_name from code where code=m_code), ', ') within group (order by order_detail_num) as m_code from order_detail where order_num=ol.order_num) as m_code,
+				(select count(*) from order_detail where order_num=ol.order_num) as m_count
+		from order_list ol 
+		where c_id=#{c_id} 
+		  	and order_status not in ('장바구니') --장바구니가 아닌
+		order by ol.order_num desc
+    
+	</select>
+	
+	<!-- 사용자의 장바구니 꺼내오기 단일  -->
+	<select id="get_basket" resultType="kosta.finalproject.customer.dto.Order_ListTDTO" >
+		select	
+				order_num,
 				c_id, 
 				s_code,
 				order_status,
 				order_date,
-				o_totalprice
+				o_totalprice,
+				order_payment
 		from order_list ol  
-		where c_id=#{c_id} and order_status='장바구니'
+		where c_id=#{c_id} 
+			and order_status='장바구니'
 		<!-- where order_status='장바구니 and c_id=#{c_id} -->
 		order by ol.order_num desc
 	</select>
 	
-	<select id="get_order_num" resultType="Integer">
-		select max(order_num) from order_list
+	<select id="get_order_num" resultType="int">
+		select nvl(max(order_num), 0) from order_list
 	</select>
 
 	<!-- order_list 에 삽입 (1. 결제, 2.장바구니 ) : 현재 order_num은 호출하는 부분에서 지정해줌 -->
-	<insert id="insert_order_list" parameterType="kosta.finalproject.customer.dto.Order_ListTDTO">
+	<insert id="insert_order" parameterType="kosta.finalproject.customer.dto.Order_ListTDTO">
 		insert into
-		ORDER_LIST (order_num, c_id, s_code, order_status, order_payment, order_date, o_totalprice)
-		values
-		(#{order_num},#{c_id},#{s_code},#{order_status}, #{order_payment}, sysdate, #{o_totalprice})
+			ORDER_LIST (order_num, c_id, s_code, order_status, order_payment, 
+						order_date, o_totalprice)
+			values	   (#{order_num},#{c_id},#{s_code},#{order_status}, #{order_payment}, 
+						sysdate, #{o_totalprice})
 	</insert>
 
-	
-	<delete id="delete_order_list" parameterType="kosta.finalproject.customer.dto.Order_ListTDTO">
+
+	<!-- c_id, order_num 을 받아서 delete  -->
+	<delete id="delete_from_order_list">
 		delete from order_list
-		where order_num = #{order_num}  
+		where 
+			c_id = #{param1}  
+			and order_num = #{param2}  
 	</delete>
-	
-	<!-- 장바구니에 아이템 추가시 totalprice, order_date 를 변경  -->
-	<update id="update_order_list" parameterType="kosta.finalproject.customer.dto.Order_ListTDTO">
-		update order_list
-			set 
-				order_date = sysdate, o_totalprice = o_totalprice + #{o_totalprice} 
-			where c_id = #{c_id} and order_status = '장바구니' 
-	</update>
 		
-	<!-- order_list 에서 장바구니였던 row를 결제 상태로 변경 -->
-	<update id="update_order_list_basket" parameterType="kosta.finalproject.customer.dto.Order_ListTDTO">
+	<!-- 장바구니 주문 = order_list 에서 장바구니 상태였던 record를 '결제 완료' 상태로 변경 -->
+	<update id="order_by_basket" parameterType="kosta.finalproject.customer.dto.Order_ListTDTO">
 		update order_list
 			set 
-				<!-- order_num = (select max(order_num)+1 from order_list) -->
 				order_date = sysdate
-				, order_payment = #{order_payment}
+				, order_payment = #{order_payment} --결제수단 
 				, order_status = '결제완료' 
 			where 
-				order_num = #{order_num}
-				<!-- c_id = #{c_id} 
-				and order_status = '장바구니' --> 
+					order_num = #{order_num}
+				and c_id = #{c_id} 
+				and order_status = '장바구니' 
 	</update>
 	
+	<!-- 장바구니에 아이템 추가시 totalprice, order_date 를 변경  -->
+	<update id="update_basket">
+		update order_list
+			set 
+				order_date = sysdate, 
+				o_totalprice = (select nvl(sum(o_price), 0) 
+								from order_detail 
+								where order_num = (select order_num from order_list where c_id=#{param1} and order_status='장바구니'))
+			where c_id = #{param1} and order_status = '장바구니' 
+	</update>
 </mapper>

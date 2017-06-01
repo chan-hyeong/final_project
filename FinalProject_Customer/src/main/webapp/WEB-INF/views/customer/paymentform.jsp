@@ -1,7 +1,7 @@
 <%@page import="java.util.Enumeration"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt"%>
 <!DOCTYPE html>
 <html>
@@ -30,7 +30,8 @@ input#card, #credit, #ssg{
 		<tr>
 			<!-- 주문매장 표시 -->
 			<td>
-				<strong>판교H스퀘어점 </strong><br> 경기도 성남시 분당구 판교역로231, 에이치스퀘어(삼평동)
+				<strong>${list_dto.s_code } 판교H스퀘어점 </strong><br>
+				주소자리 :  경기도 성남시 분당구 판교역로231, 에이치스퀘어(삼평동)
 			</td><!-- ${OrderMenu.s_code} 를 이용한 매장 정보도 받아와야겠구나 -->
 			<td><a href="#">(변경)</a></td>
 		</tr>
@@ -39,9 +40,13 @@ input#card, #credit, #ssg{
 
 		<tr>
 			<!-- 포장 체크 여부? -->
-			<td colspan="2"><input type="checkbox" id="isTakeout"> <label
-				for="isTakeout"><strong>전체 포장</strong> <br>(음료는 캐리어에, 푸드/기타는 종이백에 포장)
-			</label></td>
+			<td colspan="2">
+				<input type="checkbox" id="isTakeout"> 
+				<label for="isTakeout"><strong>전체 포장</strong> <br>(음료는 캐리어에, 푸드/기타는 종이백에 포장)</label>
+				<br><br>
+				<input type="checkbox" id="isCutting"> 
+				<label for="isCutting"><strong>커팅</strong> <br>(30cm 이상 샌드위치만 보여줄거임)</label>
+			</td>
 		</tr>
 		
 		<tr><td colspan="2"><hr></td></tr>
@@ -80,71 +85,49 @@ input#card, #credit, #ssg{
 			<td colspan="2" bgcolor="gray">최종 결제할 메뉴</td>
 		</tr>
 
-		<c:if test="${command eq 'basketpayment' }">
-			<c:forEach var="item" items="${detail_dto_basket }">
-				<tr>
-					<td>${item.m_code }</td>
-					<td>${item.o_price }</td>
-				</tr>
-				<tr>
-					<td>&nbsp;&nbsp;${item.o_option1}이름으로 나와야할텐데...</td>
-					<td>${item.o_option1_num}개</td>
-				</tr>
-				<tr>
-					<td>&nbsp;&nbsp;${item.o_option2}</td>
-					<td>${item.o_option2_num}개</td>
-				</tr>
-				<tr>
-					<td>&nbsp;&nbsp;${item.o_option3}</td>
-					<td>${item.o_option3_num}개</td>
-				</tr>
-				<tr>
-					<td colspan="2"><hr></td>
-				</tr>
-				
-				
-			</c:forEach>
-		</c:if>
-		<c:if test="${command eq 'payment' }">
-			아아아
 			<!-- 선택한 메뉴 정보를 리스트로 받아서 반복문 돌림  -->
-			<c:forEach var="i" begin="1" end="1"> <%-- var="list" items="${orderMenuList }" --%>
+			<c:forEach var="item" items="${detail_dto_list}" varStatus="index"> <%-- var="list" items="${orderMenuList }" --%>
 				<tr>
-					<td><strong>아이스 슈 크림 라떼</strong></td> <!-- ${list.name}-->
+					<td style="padding-left: 10px;"><strong>이름 : ${item.m_code }</strong></td> <!-- ${list.name}-->
 					<td><a href="#">△</a> </td>
 				</tr>
-<!-- 				<tr>
-					<td>￦ 7,000원</td>${list.price}
+ 				<tr>
+					<td>￦ 7,000원
+					<fmt:formatNumber> ${item.o_price}</fmt:formatNumber> 원
+					</td>
 					<td></td>
 				</tr>
 				<tr>
 					<td colspan="2"><hr></td>
 				</tr>
 				<tr>
-					<td>&nbsp;&nbsp;ICED / Tall / 머그컵</td> ${list.option1}
-					<td>5,800원</td>
+					<td>&nbsp;&nbsp;${item.o_pan } / 
+					<b>${item.m_necessary1} 
+					<c:if test="${item.m_necessary2_num>0}">+ ${item.m_necessary2}</c:if>
+					<c:if test="${item.m_necessary3_num>0}">+ ${item.m_necessary3}</c:if>
+					<c:if test="${item.m_necessary4_num>0}">+ ${item.m_necessary4}</c:if></b>
+					/ <i>${item.o_sauce1} + ${item.o_sauce2}</i> </td> 
+					<td>5,800원 기본가격</td>
 				</tr>
 				<tr>
-					<td>&nbsp;&nbsp;에스프레소 샷 2</td>${list.extra1}
+					<td>&nbsp;&nbsp;에스프레소 샷 2</td><%-- ${item.extra1} --%>
 					<td>600원</td>
 				</tr>
 				<tr>
-					<td>&nbsp;&nbsp;바닐라 시럽 4</td>${list.vege}
+					<td>&nbsp;&nbsp;바닐라 시럽 4</td><%-- ${item.vege} --%>
 					<td>600원</td>
 				</tr>
 				<tr>
-					<td>&nbsp;&nbsp;SBC Free Extra D/C</td>${list}.할인내역??}
+					<td>&nbsp;&nbsp;SBC Free Extra D/C</td><%-- ${item}.할인내역??} --%>
 					<td>-600원</td>
 				</tr>
 				<tr>
 					<td colspan="2"><hr></td>
-				</tr> -->
+				</tr> 
 			</c:forEach>
-		</c:if>
-		
 		<tr bgcolor="gray">
 			<td>총 주문 금액</td>
-			<td>${list_dto.o_totalprice }원</td><!-- ${OrderMenu.totalPrice}-->
+			<td><fmt:formatNumber>${list_dto.o_totalprice }</fmt:formatNumber> 원</td><!-- ${OrderMenu.totalPrice}-->
 		</tr>
 		<!-- <tr bgcolor="gray">
 			<td>총 할인 금액</td>
@@ -156,12 +139,12 @@ input#card, #credit, #ssg{
 		</tr>
 		<tr>
 			<td>최종 결제금액</td><!-- ${OrderMenu.totalPrice}-->
-			<td>${list_dto.o_totalprice }원</td>
+			<td><fmt:formatNumber> ${list_dto.o_totalprice }</fmt:formatNumber> 원</td>
 		</tr>
 
 		<tr>
 			<td colspan="2">
-			<a href="menulist.do"><button style="width: 25%;">취 소</button></a>&nbsp;&nbsp;
+			<a href="main.do"><input type="button" value="취 소" style="width: 25%;"></a>&nbsp;&nbsp;<!-- javascript:history.back() -->
 			<button name="command" value="${command }" style="width: 70%;">결제 및 주문하기</button>
 			</td>
 		</tr>

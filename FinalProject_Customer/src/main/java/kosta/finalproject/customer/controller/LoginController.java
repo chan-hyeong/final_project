@@ -29,7 +29,7 @@ public class LoginController {
 			System.out.println("result : " + result);
 			model.addAttribute("result", 1);
 			session.setAttribute("id", dto.getC_id());
-			return "customer/main";
+			return "redirect:main.do";//로그인 성공 
 		} else
 
 			// model.addAttribute("result", 0);

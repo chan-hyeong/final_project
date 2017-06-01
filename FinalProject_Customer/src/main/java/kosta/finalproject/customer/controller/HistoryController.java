@@ -32,8 +32,11 @@ public class HistoryController {
 		Order_ListDAO list_dao = sqlsession.getMapper(Order_ListDAO.class);
 		
 		String c_id = session.getAttribute("id").toString();
-		List<Order_DetailTDTO> orderdetail_all = detail_dao.order_detail_list(c_id);
+		List<Order_DetailTDTO> orderdetail_all = detail_dao.order_detail_list_for_customer(c_id);
 		List<Order_DetailTDTO> orderdetail = new ArrayList<Order_DetailTDTO>();
+		
+		//////★★★★★★★ for 문 없애고 매서드하나 더 만드는게 나을듯? 오버라이딩하거나
+		
 		
 		System.out.println("\n\t 세션에서 넘겨받은 아이디 : " + c_id + " : ");
 		for( Order_DetailTDTO item : orderdetail_all){
@@ -44,7 +47,7 @@ public class HistoryController {
 				continue;
 			}
 		}
-		for( Order_ListTDTO item : list_dao.order_list_list(c_id)){
+		for( Order_ListTDTO item : list_dao.get_order_list_for_customer(c_id)){
 			if ( item.getOrder_num() == Integer.parseInt(order_num)){
 				System.out.println("\t히스토리 list아이템 : " + item);
 				request.setAttribute("orderitem", item);
@@ -67,7 +70,7 @@ public class HistoryController {
 		Order_ListDAO list_dao = sqlsession.getMapper(Order_ListDAO.class);
 		
 		String c_id = session.getAttribute("id").toString();
-		List<Order_ListTDTO> orderlist = list_dao.order_list_list(c_id);
+		List<Order_ListTDTO> orderlist = list_dao.get_order_list_for_customer(c_id);
 		
 		System.out.println("\n\t 세션에서 넘겨받은 아이디 : " + c_id + " : ");
 		for( Order_ListTDTO item : orderlist){

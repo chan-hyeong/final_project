@@ -6,122 +6,176 @@
 <mapper namespace="kosta.finalproject.customer.dao.Order_DetailDAO">
 	<select id="order_detail_list" resultType="kosta.finalproject.customer.dto.Order_DetailTDTO">
 		select
-			order_detail_num,
-			order_num, 
-			m_code, 
-			o_pan, 
-			m_necessary1,
-			m_necessary1_num,
-			m_necessary2,
-			m_necessary2_num,
-			m_necessary3,
-			m_necessary3_num,
-			m_necessary4,
-			m_necessary4_num,
-			o_option1,
-			o_option1_num,
-			o_option2,
-			o_option2_num,
-			o_option3,
-			o_option3_num,
-			o_sauce1,
-			o_sauce2,
-			o_vege1,
-			o_vege2,
-			o_vege3,
-			o_vege4,
-			o_vege5,
-			o_vege6,
-			o_vege7,
-			o_vege8,
+			order_detail_num, order_num, 
+			
+			m_code,	o_pan, 
+			
+			m_necessary1, m_necessary1_num,
+			m_necessary2, m_necessary2_num,
+			m_necessary3, m_necessary3_num,
+			m_necessary4, m_necessary4_num,
+			
+			o_option1, o_option1_num,
+			o_option2, o_option2_num,
+			o_option3, o_option3_num,
+			o_option4, o_option4_num,
+			o_option5, o_option5_num,
+			
+			o_sauce1, o_sauce2,
+			
+			o_vege1, o_vege2, o_vege3, o_vege4,	o_vege5, o_vege6, o_vege7, o_vege8,
 			o_price
 		from order_detail
 		where order_num in (select order_num from order_list where c_id=#{c_id})
 		order by order_num desc, m_code asc
 	</select>
+	<select id="order_detail_list_for_customer" resultType="kosta.finalproject.customer.dto.Order_DetailTDTO">
+		select
+			order_detail_num, order_num, 
+			
+			(select code_name from code where code=od.m_code) as m_code,	
+			(select code_name from code where code=od.o_pan ) as o_pan, 
+			
+			(select code_name from code where code=od.m_necessary1 ) as m_necessary1, m_necessary1_num,
+			(select code_name from code where code=od.m_necessary2 ) as m_necessary2, m_necessary2_num,
+			(select code_name from code where code=od.m_necessary3 ) as m_necessary3, m_necessary3_num,
+			(select code_name from code where code=od.m_necessary4 ) as m_necessary4, m_necessary4_num,
+			
+			(select code_name from code where code=od.o_option1 ) as o_option1, o_option1_num,
+			(select code_name from code where code=od.o_option2 ) as o_option2, o_option2_num,
+			(select code_name from code where code=od.o_option3 ) as o_option3, o_option3_num,
+			(select code_name from code where code=od.o_option4 ) as o_option4, o_option4_num,
+			(select code_name from code where code=od.o_option5 ) as o_option5, o_option5_num,
+			
+			(select code_name from code where code=od.o_sauce1 ) as o_sauce1, (select code_name from code where code=od.o_sauce2 ) as o_sauce2,
+			
+			(select code_name from code where code=od.o_vege1) as o_vege1, 
+			(select code_name from code where code=od.o_vege2 ) as o_vege2, 
+			(select code_name from code where code=od.o_vege3 ) as o_vege3, 
+			(select code_name from code where code=od.o_vege4 ) as o_vege4,	
+			(select code_name from code where code=od.o_vege5 ) as o_vege5, 
+			(select code_name from code where code=od.o_vege6 ) as o_vege6, 
+			(select code_name from code where code=od.o_vege7 ) as o_vege7, 
+			(select code_name from code where code=od.o_vege8 ) as o_vege8,
+			o_price
+		from order_detail od
+		where od.order_num in (select order_num from order_list where c_id=#{c_id})
+		order by od.order_num desc, od.m_code asc
+	</select>
 	
 	<select id="order_detail_basket" resultType="kosta.finalproject.customer.dto.Order_DetailTDTO">
 		select
-			order_detail_num,
-			order_num, 
-			m_code, 
-			o_pan, 
-			m_necessary1,
-			m_necessary1_num,
-			m_necessary2,
-			m_necessary2_num,
-			m_necessary3,
-			m_necessary3_num,
-			m_necessary4,
-			m_necessary4_num,
-			o_option1,
-			o_option1_num,
-			o_option2,
-			o_option2_num,
-			o_option3,
-			o_option3_num,
-			o_sauce1,
-			o_sauce2,
-			o_vege1,
-			o_vege2,
-			o_vege3,
-			o_vege4,
-			o_vege5,
-			o_vege6,
-			o_vege7,
-			o_vege8,
+			order_detail_num, order_num, 
+			
+			m_code,	o_pan, 
+			
+			m_necessary1, m_necessary1_num,
+			m_necessary2, m_necessary2_num,
+			m_necessary3, m_necessary3_num,
+			m_necessary4, m_necessary4_num,
+			
+			o_option1, o_option1_num,
+			o_option2, o_option2_num,
+			o_option3, o_option3_num,
+			o_option4, o_option4_num,
+			o_option5, o_option5_num,
+			
+			o_sauce1, o_sauce2,
+			
+			o_vege1, o_vege2, o_vege3, o_vege4,	o_vege5, o_vege6, o_vege7, o_vege8,
 			o_price
 		from order_detail
 		where order_num=(select order_num from order_list where order_status='장바구니' and c_id=#{c_id})
 		order by order_num desc, m_code asc
 	</select>
+	<select id="order_detail_basket_for_customer" resultType="kosta.finalproject.customer.dto.Order_DetailTDTO">
+		select
+			order_detail_num,
+			order_num, 
+			
+			(select code_name from code where code=od.m_code) as m_code,
+			
+			(select code_name from code where code=od.o_pan) as o_pan,
+			
+			nvl((select code_name from code where code=od.m_necessary1),'') as m_necessary1,		m_necessary1_num,
+			nvl((select code_name from code where code=od.m_necessary2),'') as m_necessary2,		m_necessary2_num,
+			nvl((select code_name from code where code=od.m_necessary3),'') as m_necessary3,		m_necessary3_num,
+			nvl((select code_name from code where code=od.m_necessary4),'') as m_necessary4,		m_necessary4_num,
+			
+			nvl((select code_name from code where code=od.o_option1),'') as o_option1,			o_option1_num,
+			nvl((select code_name from code where code=od.o_option2),'') as o_option2,			o_option2_num,
+			nvl((select code_name from code where code=od.o_option3),'') as o_option3,			o_option3_num,
+			nvl((select code_name from code where code=od.o_option4),'') as o_option4,			o_option4_num,
+			nvl((select code_name from code where code=od.o_option5),'') as o_option5,			o_option5_num,
+			
+			nvl((select code_name from code where code=od.o_sauce1),'') as o_sauce1,
+			nvl((select code_name from code where code=od.o_sauce2),'') as o_sauce2,
+			
+			nvl((select code_name from code where code=od.o_vege1),'') as o_vege1,
+			nvl((select code_name from code where code=od.o_vege2),'') as o_vege2,
+			nvl((select code_name from code where code=od.o_vege3),'') as o_vege3,
+			nvl((select code_name from code where code=od.o_vege4),'') as o_vege4,
+			
+			nvl((select code_name from code where code=od.o_vege5),'') as o_vege5,
+			nvl((select code_name from code where code=od.o_vege6),'') as o_vege6,
+			nvl((select code_name from code where code=od.o_vege7),'') as o_vege7,
+			nvl((select code_name from code where code=od.o_vege8),'') as o_vege8,
+			
+			o_price
+			
+		from order_detail od
+		where order_num=(select order_num from order_list where order_status='장바구니' and c_id=#{c_id})
+		order by order_detail_num asc
+	</select>
 
 	<insert id="insert_order_detail" parameterType="kosta.finalproject.customer.dto.Order_DetailTDTO">
 		insert into order_detail (
-			order_detail_num,
-			order_num, 
-			m_code, 
-			o_pan, 
-			m_necessary1,
-			m_necessary1_num,
-			m_necessary2,
-			m_necessary2_num,
-			m_necessary3,
-			m_necessary3_num,
-			m_necessary4,
-			m_necessary4_num,
-			o_option1,
-			o_option1_num,
-			o_option2,
-			o_option2_num,
-			o_option3,
-			o_option3_num,
-			o_sauce1,
-			o_sauce2,
-			o_vege1,
-			o_vege2,
-			o_vege3,
-			o_vege4,
-			o_vege5,
-			o_vege6,
-			o_vege7,
-			o_vege8,
-			o_price
-			) values
-		(	o_detail_num.nextval, #{order_num},#{m_code},#{o_pan},
+			order_detail_num, order_num, 
+			
+			m_code,	o_pan, 
+			
+			m_necessary1, m_necessary1_num,
+			m_necessary2, m_necessary2_num,
+			m_necessary3, m_necessary3_num,
+			m_necessary4, m_necessary4_num,
+			
+			o_option1, o_option1_num,
+			o_option2, o_option2_num,
+			o_option3, o_option3_num,
+			o_option4, o_option4_num,
+			o_option5, o_option5_num,
+			
+			o_sauce1, o_sauce2,
+			
+			o_vege1, o_vege2, o_vege3, o_vege4,	o_vege5, o_vege6, o_vege7, o_vege8,
+			o_price	) 
+		values(
+			o_detail_num.nextval, #{order_num},
+			
+			#{m_code},#{o_pan},
+			
 			#{m_necessary1},#{m_necessary1_num},#{m_necessary2},#{m_necessary2_num},
 			#{m_necessary3},#{m_necessary3_num},#{m_necessary4},#{m_necessary4_num},
+			
 			#{o_option1},#{o_option1_num},#{o_option2},#{o_option2_num},#{o_option3},#{o_option3_num},
+			#{o_option4},#{o_option4_num},#{o_option5},#{o_option5_num},
+			
 			#{o_sauce1},#{o_sauce2},
+			
 			#{o_vege1}, #{o_vege2}, #{o_vege3}, #{o_vege4}, #{o_vege5}, #{o_vege6}, #{o_vege7}, #{o_vege8}, 
-			#{o_price}
-		)
+			
+			#{o_price} )
 	</insert>
 
 
-	<delete id="delete_order_detail" parameterType="kosta.finalproject.customer.dto.Order_DetailTDTO">
-		
-	
+	<delete id="delete_order_detail">
+		delete from order_detail
+		<where>
+			order_num = #{param1}
+			<if test="param2 > 0">
+				and order_detail_num = #{param2} 
+			</if>
+		</where>
 	</delete>
 	
 	
