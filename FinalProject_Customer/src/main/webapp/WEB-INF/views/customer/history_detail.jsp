@@ -20,7 +20,7 @@
 
 
    <!-- 장바구니 테이블 -->
-   <table border="0" style="align:center;width:90%;">
+   <table border="0" align=center style="align:center;width:80%; font-size: large;">
       <tr id="header1">
          <td colspan="2">주문 번호 <b style="float:right;">${orderdetail[0].order_num }</b></td>
       </tr>
