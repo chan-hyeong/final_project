@@ -8,15 +8,8 @@ public class HistoryTDTO {
 	private String m_code;
 	private String s_code;
 	private Timestamp order_date;
+	private String order_status;
 	private int o_totalprice;
-	
-	@Override
-	public String toString() {
-		return "HistoryTDTO [order_num=" + order_num + ", num_of_item=" + num_of_item + ", m_code=" + m_code
-				+ ", s_code=" + s_code + ", order_date=" + order_date + ", o_totalprice=" + o_totalprice + "]\n";
-	}
-	
-	
 	
 	public int getOrder_num() {
 		return order_num;
@@ -57,6 +50,24 @@ public class HistoryTDTO {
 
 	public void setNum_of_item(int num_of_item) {
 		this.num_of_item = num_of_item;
+	}
+
+
+
+	public String getOrder_status() {
+		return order_status;
+	}
+
+
+
+	public void setOrder_status(String order_status) {
+		this.order_status = order_status;
+	}
+	@Override
+	public String toString() {
+		return "HistoryTDTO [order_num=" + order_num + ", num_of_item=" + num_of_item + ", m_code=" + m_code
+				+ ", s_code=" + s_code + ", order_date=" + order_date + ", order_status=" + order_status
+				+ ", o_totalprice=" + o_totalprice + "]<br>\n";
 	}
 	
 	

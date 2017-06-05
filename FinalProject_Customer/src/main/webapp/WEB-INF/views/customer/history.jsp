@@ -7,6 +7,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet"
+	href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <title>${id }님의 히스토리입니다.</title>
 
 <style type="text/css">
@@ -64,7 +66,28 @@ table tr td button:HOVER {
 }
 </style>
 <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
+	  $( function() {
+		    $( ".datepicker1" ).datepicker();
+		  } );
+	  
+	  function atest(start, end){
+	    	var start=start.value; //파마리터값 가져오기 
+	    	var end=end.value; //파마리터값 가져오기 
+	    	
+	    	var startarr=start.split('/');  //  "/" 로 나눠서 배열형태로 저장 
+	    	var endarr=end.split('/');  //  "/" 로 나눠서 배열형태로 저장 
+	    	
+	    	var start=startarr[2]+'-'+startarr[0]+'-'+startarr[1];  //DB에 맞는 형식으로 변환 
+	    	var end=endarr[2]+'-'+endarr[0]+'-'+endarr[1];  //DB에 맞는 형식으로 변환 
+	    	
+	    	var url ='history.do?start='+start+'&end='+end;
+	   	 	window.location.href=url;
+	    };
+	    
+	    
+
 	$(document).ready(function(){
 		console.log("history page 입니다");
 		
@@ -74,8 +97,12 @@ table tr td button:HOVER {
 		$('.popup').click(function(){
 			$('.dimmed,.popup').hide();
 		});
+		
+		$('#selectDate').click(function(){
+			alert('기간 선택');
+		});
+		
 	});
-	
 	function popupCenter(params1){
 			var width = $('.popup').width();
 			var height = $('.popup').height();
@@ -105,83 +132,23 @@ table tr td button:HOVER {
 		/* scroll(0, document.getElementById('historydetail').scollHeight); */
 		console.log("\t ajax 끝났다");
 	}
-				
-	function historydetail1(order_num){
-		 $.ajax({
-			type: "get",
-			url: "historydetail.do",
-			data: {"order_num" : order_num },
-			success : function(data){
-				
-				var historydetail =JSON.parse(JSON.stringify(data));
-				
-				var detail_data = "";
-				detail_data += "<table sytle=font-size: 10px; text-align: center;>";
-				detail_data += "<tr>";
-				detail_data += "<td>주문번호</td>";
-				detail_data += "<td>메뉴명</td>";
-				detail_data += "<td>빵</td>";
-				detail_data += "<td>베이스1</td>";
-				detail_data += "<td>베이스2</td>";
-				detail_data += "<td>베이스3</td>";
-				detail_data += "<td>베이스4</td>";
-				detail_data += "<td>옵션1</td>";
-				detail_data += "<td>옵션2</td>";
-				detail_data += "<td>옵션3</td>";
-				detail_data += "<td>옵션4</td>";
-				detail_data += "<td>옵션5</td>";
-				detail_data += "<td>소스</td>";
-				detail_data += "<td>야채</td>";
-				detail_data += "<td>가격</td>";
-				
-				
-				detail_data += "</tr>";
-				
-				for(var i = 0 ; i < historydetail.length ; i++){
-					
-					
-					var detail = historydetail[i];
-					
-					detail_data += "<tr>";
-					detail_data += "<td>"  + detail.order_no +  "</td>";
-					detail_data += "<td>"  + detail.m_name +  "</td>";
-					detail_data += "<td>"  + detail.PAN +  "</td>";
-					detail_data += "<td>"  + detail.necessary1 +  "</td>";
-					detail_data += "<td>"  + detail.necessary2 +  "</td>";
-					detail_data += "<td>"  + detail.necessary3 +  "</td>";
-					detail_data += "<td>"  + detail.necessary4 +  "</td>";
-					detail_data += "<td>"  + detail.o_option1 + ":" + detail.o_option1_num +  "</td>";
-					detail_data += "<td>"  + detail.o_option2 + ":" + detail.o_option2_num +  "</td>";
-					detail_data += "<td>"  + detail.o_option3 + ":" + detail.o_option3_num +  "</td>";
-					detail_data += "<td>"  + detail.o_option4 + ":" + detail.o_option4_num +  "</td>";
-					detail_data += "<td>"  + detail.o_option5 + ":" + detail.o_option5_num +  "</td>";
-					detail_data += "<td>"  + detail.sauce +  "</td>";
-					detail_data += "<td>"  + detail.vege +  "</td>";
-					detail_data += "<td>"  + detail.o_price +  "</td>";
-					
-					detail_data += "</tr>";
-					
-				}
-				detail_data += "</table>";
-				
-				$('#historydetail').html(detail_data);
-				/*var m_value=m_name.value(1);
-				alert(m_value); */
-				
-				/*alert(data.list);
-				alert(data.list.length);
-				alert(data.list[0].order_num); */
-				
-				popupCenter();
-				$('.dimmed,.popup').show();
-				
-				  $(window).resize(function(){
-				  popupCenter();
-			  })
-			 }
-		})
-		  
+	
+	
+	function test(){
+		/* $('#order_status').each(function (index, item){
+			console.log($(this));
+		}); */
+		var item = document.getElementsByName('order_status');
+		for(var i=0; i<item.length; i++){
+			//console.log(item[i].innerHTML);
+			if( item[i].innerHTML == '준비완료'){
+				console.log(item[i].innerHTML + " : " + i);
+				//이거의 부모를 선택해서 
+				//show 나머지는 hide
+			}
 		}
+	}
+				
 	
 
 </script>
@@ -192,16 +159,54 @@ table tr td button:HOVER {
 <a href="main.do">메인으로 돌아가기</a><br>
 
 <h1>인엽이형이 수정할 히스토리 페이지 </h1>
+	<fieldset >
+	<legend>
+		<h3>
+			날짜 선택 
+		</h3>
+	</legend>
+		<input type="text" placeholder="시작 날짜" id="datepicker" class="datepicker1">
+		<input type="text" placeholder="끝 날짜" id="datepicker2" class="datepicker1">
+		<button onclick="atest(datepicker, datepicker2)">조회 방법1</button>
+		<hr><br>
+		
+		<input type="date" placeholder="시작 날짜" id="dateinput">
+		<input type="date" placeholder="끝 날짜" id="dateinput2">
+		<button onclick="atest(dateinput, dateinput2)">조회 방법2</button>
+		<hr><br>
+		
+		<input type="date" placeholder="시작 날짜" id="dinput">
+		<input type="date" placeholder="끝 날짜" id="dinput2">
+		<button onclick="atest(dinput, dinput2)">조회 방법3</button><br>
+		<input type="radio" name="period" id="amonth"><label for="amonth">1개월</label> 
+		<input type="radio" name="period" id="ayear"><label for="ayear">1년</label>
+		<input type="radio" name="period" id="custom"><label for="custom">기간설정</label>
+		<hr>
+	</fieldset>
+	
+	<fieldset >
+	<legend><h3>status셀렉</h3></legend>
+            <select name="statuscheck" style="width:200px;" onchange="">
+               <option value="all">(주문상태) 전체</option>
+               <option value="paid">결제완료</option>
+               <option value="complete">준비완료</option>
+               <option value="canceld">결제취소</option>
+            </select>
+            
+            <button onclick="test();">확인버튼 </button>
+	</fieldset>
+<hr>
+<br>
 
 <table style="align:center; width:90%;"> 
       <tr>
          <td colspan="2">
-            <select name="category" style="width:200px;">
-               <option>(주문상태) 전체</option>
-               <option>결제완료</option>
-               <option>준비완료</option>
-               <option>결제취소</option>
-            </select>
+            <!-- <select name="statuscheck" style="width:200px;" onchange="">
+               <option value="all">(주문상태) 전체</option>
+               <option value="paid">결제완료</option>
+               <option value="complete">준비완료</option>
+               <option value="canceld">결제취소</option>
+            </select> -->
          </td>
       </tr>
       <tr><td colspan="2"><hr></td></tr>
@@ -209,7 +214,7 @@ table tr td button:HOVER {
       <tr>
          <td align="left">설정된 기간이 나올거임</td>
          <td align="right" width="45%">
-            <button class="myButton">기간 설정</button>
+            <button class="myButton" id="selectDate">기간 설정</button>
          </td>
       </tr>
       <tr><td colspan="2"><hr></td></tr>
@@ -217,11 +222,11 @@ table tr td button:HOVER {
 	<c:forEach var="list" items="${ orderlist }" varStatus="status">
       <tr>
          <td colspan="2">
-            <button style="border:none; width:100%;"
-                  id="listitem" onclick="historydetail(${ list.order_num }, this)">
+            <button name="listitem" style="border:none; width:100%;" id="listitem" onclick="historydetail(${ list.order_num }, this)">
                <p style="float:left;"><b>[${ list.num_of_item} 개] &nbsp;${ list.m_code }&nbsp;</b></p><br><br>
                
-               <div style="float:right">
+               <div style="float:right;">
+               <div name="order_status">${list.order_status }</div>
                <fmt:formatDate value="${ list.order_date }" pattern="yyyy-MM-dd HH:mm:ss"/> / 
                <fmt:formatNumber>${ list.o_totalprice }</fmt:formatNumber> 원
                </div>
@@ -235,6 +240,7 @@ table tr td button:HOVER {
    
    
    <div class="dimmed"></div>
+   
    <div class="popup">
    		<div class="historydetail" id="historydetail">
    		</div>

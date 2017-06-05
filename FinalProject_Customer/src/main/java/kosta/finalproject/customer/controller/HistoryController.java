@@ -38,6 +38,7 @@ public class HistoryController {
 		return list;
 	}
 	
+	//히스토리 디테일 : ajax 이용해서 detail 페이지를 작성, 보낸다 
 	@RequestMapping(value="/historydetailtest.do", method=RequestMethod.GET)
 	public String history_detail_test(HttpServletRequest request, HttpSession session,
 			@RequestParam("order_num") int order_num) {
@@ -59,13 +60,25 @@ public class HistoryController {
 		return "customer/history_detail_test";
 	}
 	
-	//historylist
+	
+	
+	//히스토리 진입시 
 	@RequestMapping("/history.do")
-	public String history(HttpServletRequest request, HttpSession session) {
+	public String history(HttpServletRequest request, HttpSession session,
+			@RequestParam(name="start", defaultValue="sysdate-31")String start, 
+			@RequestParam(name="end", defaultValue="sysdate")String end ) {
 		HistoryDAO list_dao = sqlsession.getMapper(HistoryDAO.class);
 		
 		String c_id = session.getAttribute("id").toString();
-		List<HistoryTDTO> orderlist = list_dao.history(c_id);
+		
+		List<HistoryTDTO> orderlist ;
+		
+		if (start == null && end == null){
+			orderlist = list_dao.history(c_id);
+		}else {
+			System.out.println(start + " , " + end);
+			orderlist = list_dao.history_get_by_date(c_id, start, end);
+		}
 		
 		System.out.println(orderlist.toString());
 		

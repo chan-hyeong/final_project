@@ -24,6 +24,32 @@
 		     	
 		order by ol.order_date desc
 	</select>
+	<select id="history_get_by_date" resultType="kosta.finalproject.customer.dto.HistoryTDTO">
+		select	ol.order_num,
+				( select count(order_detail_num) from order_detail where order_num=ol.order_num ) as num_of_item,
+		        ( select listagg( (select code_name from code where code=od.m_code), '; ') within group (order by order_detail_num)  
+		          from order_detail od 
+		          where order_num = ol.order_num group by order_num
+		         ) as m_code,
+				(select code_name from code where code = ol.s_code) as s_code,
+				ol.order_date,
+				ol.order_status,
+				ol.o_totalprice
+				
+		from order_list ol
+		
+		where c_id = #{param1}
+		     and order_status not in ('장바구니')
+		     <choose>
+			     <when test="param3 == 'sysdate'">
+				     and to_char(order_date, 'YYYY-MM-DD') between ${param2} and ${param3}
+			     </when>
+			     <otherwise>
+				     and to_char(order_date, 'YYYY-MM-DD') between #{param2} and #{param3}
+			     </otherwise>
+		     </choose>
+		order by ol.order_date desc
+	</select>
 
 
 	<select id="historydetail" resultMap="historydetail">

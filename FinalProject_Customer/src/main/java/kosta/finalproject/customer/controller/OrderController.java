@@ -82,6 +82,9 @@ public class OrderController {
 		return "customer/paymentform";
 	}
 
+	
+	
+	//트랜잭션이 필요함 //[1]주문추가 [2]재고수정 [3]코인결제, 셋 중 하나라도 실패하면 rollback해야함 
 	@RequestMapping("/payment.do")//결제 완료 버튼을 눌렀을때 
 	public String paymentpro(HttpServletRequest request, HttpSession session, 
 			@RequestParam(value="command", defaultValue="null") String command,
@@ -135,7 +138,11 @@ public class OrderController {
 		
 		///////////////////////////////////// inventory 변경 test 중 ★★★★★★★★★
 		
-		//[3] history.do 로 이동 : 주문내역 보여주기 (이 경우에는 주문내역 상세페이지)
+		//[3] 결제된 금액만큼 customers.c_coin 을 업데이트하기 ? 
+		
+		
+		
+		//[4] history.do 로 이동 : 주문내역 보여주기 (이 경우에는 주문내역 상세페이지)
 		return "redirect:history.do";
 	}
 	

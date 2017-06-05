@@ -23,7 +23,6 @@
 	</beans:bean>
 	
 	<context:component-scan base-package="kosta.finalproject.*" />
-	
-	
+
 	
 </beans:beans>
