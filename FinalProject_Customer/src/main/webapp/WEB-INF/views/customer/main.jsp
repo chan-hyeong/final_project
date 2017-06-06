@@ -30,7 +30,9 @@ String id = (String)session.getAttribute("id");
 <h3>
 <a href="logout.do">로그아웃</a><br>
 </h3>
-
+<h3>
+<a href="charge.do">코인충전</a><br/>
+</h3>
 
 
 <%-- form action="modify.do" method="get">
