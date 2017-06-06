@@ -163,8 +163,24 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.4.4</version>
         </dependency>
+	<!-- Iimport -->
+	<dependency>
+	    <groupId>com.github.iamport</groupId>
+	    <artifactId>iamport-rest-client-java</artifactId>
+	    <version>0.1.0</version>
+	</dependency>
+	
 	
 	</dependencies>
+	
+	
+	<repositories>
+		<repository>
+	    	<id>jitpack.io</id>
+	    	<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+	
     <build>
         <plugins>
             <plugin>
