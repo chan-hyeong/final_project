@@ -15,7 +15,7 @@
 		parameterType="kosta.finalproject.customer.dto.CustomersTDTO">
 		select count(*) from CUSTOMERS where c_id=#{c_id} and c_pw=#{c_pw}
 	</select>
-
+	
 	<!-- 회원정보 불러오기 -->
 	<select id="getcustomers" resultType="kosta.finalproject.customer.dto.CustomersTDTO">
 		select * from CUSTOMERS where c_id=#{c_id}

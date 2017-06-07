@@ -25,10 +25,13 @@ public class LoginController {
 	public String loginpro(CustomersTDTO dto, HttpSession session, Model model) {
 		CustomersDAO dao = sqlsession.getMapper(CustomersDAO.class);
 		int result = dao.customers(dto);
+		
 		if (result == 1) {
 			System.out.println("result : " + result);
 			model.addAttribute("result", 1);
 			session.setAttribute("id", dto.getC_id());
+			session.setAttribute("c_coin", dao.getcustomers(dto.getC_id()).getC_coin());
+			
 			return "redirect:main.do";//로그인 성공 
 		} else
 
@@ -44,7 +47,7 @@ public class LoginController {
 		session.setAttribute("id", null);
 		session.invalidate();
 		System.out.println("로그아웃됨");
-		return "customer/index";
+		return "redirect:main.do";
 	}
 	
 

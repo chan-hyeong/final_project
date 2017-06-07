@@ -106,72 +106,25 @@ input{
 }
 
 </style>
+
 </head>
 <body>	
+<!-- header -->
+<jsp:include page="header.jsp"></jsp:include>
+<br>
+<br>
+<br>
+<br>
+
+<br>
+<br>
+<br>
+<div style="margin: 10px;">
 
 	<img src="${pageContext.request.contextPath}/img/${menudto.m_code}.png">
-	${menudto.m_explain}<br>
-	${menudto.m_name}<br>
+		${menudto.m_explain}<br>
+		${menudto.m_name}<br>
 	<br>
- <%-- 	<div>
- 		<c:forEach var="olist" items="${option}" begin="0" end="8" varStatus="i">
- 			<input type="checkbox" id="${olist.m_code}" name="${olist.m_code}" value="${olist.m_name}" checked="true"><label for="${olist.m_code}">${olist.m_name}</label>&nbsp;
- 			<input type="checkbox" id="${olist.m_code}" name="o_vage${i.count}" value="o" checked="true"><label for="${olist.m_code}">${olist.m_name}</label>&nbsp;
- 		</c:forEach>
- 	</div>
- 	<br>
- 	<div>
-		<select name="o_pan">
-			<option >빵선택</option>
-			<c:forEach var="olist" items="${option}" begin="9" end="14">
-				<option  value="${ olist.m_code }">${olist.m_name}</option>
-			</c:forEach>
-		</select> 		
- 	</div>
- 	<br>
- 	
- 	
- 	
- 	<div> 		
-		<select>
-			<option>소스선택</option>
-			<c:forEach var="olist" items="${option}" begin="15" end="31">
-				<option  value="${ olist.m_code }">${olist.m_name}</option>
-			</c:forEach>
-		</select>
-		<select>
-			<option>소스선택</option>
-			<c:forEach var="olist" items="${option}" begin="15" end="31">
-				<option  value="${ olist.m_code }">${olist.m_name}</option>
-			</c:forEach>
-		</select>		
- 	</div>
- 	<br>
- 	
- 	
- 	
-  	<div>
-		<c:forEach var="olist" items="${option}" begin="32" end="36" varStatus="status">
-		<div>
-			${olist.m_name} <input name="price" value="0"/>
-			<input type="hidden" value="${ olist.m_price }" name="h_price"/>
-			<input type="button" value="-" id="${status.count}" onclick="minus(this)"/>
-			<input readonly="readonly" value="1" id="o_option${status.count }_num">
-			<input type="button" value="+" id="${status.count}" onclick="plus(this)"/>
-		</div>
-		</c:forEach>
- 	</div> 
- 	<div>
- 		<input value="${ menudto.m_price }" id="totalprice"/> 		
- 	</div>
- 	<br>
-	<div>
-		<a href="shoppingbag.do">장바구니담기</a>&nbsp;
-		<a href="menulist.do">취소</a>&nbsp;
-		<a href="payment.do">결제</a>&nbsp;
-	</div>
-	
-	<hr> --%>
 	
  	<!-- <button onclick="test()">테스트버튼 </button>
  	<br>
@@ -188,7 +141,7 @@ input{
 	
 	
 		사용자 id : <input type="text" name="c_id" value="${id }"><br>
-		매장 코드 : <input type="text" name="s_code" value="d004"><br>
+		매장 코드 : <input type="text" name="s_code" value="${s_code}"><br>
 		기본 가격 : <input type="text" name="o_totalprice" value="${ menudto.m_price }">원<br>
 		<br>
 		메뉴 코드 : <input type="text" name="m_code" value="${menudto.m_code }"><br>
@@ -201,18 +154,19 @@ input{
 		</select> 		
 		<br>
 		
-		<br>필수 : <br>
-		<input type="hidden" name="m_necessary1" value="${menudto.m_necessary1 }"><label>${menudto.m_necessary1_name }</label>
-		<input type="hidden" name="m_necessary1_num" value="${menudto.m_necessary1_num }"><label>${menudto.m_necessary1_num}개</label><br>
-		
-		<input type="hidden" name="m_necessary2" value="${menudto.m_necessary2}"><label>${menudto.m_necessary2_name }</label>
-		<input type="hidden" name="m_necessary2_num" value="${menudto.m_necessary2_num}"><label>${menudto.m_necessary1_num}개</label><br>
-		
-		<input type="hidden" name="m_necessary3" value="${menudto.m_necessary3}"><label>${menudto.m_necessary3_name }</label>
-		<input type="hidden" name="m_necessary3_num" value="${menudto.m_necessary3_num}"><label>${menudto.m_necessary3_num}개</label><br>
-		
-		<input type="hidden" name="m_necessary4" value="${menudto.m_necessary4 }"><label>${menudto.m_necessary4_name }</label>
-		<input type="hidden" name="m_necessary4_num" value="${menudto.m_necessary4_num }"><label>${menudto.m_necessary4_num}개</label><br>
+		<br>
+		필수 : <br>
+			<input type="hidden" name="m_necessary1" value="${menudto.m_necessary1 }"><label>${menudto.m_necessary1_name }</label>
+			<input type="hidden" name="m_necessary1_num" value="${menudto.m_necessary1_num }"><label>${menudto.m_necessary1_num}개</label><br>
+			
+			<input type="hidden" name="m_necessary2" value="${menudto.m_necessary2}"><label>${menudto.m_necessary2_name }</label>
+			<input type="hidden" name="m_necessary2_num" value="${menudto.m_necessary2_num}"><label>${menudto.m_necessary1_num}개</label><br>
+			
+			<input type="hidden" name="m_necessary3" value="${menudto.m_necessary3}"><label>${menudto.m_necessary3_name }</label>
+			<input type="hidden" name="m_necessary3_num" value="${menudto.m_necessary3_num}"><label>${menudto.m_necessary3_num}개</label><br>
+			
+			<input type="hidden" name="m_necessary4" value="${menudto.m_necessary4 }"><label>${menudto.m_necessary4_name }</label>
+			<input type="hidden" name="m_necessary4_num" value="${menudto.m_necessary4_num }"><label>${menudto.m_necessary4_num}개</label><br>
 		
 		 	
  	<div> 		
@@ -250,7 +204,7 @@ input{
 <%-- 		<c:forEach var="olist" items="${option}" varStatus="i">  --%>
 		<c:forEach var="olist" items="${option_vege}" varStatus="i"> 
  			<input type="checkbox" id="${olist.m_code}" name="o_vege${i.count}" value="${olist.m_code}" checked="checked" ><label for="${olist.m_code}">${olist.m_name}</label>&nbsp; 
- 			<c:if test="${i.count%4 == 0 }"><br></c:if>
+ 			<br>
  		</c:forEach>
 		
 		<br>총 가격 : 
@@ -260,8 +214,15 @@ input{
 		<button value="basket" name="command">장바구니</button>
 		<button value="payment" name="command">결제</button>
 	</form>
+	</div>
 	
 	
+	<br>
+	<br>
+	<br>
+	<br>
+	<!-- footer -->
+	<jsp:include page="footer.jsp"></jsp:include>
 	
 </body>
 </html>

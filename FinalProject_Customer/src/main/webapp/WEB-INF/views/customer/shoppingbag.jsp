@@ -8,7 +8,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>${id} 님의 장바구니</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
 
 <style type="text/css">
 #btn{
@@ -51,9 +57,22 @@ div#total{
 }
 
 </style>
+
+
+
+<title>${id} 님의 장바구니</title>
+
+
 </head>
 <body>
-	<a href="main.do"><h3>메인으로 가기</h3></a>
+<!-- header -->
+<jsp:include page="header.jsp"></jsp:include>
+<br>
+<br>
+<br>
+<br>
+
+
 	<h1>장바구니</h1>
 
 
@@ -166,5 +185,11 @@ div#total{
 		</c:otherwise>
 	</c:choose>
 	
+	<br>
+	<br>
+	<br>
+	<br>
+	<!-- footer -->
+		<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

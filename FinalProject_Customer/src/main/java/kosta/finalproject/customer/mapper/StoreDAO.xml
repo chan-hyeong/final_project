@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kosta.finalproject.customer.dao.StoreDAO">
+	<!-- select s_code, (select c.code_name from code c where s.s_code=c.code) 
+		s_address, s_latitude, s_longitude from stores s where s_code like 'd%' -->
+	<select id="storelist" resultType="kosta.finalproject.customer.dto.StoreTDTO">
+		select
+				s_code
+				, (select code_name from code where code=s_code) as s_name
+				, s_address
+				, s_phone
+				, s_manager
+		from 	stores s
+	</select>
+	
+	<select id="get_store_info" resultType="kosta.finalproject.customer.dto.StoreTDTO">
+		select
+				s_code
+				, (select c.code_name from code c where c.code=s.s_code) as s_name,
+				, s_address
+				, s_phone
+				, s_manager
+				--, s_latitude
+				--, s_longitude
+		from 	stores s
+		where 
+				s.s_code = #{s_code}
+	</select>
+	
+	
+</mapper>

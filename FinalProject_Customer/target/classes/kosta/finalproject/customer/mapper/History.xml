@@ -39,15 +39,28 @@
 		from order_list ol
 		
 		where c_id = #{param1}
-		     and order_status not in ('장바구니')
-		     <choose>
-			     <when test="param3 == 'sysdate'">
-				     and to_char(order_date, 'YYYY-MM-DD') between ${param2} and ${param3}
-			     </when>
-			     <otherwise>
-				     and to_char(order_date, 'YYYY-MM-DD') between #{param2} and #{param3}
-			     </otherwise>
-		     </choose>
+	    <choose>
+		    <when test="param3 == 'sysdate'">
+				and to_char(order_date, 'YYYY-MM-DD') between ${param2} and ${param3}
+		    </when>
+		    <otherwise>
+				and to_char(order_date, 'YYYY-MM-DD') between #{param2} and #{param3}
+		    </otherwise>
+	    </choose>
+		<choose>
+			<when test="param4 == 'paid'">
+				and order_status = '결제완료'
+			</when>
+			<when test="param4 == 'complete'">
+				and order_status = '준비완료'
+			</when>
+			<when test="param4 == 'canceld'">
+				and order_status = '주문취소'
+			</when>
+		    <otherwise>
+				and order_status not in ('장바구니')
+		    </otherwise>
+		</choose>
 		order by ol.order_date desc
 	</select>
 

@@ -6,8 +6,51 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-<style type="text/css">
+
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">	
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/footer.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<script> 
+	$(document).ready(function(){
+		$(".panel").hide();
+	});
+	
+	function test(data) {
+		 $("#panel"+data+"").slideToggle("slow");
+	}
+</script>
+<script type="text/javascript">
+	function session(){
+		var id = "${id}"
+		var store = "${s_code}"
+		if(id == ""){
+			alert('로그인을 먼저 해주세요');
+			return false;
+		}		
+		if(store == ""){
+			alert('매장을 먼저 선택해주세요');
+			return false; 
+		}
+	}
+	
+	function store(){
+		var id = "${id}"
+		if(id == ""){
+			alert('로그인 먼저 해주세요');
+			return false;
+		}
+		
+	}
+</script>
+
+<title>${s_code } 에서 주문을 시작합니다</title>
+
+<!-- <style type="text/css">
 div#menulist {
 	border: 1px black solid;
 	padding : 5px;
@@ -17,10 +60,19 @@ button{
 	width:120px;
 	margin: 2px;
 	padding: 2px;
-}
-</style>
+} 
+</style> -->
 </head>
+
 <body>
+
+<jsp:include page="header.jsp"/>
+<br>
+<br>
+<br>
+<br>
+<%-- 
+
 	<a href="shoppingbag.do"><h3>장바구니로 가기</h3></a>
 	<a href="main.do"><h3>메인으로 가기</h3></a>
 	
@@ -46,8 +98,71 @@ button{
 		
 	</fieldset>
 	<hr>
+	 --%>
 	
+<div style="margin-top: 10%;">
+	<div class="button-group filters-button-group">
+	  <button class="button is-checked default" data-filter="*">모든메뉴</button>
+	  <button class="button default" data-filter=".m001, .m002">베스트메뉴</button>
+	  <button class="button default" data-filter=".m004,.m005, .m006">한정메뉴</button>
+	  <button class="button default" data-filter=".m007, .m008, .m010, .m017, .m018, .m019">클래식메뉴</button>
+	  <button class="button default" data-filter=".m011, .m012, .m013, .m014, .m015, .m016">프리미엄메뉴</button>
+	
+	</div>
+	
+	<div class="grid">
+		<c:forEach var="list" items="${menulist}" varStatus="status">
+			<div class="element-item  ${list.m_code } ">
+					<p class="symbol" style="text-align: center;">
+				<div class="flip" id="flip" style="text-align: center;">	
+						<img src="${pageContext.request.contextPath}/img/${list.m_code}.png?ver=1" onclick="test(${status.index});"></a></p>
+						${list.m_name}
+				</div>
+				<div class="panel" id="panel${ status.index }">
+					<a href="orderdetail.do?m_code=${ list.m_code }" onclick="return session();">주문하기</a>
+					<a href="#">즐겨찾기</a>
+					<a href="#">장바구니</a>
+				</div>
+						
+			</div>
+		</c:forEach>
+		<!-- <a href="payment.do">클릭하면 해당상품 결제</a> -->
+	</div>
+	
+		<!-- ------------매장 넘어옴--------------------------------------- -->
 
+
+
+		<div id="floatMenu">
+		<c:set var="store" value="${ store_sele }" />
+		<c:if test="${ store eq null }">
+			<a href="store2.do" onclick="return store();">매장을 먼저 선택해주세요 click!!</a>		
+		</c:if>
+		<c:if test="${store ne null }">
+			<font color="black">현재 매장 : ${store }</font>
+				<a href="store.do">변경하기</a>
+		</c:if>
+			
+		</div>
+		<!-- -------------------------------------------------------------- -->
+</div>
+
+<div class = "footer">
+	<jsp:include page="footer.jsp"></jsp:include>
+</div>
+
+	<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery08/2.2.2/jquery.min.js'></script>
+	<script src='http://npmcdn.com/isotope-layout@3/dist/isotope.pkgd.js'></script>
+	
+    <script src="${pageContext.request.contextPath}/js/index.js"></script>
+    <script src="${pageContext.request.contextPath}/js/side.js"></script>
+	
+	
+	
+</body>
+</html>
+	<!-- <a href="payment.do">클릭하면 해당상품 결제</a> -->
+<%-- 
 	<h1>메뉴리스트</h1>
 	<c:forEach var="list" items="${menulist}">
 			<div id="menulist" style="display: inline-table;">
@@ -69,7 +184,4 @@ button{
 			</div>
 		
 		<br><br>
-	</c:forEach>
-</body>
-</html>
-	<!-- <a href="payment.do">클릭하면 해당상품 결제</a> -->
+	</c:forEach> --%>

@@ -1,0 +1,51 @@
+.button{
+    border: 1px black;
+    color: cadetblue;
+    padding: 14px 28px;
+    background-color: white;
+    cursor: pointer;
+    border-bottom-style: solid;
+}
+.button-group{
+	 margin: 0 auto;
+    width: 100%;
+    text-align: center;
+    margin-top: 10%;
+}
+.grid{
+	
+	text-align: center;
+	
+}
+.symbol{
+	text-align: center;
+}
+#floatMenu {
+    position: absolute;
+    width: 25%;
+    height: 5%;
+    left: 50px;
+    top: 10px;
+    background-color: white;
+    color: #fff;
+    margin-top: 30%;
+    border-style: solid;
+    border: 1px black;
+    text-align: center;
+}
+
+<!-- header -->
+.navbar .navbar-inverse {
+    background-color: #015643;
+    border-color: #015643;
+    height: 15%;
+}
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+    border-color: #101010;
+    margin-top: 3%;
+}
+.navbar-brand>img {
+    display: block;
+}
+
+	

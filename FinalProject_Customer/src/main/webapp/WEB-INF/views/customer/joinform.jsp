@@ -3,8 +3,28 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/login.css?ver=1">	
+
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+
+<style type="text/css">
+.login input[type="button"]{
+  padding: 0px;
+  width: 150px;
+  height: 40px;
+  float: right;
+  margin-bottom: 10px;
+  margin-right: 14px;
+}
+</style>
+
+<title>subway는 회원 가입을 페이지 입니다.</title>
+
 </head>
 
 <script type="text/javascript">
@@ -96,7 +116,7 @@
 		 url = "email_check.do?c_email=" + myform.c_email.value;
 		 
 	    open(url, "eamil_check", 
-	    "toolbar=no, location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=300, height=150");
+	    "toolbar=no, location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=450, height=150");
 		
 	}
 	
@@ -109,35 +129,57 @@
 		 url = "id_check.do?c_id=" + myform.c_id.value;
 		 
 	    open(url, "id_check", 
-	    "toolbar=no, location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400, height=150");
+	    "toolbar=no, location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=450, height=150");
 		
 	}
 </script>
 <body>
-	<h1>조인폼</h1>
-	<form name="myform" method="post" action="/customer/joinpro.do" onSubmit="return checkIt()">
-		ID: <input type="text" name="c_id" onkeyup="check_id()"/>
-			<input type="button" name="confirm_id" value="ID중복체크" onclick = "id_check(this.form);"/>
-			<input type="hidden" name = "idDuplication" value="idUncheck">
-			<span id="id_txt"></span><br> 
+	<!-- header -->
+	<jsp:include page="header.jsp"/>
+	<br>
+	<br>
+	<br>
+	<br>
+	<div class="login">
+		<div class="login-triangle"></div>
+	  	<h2 class="login-header">Join</h2>
+	  	
+		<form class="login-container" name="myform" method="post" action="/customer/joinpro.do" onSubmit="return checkIt()">
+			<p><input type="text" name="c_id" placeholder="ID (영문대, 소문자와 숫자만 사용해주세요)" onkeyup="check_id()"></p>
+				<input type="button" class="button" name="confirm_id" value="ID중복체크" onclick = "id_check(this.form);">
+				<input type="hidden" name = "idDuplication" value="idUncheck">
+				<span id="id_txt"></span>
 			
-		pw: <input type="password" name="c_pw" onkeyup="check_pw()"/>
-			<span id="pw_txt"></span><br>
 			
-		이름: <input type="text" name="c_name" /> <br> 
-		
-		이메일: <input type="email" name="c_email" />
-			<input type="button" id="e_btn" value = "이메일 인증" onclick = "email_check(this.form);"/>
-			 <input type="hidden" name = "email_Check" value="Uncheck">
-		<br>
-		
-		성별 : <input type="radio" name="c_gender" value="M"/>M
-			 <input type="radio" name="c_gender" value="F"/>F<br>
-			 
-		생년월일: <input type="text" name="c_birth" onkeyup="check_birth()"/>
-			<span id="c_birth"></span><br>
-		<input type="submit" value="등록"> <a href="index.do">홈</a>
-	</form>
+			<p> <input type="password" name="c_pw" placeholder="Password" onkeyup="check_pw()"></p>
+				<span id="pw_txt"></span>
+				
+			<p><input type="text" name="c_name" placeholder="이름" ></p>
+			
+			<p> <input type="text" name="c_email" placeholder="이메일 (예 : example@gmail.com)" ></p>
+		  	<input type="button" class="button" id="e_btn" value = "이메일 인증" onclick = "email_check(this.form);"><br>
+			<input type="hidden" name = "email_Check" value="Uncheck"><br>
+			
+			성별  
+			<input type="radio" name="c_gender" value="M" style="vertical-align: 3px">M 
+			<input type="radio" name="c_gender" value="F" style="vertical-align: 0px">F
+			
+			<p><input type="text" name="c_birth" placeholder="생년월일 (예 : 19920219)" onkeyup="check_birth()"></p>
+			<span id="c_birth"></span>
+			
+			<p><input type="submit" value="등록"></p>	
+		</form>
+	</div>
+	<br>
+	<br>
+	<br>
+	<br>
+	
+	<!-- footer -->
+	<jsp:include page="footer.jsp"/>
+	
+	<!-- 
+	 <a href="index.do">홈</a> -->
 
 </body>
 </html>

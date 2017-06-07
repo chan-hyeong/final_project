@@ -5,8 +5,31 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/login.css?ver=1">	
+<style type="text/css">
 
-<title>Please Login</title>
+
+.container-fluid {
+	margin-top: 90px;
+	float: right;
+}
+.carousel-control.left{
+background-image: linear-gradient(to right,rgba(0,0,0,0) 0,rgba(0,0,0,0) 100%);
+}
+.carousel-control.right{
+background-image: linear-gradient(to right,rgba(0,0,0,0) 0,rgba(0,0,0,0) 100%);
+}
+#bottom{
+	margin-left: 30%;
+}
+</style>
+
+
+
 <script type="text/javascript">
 	function check() {
 		var obj = document.myform;
@@ -22,31 +45,62 @@
 			document.getElementById("pwd_txt").innerHTML = "";
 	}
 </script>
+<script type="text/javascript">
+
+$(function(){
+    $("#popbutton").click(function(){
+        $('div.modal').modal({
+                      remote : 'joinform.do'
+                });
+    })
+})
+</script>
+
+
+
+<title>Please Login</title>
 </head>
 <body>
-	<h1>로그인폼</h1>
-	<form name="myform" method="post" action="/customer/loginpro.do" onsubmit="return check()">
-		<div>
-			ID: <input type="text" name="c_id" id="id" >
-			<span id="id_txt"></span>
-		</div>
-		<div>
-			pw: <input type="password" name="c_pw" id="pwd">
-			<span id="pwd_txt"></span>
-		</div>
-		<input type="submit" id="login" value="로그인" >
-		<input type = "hidden" value="${result }">
-		 <a href="index.do">홈</a><br>
-		 <span id="login_txt"></span>
-		
+<!-- header -->
+<jsp:include page="header.jsp"/>
+	<br>
+	<br>
+	<br>
+	<br>
+</div>
+	<div class="login" style="margin-top: 10%;">
+	<div class="login-triangle"></div>
+	  <h2 class="login-header">Log in</h2>
+		<form class="login-container" name="myform" method="post" action="loginpro.do" onsubmit="return check()">
 
+		<p><input type="text" name="c_id" id="id" placeholder="ID" ></p>
+				<span id="id_txt"></span>
+
+		<p><input type="password" name="c_pw" id="pwd" placeholder="Password"></p>
+			<span id="pwd_txt"></span>
+
+		<p><input type="submit" id="login" value="로그인" ></p>
+		<div id="bottom">
+		<a href="joinform.do">회원가입</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="main.do" >메인으로</a>
+		</div>
+			<input type = "hidden" value="${result }">
+			 <span id="login_txt"></span>
 	</form>
+	</div>
+	<br>
+	<br>
+	<br>
+	<br>
+	<!-- footer -->
+	<jsp:include page="footer.jsp"/>
 </body>
 <script type="text/javascript">
 	var msg = "${result}";
 	if (typeof msg != "undefined" && msg != null && msg != "") {
+
 		document.getElementById("login_txt").innerHTML = "<font color = 'red'>"+msg+"</font>"
 		//alert(msg);
 	}
 </script>
+
 </html>

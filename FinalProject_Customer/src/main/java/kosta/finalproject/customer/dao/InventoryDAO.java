@@ -3,9 +3,6 @@ package kosta.finalproject.customer.dao;
 import java.util.HashMap;
 import java.util.List;
 
-import kosta.finalproject.customer.dto.Order_DetailTDTO;
-import kosta.finalproject.customer.dto.Order_ListTDTO;
-
 public interface InventoryDAO {
 
 	// <!-- 주문이 들어온 경우 (결제가 완료된 경우) or 주문이 취소된 경우 (결제 취소) 재고를 수정해야함 -->

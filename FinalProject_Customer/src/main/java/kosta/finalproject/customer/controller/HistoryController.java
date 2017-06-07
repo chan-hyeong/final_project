@@ -1,8 +1,9 @@
 package kosta.finalproject.customer.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import kosta.finalproject.customer.dao.HistoryDAO;
 import kosta.finalproject.customer.dao.Order_ListDAO;
-import kosta.finalproject.customer.dto.HistoryTDTO;
 import kosta.finalproject.customer.dto.Order_ListTDTO;
 
 @Controller
@@ -65,29 +65,33 @@ public class HistoryController {
 	//히스토리 진입시 
 	@RequestMapping("/history.do")
 	public String history(HttpServletRequest request, HttpSession session,
-			@RequestParam(name="start", defaultValue="sysdate-31")String start, 
+			@RequestParam(name="statuscheck", defaultValue="all")String statuscheck, 
+			@RequestParam(name="start", defaultValue="sysdate-30")String start, 
 			@RequestParam(name="end", defaultValue="sysdate")String end ) {
 		HistoryDAO list_dao = sqlsession.getMapper(HistoryDAO.class);
 		
 		String c_id = session.getAttribute("id").toString();
 		
-		List<HistoryTDTO> orderlist ;
+		System.out.println(start + " , " + end);
+		request.setAttribute("orderlist", list_dao.history_get_by_date(c_id, start, end, statuscheck));
 		
-		if (start == null && end == null){
-			orderlist = list_dao.history(c_id);
-		}else {
-			System.out.println(start + " , " + end);
-			orderlist = list_dao.history_get_by_date(c_id, start, end);
+		//기간 정보도 담기 
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+		Date today = new Date();
+		Date target = new Date();
+		if ( start.equalsIgnoreCase("sysdate-30") ){
+			target.setTime( today.getTime() - ((long)1000*60*60*24*30));//30일전 
+			start = sdf.format(target);
 		}
+		if ( end.equalsIgnoreCase("sysdate"))	 
+			end = sdf.format(today);
 		
-		System.out.println(orderlist.toString());
-		
-		request.setAttribute("orderlist", orderlist);
+		request.setAttribute("start", start);
+		request.setAttribute("end", end);
+		request.setAttribute("statuscheck", statuscheck);
 	
 		return "customer/history";
-	}
+	}//end 
 
 	
-	
-	
-}
+}//end class

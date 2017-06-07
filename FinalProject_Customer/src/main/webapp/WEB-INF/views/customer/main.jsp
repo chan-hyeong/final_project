@@ -6,42 +6,89 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-
-
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>${id}님 환영합니다. subway</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/footer.css">	
+
+<title>
+	<c:if test="${id ne null }">
+		${id}님 환영합니다. 
+	</c:if>
+	subway order 입니다 
+</title>
+
 </head>
 <body>
-<c:if test="$[id eq '' || id eq null || id == null || fn:length(id) <= 0)">dkdkdk</c:if>
-	<h1>로그인 성공 후 메인페이지 </h1>
-	<h3>
-	${id }님 환영합니다.
-	<a href="logout.do">로그아웃</a><br>
-	</h3>
+
+
+<div class="wrapper">
+<!-- header -->
+<div class="header">
+	<jsp:include page="header.jsp"/>
+</div>
+<br>
+<!-- content -->
+	<div class="content" style="margin-top: 10%;">
+			<div id="myCarousel" class="carousel slide" data-ride="carousel">
+			<!-- Indicators -->
+			<ol class="carousel-indicators">
+				<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+				<li data-target="#myCarousel" data-slide-to="1"></li>
+				<li data-target="#myCarousel" data-slide-to="2"></li>
+			</ol>
+
+			<!-- Wrapper for slides -->
+			<div class="carousel-inner">
+				<div class="item active">
+					<img src="${pageContext.request.contextPath}/css/서브1.jpg"
+						style="width: 100%;">
+				</div>
+
+				<div class="item">
+					<img src="${pageContext.request.contextPath}/css/서브2.jpg"
+						style="width: 100%;">
+				</div>
+
+				<div class="item">
+					<img src="${pageContext.request.contextPath}/css/서브3.jpg"
+						style="width: 100%;">
+				</div>
+			</div>
+
+			<!-- Left and right controls -->
+			<a class="left carousel-control" href="#myCarousel" data-slide="prev" 
+			style="background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0,rgba(0, 0, 0, 0) 100%);"> 
+				<span class="glyphicon glyphicon-chevron-left"></span> <span
+				class="sr-only">Previous</span>
+			</a> <a class="right carousel-control" href="#myCarousel"
+				data-slide="next" 
+				style="background-image: linear-gradient(to left, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 100%);"> <span
+				class="glyphicon glyphicon-chevron-right"></span> <span
+				class="sr-only">Next</span>
+			</a>
+		</div>
+	</div>
+	<div>
+	<br>
+	<br>
+	<br>
+		<h2>여기는 메뉴가 올자리입니다.</h2>
+		<br>
+		<br>
+		<br>
+	</div>
+
+	<!-- footer -->
+	<div class="footer">
+ 		<jsp:include page="footer.jsp"/> 
+	</div>
+</div>
 	
-	<h3>
-	<a href="menulist.do">주문</a><br>
-	</h3>
-	
-	<h3>
-	<a href="history.do">히스토리</a><br>
-	</h3>
-	
-	<h3>
-	 <a href="modify.do">내정보</a><br>
-	</h3>
-	
-	<h3>
-	 <a href="shoppingbag.do">장바구니</a><br>
-	</h3>
-	
-	<h3>
-	<a href="favorite.do">즐겨찾기</a><br>
-	</h3>
-	<hr>
-	
-	<br><br>
+</body>
+</html>
+
+
 <%-- <p>
 추천 : order_Detail , order_list 를 이용해서 인기 메뉴 rank 매김 , 연령? 지역? 시간? 성별?로 그룹 
 또는 본인이 자주 시켰던 메뉴의 인기 조합 
@@ -176,6 +223,3 @@ ppt {
 <input type="hidden" name="c_id" value="<%=id %>" >
 <input type="submit" value="내정보">
 </form> --%>
-
-</body>
-</html>
