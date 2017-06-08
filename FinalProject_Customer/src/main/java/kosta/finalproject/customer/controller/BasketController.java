@@ -22,7 +22,10 @@ public class BasketController {
 
 	//파라미터 없이 진입시 장바구니 띄워주기  
 	@RequestMapping(value="/shoppingbag.do",  method=RequestMethod.GET)
-	public String shoppingbag(HttpServletRequest request) {
+	public String shoppingbag(HttpServletRequest request, HttpSession session) {
+		if ( session.getAttribute("id") == null){
+			return "redirect:loginform.do?result=if you have a Id, please login first~";
+		}
 		String c_id = request.getSession().getAttribute("id").toString();
 		
 		Order_DetailDAO detail_dao = sqlsession.getMapper(Order_DetailDAO.class);

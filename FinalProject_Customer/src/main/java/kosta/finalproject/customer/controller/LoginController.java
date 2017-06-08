@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import kosta.finalproject.customer.dao.CustomersDAO;
 import kosta.finalproject.customer.dto.CustomersTDTO;
@@ -17,7 +18,8 @@ public class LoginController {
 	private SqlSession sqlsession;
 
 	@RequestMapping("/loginform.do")
-	public String loginform() {
+	public String loginform(@RequestParam(name="result", required=false)String result, Model model) {
+		model.addAttribute("result", result);
 		return "customer/loginform";
 	}
 
@@ -37,7 +39,7 @@ public class LoginController {
 
 			// model.addAttribute("result", 0);
 			model.addAttribute("result", "아이디와 비밀번호를 확인하세요.");
-
+		
 		return "customer/loginform";
 	}
 

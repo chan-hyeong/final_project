@@ -71,6 +71,9 @@ div#total{
 <br>
 <br>
 <br>
+<br>
+<br>
+<br>
 
 
 	<h1>장바구니</h1>
@@ -95,7 +98,7 @@ div#total{
 				onclick="javascript:return confirm('장바구니 내역을 결제합니다.');">장바구니 통 결제</button>
 			<div id="total">
 				총 ${fn:length(detail_list) } 개
-				<br>
+				= 
 				<fmt:formatNumber>
 				${list_dto.o_totalprice}
 				</fmt:formatNumber>원

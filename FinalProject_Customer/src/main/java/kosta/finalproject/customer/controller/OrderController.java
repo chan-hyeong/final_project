@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import kosta.finalproject.customer.dao.HistoryDAO;
 import kosta.finalproject.customer.dao.InventoryDAO;
 import kosta.finalproject.customer.dao.Order_DetailDAO;
 import kosta.finalproject.customer.dao.Order_ListDAO;
@@ -24,15 +25,23 @@ public class OrderController {
 	@Autowired
 	private SqlSession sqlsession;
 	//0517 17:11 찬형 //menu에서 detail option을 선택하고 결제 창으로 보냄 
+	
+	
+	
 	@RequestMapping("/paymentform.do")
-	public String paymentform(Order_ListTDTO list_dto, Order_DetailTDTO detail_dto , 
-			HttpServletRequest request, HttpSession session, 
-			@RequestParam("command")String command) {
+	public String paymentform(
+			Order_ListTDTO list_dto
+			,Order_DetailTDTO detail_dto  
+			,HttpServletRequest request, HttpSession session 
+			,@RequestParam("command")String command
+			,@RequestParam(name="amount", defaultValue="1")int amount
+			) {
 		
-		System.out.println("\n\n==============================================================================");
+		System.out.println("\n\n\n==============================================================================");
 		System.out.println("\t"+list_dto.toString());
 		System.out.println("\t"+detail_dto.toString());
-		System.out.println("==============================================================================\n\n");
+		System.out.println("\t"+amount);
+		System.out.println("==============================================================================\n\n\n");
 		
 		Order_ListDAO list_dao = sqlsession.getMapper(Order_ListDAO.class);
 		Order_DetailDAO detail_dao = sqlsession.getMapper(Order_DetailDAO.class);
@@ -63,7 +72,9 @@ public class OrderController {
 			}else{//order_list에 이미 들어가있으면
 				detail_dto.setOrder_num(order_list_basket.getOrder_num());
 			}
-			detail_dao.insert_order_detail(detail_dto);//삽입
+			for (int i=0; i<amount; i++)
+				detail_dao.insert_order_detail(detail_dto);//개수에 맞게 삽입
+			
 			list_dao.update_basket(c_id);//토탈 가격이랑 order_date 바꿔주고 
 			
 			return "redirect:menulist.do";
@@ -71,7 +82,9 @@ public class OrderController {
 		} else if (command.equalsIgnoreCase("payment")) {// [2] 바로 결제 페이지로 <-- 단일 메뉴 주문
 			session.setAttribute("list_dto", list_dto);
 			
-			List<Order_DetailTDTO> detail_dto_list = new ArrayList<Order_DetailTDTO>(); detail_dto_list.add( detail_dto );
+			List<Order_DetailTDTO> detail_dto_list = new ArrayList<Order_DetailTDTO>(); 
+			for (int i=0; i<amount; i++)
+				detail_dto_list.add( detail_dto );
 			session.setAttribute("detail_dto_list", detail_dto_list);
 			
 //			System.out.println(" \n\t 테 스 트 : " + ((Order_DetailTDTO[] )session.getAttribute("detail_dto_list"))[0].toString() + "\n\n");
@@ -109,8 +122,6 @@ public class OrderController {
 		//[1] 주문 추가  
 		if (  command.equalsIgnoreCase("basketpayment")){  //장바구니에서 넘어온 경우 
 			list_dao.order_by_basket(list_dto); //주문상태를 결제완료로 변경  
-			//업데이트를 해버리면 테이블이 나눠져있어서 힘듬 
-			//없애고 다시 넣는게 나을듯 
 			//★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 			
 			
@@ -139,11 +150,30 @@ public class OrderController {
 		///////////////////////////////////// inventory 변경 test 중 ★★★★★★★★★
 		
 		//[3] 결제된 금액만큼 customers.c_coin 을 업데이트하기 ? 
+		System.out.println(list_dto.getO_totalprice() + " : total 가격!!!!!!!!!! ");
+		
 		
 		
 		
 		//[4] history.do 로 이동 : 주문내역 보여주기 (이 경우에는 주문내역 상세페이지)
+//		alarm_need_check(session, 0);//알람필요?
 		return "redirect:history.do";
 	}
+	
+
+	/**
+	 * 알람이 필요한 경우 세션에 true를 담는다
+	 * setAttribute("alarm_need_check", "true");
+	 * @param session
+	 * @param order_num 아직못정함 
+	 */
+//	public void alarm_need_check(HttpSession session, int order_num){
+//		HistoryDAO dao = sqlsession.getMapper(HistoryDAO.class);
+		
+//		if ( dao.get_uncompleted_order_num(session.getAttribute("id").toString()) == 0 ) //준비완료면 order_num을 그 외에는 0을  
+//			session.setAttribute("alarm_need_check", "true");
+//		else 
+//			session.removeAttribute("alarm_need_check"); //마지막 주문도 준비완료된 상태라면 알람이 필요없지 
+//	}//end 
 	
 }//end class

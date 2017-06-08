@@ -65,153 +65,31 @@ table tr td button:HOVER {
 	font-weight: bold;
 }
 </style>
-<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script type="text/javascript">
-	  $( function() {
-		    $( ".datepicker" ).datepicker();
-		  } );
 
-		$(document).ready(function(){
-			console.log("history page 입니다");
-			
-			$('.dimmed').click(function(){
-				$('.dimmed,.popup').hide();
-			});
-			$('.popup').click(function(){
-				$('.dimmed,.popup').hide();
-			});
-			
-			$('#selectDate').click(function(){
-				alert('기간 선택');
-			});
-			
-			//select 된 status 상태 나타내기
-			$("#sts").val("${statuscheck}"); 
-			/* 
-			var item = document.getElementsByName('statuscheck')[0].options;
-			for ( var i = 0 ;i <item.length; i++){
-				if(item[i].value == '${statuscheck}'){
-					// alert(item[i].value + "\n " + item[i].selected);
-					item[i].selected='selected';
-					break;
-				}
-			} 
-			  /* 
-			  document.getElementById('sts').options;
-			  document.getElementById('sts').options[0].value;
-			  document.getElementById('sts').options[1].index;
-			  document.getElementById('sts').options[2].selected;
-			  */
-			  
-		});
-	  
-	  function setDate(pstart, pend){//onsubmit
-	    	if ( pstart.value == "" || pend.value == "" ) {
-	    		pstart.focus();
-	    		return false;
-	    	}
-	    	
-	    	var start=pstart.value; //파마리터값 가져오기 
-	    	var end=pend.value; //파마리터값 가져오기 
-	    	
-	    	if( (new Date(pend.value)).getTime()-(new Date(pstart.value)).getTime() < 0 ) {alert("날짜범위가 잘못지정되었습니다. \n다시 선해주세요") ; return false;}
-	    	
-	    	var startarr=start.split('/');  //  "/" 로 나눠서 배열형태로 저장 
-	    	var endarr=end.split('/');  //  "/" 로 나눠서 배열형태로 저장 
-	    	
-	    	//DB에 맞는 형식으로 변환 
-	    	if ( startarr.length > 2)
-	    		start=startarr[2]+'-'+startarr[0]+'-'+startarr[1];  
-	    	if ( endarr.length > 2)
-		    	end=endarr[2]+'-'+endarr[0]+'-'+endarr[1];   
-	    	
-	    	//form 으로 전송하니까 
-		  	pstart.value=start;
-		   	pend.value=end;
- 	    };
- 	    
- 	    function date_formating(option){
- 	    	var result= new Date(new Date().getTime() - (1000*60*60*24*eval(option)));
- 	    	
-	    	var year = result.getFullYear();
-	    	var month = result.getMonth()+1;
-	    	var date = result.getDate(); 
-	    	
-	    	if(parseInt(month) < 10)  // 월이 한자리 수인 경우 (예: 1, 3, 5) 앞에 0을 붙여주기 위해, 즉 01, 03, 05
-	    		month = "0" + month;
-	    	if(parseInt(date) < 10)       // 일이 한자리 수인 경우 앞에 0을 붙여주기 위해
-	    		date = "0" + date;
-	    		
-	    	return year+"-"+month+"-"+date;
- 	    }//end function
- 	    
- 	    function set_default_date(option, datepicker, datepicker2){
- 	    	var start, end;
- 	    	if ( option == 'amonth'){//기간을 한달로 설정 
- 	    		var amonth_ago=date_formating(30); 
- 	    		console.log("한달 선택 : " + amonth_ago);
- 	    		datepicker.value=amonth_ago;
- 	    		datepicker2.value=date_formating(0);
- 	    	}else if(option == 'ayear'){ //일년
- 	    		var ayear_ago= date_formating(365);
- 	    		console.log("일년 선택 : " + ayear_ago)
-
- 	    		datepicker.value=ayear_ago;
- 	    		datepicker2.value=date_formating(0);
- 	    	}else{
- 	    		datepicker.value=""; 
- 	    		datepicker2.value="";
- 	    		datepicker.focus();
- 	    	}
- 	    }//end function
-	    
-
-	function popupCenter(){
-			var width = $('.popup').width();
-			var height = $('.popup').height();
-			
- 			$('.popup').css({'left':(($(window).width() - width) / 2), 
-							 'top':(($(window).height() - height) / 2)}); 
-	} 
-	
-	
-	function historydetail(order_num, params1){
-		console.log("\najax 테스트 넘어왔다");
-		
-		 $.ajax({
-			type: "get",
-			url: "historydetailtest.do",
-			data: {"order_num" : order_num },
-			success : function(data){
-				/* $('#testdiv').html(data); */
-				$('#historydetail').html(data);
-				popupCenter();
-				$('.dimmed,.popup').show();
-			/* 	$(window).resize(function(){
-					  popupCenter();
-				  }); */
-			}
-		})
-		/* scroll(0, document.getElementById('historydetail').scollHeight); */
-		console.log("\t ajax 끝났다");
-	}
-	
-</script>
 </head>
 
 
 <body>
-<a href="main.do">메인으로 돌아가기</a><br>
+<!-- header -->
+<div class="header">
+	<jsp:include page="header.jsp"/>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-<h1>인엽이형이 수정할 히스토리 페이지 </h1>
+<h1>수정해야할 히스토리 페이지 </h1>
+
 <fieldset >
 	<legend>
 		<h3>
 			날짜 선택 
 		</h3>
 	</legend>
-	<form name="frmhistory" action="#" onsubmit="return setDate(startdate, enddate);" method="post">
+	<form name="frmhistory" action="history.do" onsubmit="return setDate(startdate, enddate);" method="post">
 		<input type="text" name="start" placeholder="시작 날짜" id="startdate" class="datepicker" value="${start}" readonly="readonly" >
 		<input type="text" name="end" placeholder="끝 날짜" id="enddate" class="datepicker" value="${end}" readonly="readonly">
 		<button>조회 방법1</button>
@@ -304,7 +182,143 @@ table tr td button:HOVER {
    <legend><h3>param, attrb 체크 </h3></legend>
    
    </fieldset>
-
-
+   
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<!-- footer -->
+	<div class="footer">
+ 		<jsp:include page="footer.jsp"/> 
+	</div>
 </body>
 </html>
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript">
+	  $( function() {
+		    $( ".datepicker" ).datepicker();
+		  } );
+
+	  //페이지 진입시 
+		$(document).ready(function(){
+			console.log("history page 입니다");
+			
+			$('.dimmed').click(function(){
+				$('.dimmed,.popup').hide();
+			});
+			$('.popup').click(function(){
+				$('.dimmed,.popup').hide();
+			});
+			
+			$('#selectDate').click(function(){
+				alert('기간 선택');
+			});
+			
+			//select 된 status 상태 나타내기
+			$("#sts").val("${statuscheck}"); 
+			
+			///////
+			var order_num = '${order_num}';
+			if (order_num > 0 ) {
+				historydetail(order_num);
+			}
+			  
+		});
+	  
+  
+	  
+	  
+	  function setDate(pstart, pend){//onsubmit
+	    	if ( pstart.value == "" || pend.value == "" ) {
+	    		pstart.focus();
+	    		return false;
+	    	}
+	    	
+	    	var start=pstart.value; //파마리터값 가져오기 
+	    	var end=pend.value; //파마리터값 가져오기 
+	    	
+	    	if( (new Date(pend.value)).getTime()-(new Date(pstart.value)).getTime() < 0 ) {alert("날짜범위가 잘못지정되었습니다. \n다시 선해주세요") ; return false;}
+	    	
+	    	var startarr=start.split('/');  //  "/" 로 나눠서 배열형태로 저장 
+	    	var endarr=end.split('/');  //  "/" 로 나눠서 배열형태로 저장 
+	    	
+	    	//DB에 맞는 형식으로 변환 
+	    	if ( startarr.length > 2)
+	    		start=startarr[2]+'-'+startarr[0]+'-'+startarr[1];  
+	    	if ( endarr.length > 2)
+		    	end=endarr[2]+'-'+endarr[0]+'-'+endarr[1];   
+	    	
+	    	//form 으로 전송하니까 
+		  	pstart.value=start;
+		   	pend.value=end;
+ 	    };
+ 	    
+ 	    function date_formating(option){
+ 	    	var result= new Date(new Date().getTime() - (1000*60*60*24*eval(option)));
+ 	    	
+	    	var year = result.getFullYear();
+	    	var month = result.getMonth()+1;
+	    	var date = result.getDate(); 
+	    	
+	    	if(parseInt(month) < 10)  // 월이 한자리 수인 경우 (예: 1, 3, 5) 앞에 0을 붙여주기 위해, 즉 01, 03, 05
+	    		month = "0" + month;
+	    	if(parseInt(date) < 10)       // 일이 한자리 수인 경우 앞에 0을 붙여주기 위해
+	    		date = "0" + date;
+	    		
+	    	return year+"-"+month+"-"+date;
+ 	    }//end function
+ 	    
+ 	    function set_default_date(option, datepicker, datepicker2){
+ 	    	var start, end;
+ 	    	if ( option == 'amonth'){//기간을 한달로 설정 
+ 	    		var amonth_ago=date_formating(30); 
+ 	    		console.log("한달 선택 : " + amonth_ago);
+ 	    		datepicker.value=amonth_ago;
+ 	    		datepicker2.value=date_formating(0);
+ 	    	}else if(option == 'ayear'){ //일년
+ 	    		var ayear_ago= date_formating(365);
+ 	    		console.log("일년 선택 : " + ayear_ago)
+
+ 	    		datepicker.value=ayear_ago;
+ 	    		datepicker2.value=date_formating(0);
+ 	    	}else{
+ 	    		datepicker.value=""; 
+ 	    		datepicker2.value="";
+ 	    		datepicker.focus();
+ 	    	}
+ 	    }//end function
+	    
+
+	function popupCenter(){
+			var width = $('.popup').width();
+			var height = $('.popup').height();
+			
+ 			$('.popup').css({'left':(($(window).width() - width) / 2), 
+							 'top':(($(window).height() - height) / 2)}); 
+	} 
+	
+	
+	function historydetail(order_num){
+		console.log("\najax 테스트 넘어왔다");
+		
+		 $.ajax({
+			type: "get",
+			url: "historydetailtest.do",
+			data: {"order_num" : order_num },
+			success : function(data){
+				/* $('#testdiv').html(data); */
+				$('#historydetail').html(data);
+				popupCenter();
+				$('.dimmed,.popup').show();
+			/* 	$(window).resize(function(){
+					  popupCenter();
+				  }); */
+			}
+		})
+		/* scroll(0, document.getElementById('historydetail').scollHeight); */
+		console.log("\t ajax 끝났다");
+	}
+	
+</script>

@@ -32,6 +32,8 @@ public interface Order_ListDAO {
 	
 	//장바구니에서 주문이 들어온 경우 update order_date, order_status, order_payment
 	public int order_by_basket(Order_ListTDTO list_dto);
+	
+	
 	//장바구니에 추가, 내려놓은 경우 업데이트 update order_date, o_totalprice
 	public int update_basket(String c_id);
 }

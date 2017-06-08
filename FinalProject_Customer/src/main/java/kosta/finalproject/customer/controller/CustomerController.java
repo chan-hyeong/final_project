@@ -1,5 +1,7 @@
 package kosta.finalproject.customer.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +23,10 @@ public class CustomerController {
 	}
 
 	@RequestMapping("/favorite.do")
-	public String favorite() {
+	public String favorite(HttpSession session) {
+		if ( session.getAttribute("id") == null){
+			return "redirect:loginform.do";
+		}
 		return "customer/favorite";
 	}
 	

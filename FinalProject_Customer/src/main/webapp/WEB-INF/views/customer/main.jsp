@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/footer.css">	
 
+			
 <title>
 	<c:if test="${id ne null }">
 		${id}님 환영합니다. 

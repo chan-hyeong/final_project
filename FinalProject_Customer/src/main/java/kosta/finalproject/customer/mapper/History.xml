@@ -6,6 +6,68 @@
     
 <mapper namespace="kosta.finalproject.customer.dao.HistoryDAO">
 
+<!-- 	 <select id="check_status_change" resultType="integer">
+	 	select  decode ( count(*) , 0, 0 
+             			 , min(t.order_num)            
+       					 ) as need
+		from (select *
+		      from order_list
+		      where c_id = #{c_id}
+		          and order_status not in ('준비완료', '결제취소') ) t
+	 </select> -->
+	<!-- /**
+	 * order_status 체크가 필요한 경우 실행. 
+	 * @param c_id
+	 * @return order_status가 '준비완료'가 되었다면 해당 order_num 을 
+	 * 아니라면 0 을 리턴 
+	 */ -->
+	 <select id="get_uncompleted_order_num" resultType="integer">
+		select order_num
+		from order_list
+		where c_id = #{c_id}
+			and order_status not in ('준비완료', '결제취소')
+		order by order_date asc 
+	 </select>
+	 
+	 
+<!-- 	 collection = 전달받은 인자값
+
+item   = 전달받은 인자값을 다른이름으로 대체 
+
+open 해당 구문이 시작할떄 (
+
+close 해당구문이 끝날떄
+
+separator  한번 이상 반복할때 반복되는 사이에  해당 문을 넣어줌
+	  -->
+	<select id="completed_order_num" resultType="integer">
+		select order_num
+		from order_list 
+		<where>
+			c_id = #{param1}
+			<if test="param2 != null ">
+			and order_num in
+				<foreach item="item" index="index" collection="param2" open="("
+					separator="," close=")">
+					#{item}
+				</foreach>
+			and order_status = '준비완료'
+			</if>
+		</where>
+	</select>
+	
+	
+	
+	 
+	<!-- order_num이 넘어오면 order_status를 리턴  -->
+	<select id="check_order_status" resultType="java.lang.String">
+	 	select order_status 
+	 	from order_list
+	 	where c_id = #{param1}
+	 		and order_num = #{param2]
+	</select>
+
+
 	<select id="history" resultType="kosta.finalproject.customer.dto.HistoryTDTO">
 		select	ol.order_num,
 				( select count(order_detail_num) from order_detail where order_num=ol.order_num ) as num_of_item,

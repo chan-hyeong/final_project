@@ -12,6 +12,36 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">	
 
+<!-- start 알람체크하는 기능 -->
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="<c:url value="js/alarm.js"/>">
+</script>
+<script>
+	  //페이지 진입시 
+		$(document).ready(function(){
+			var title = document.getElementsByTagName("title")[0].innerHTML;
+			title ='<%=request.getRequestURI()%>';
+			title = title.split('/')[5].split('.jsp')[0];
+			console.log(title + " page 입니다");
+			
+			console.log(title + " page 입니다");
+			
+			var tmp = ${slist eq null? 0 : slist};
+			var slist = new Array();
+			for ( var i=0; i<tmp.length; i++){
+				slist[i] = tmp[i];
+			}
+			console.log("주문상태를 체크해야할 order (" + slist.length + " 개): <" + slist + ">");
+			console.log(slist[1]);
+			
+			//console.log("header page 입니다");
+			console.log(${slist eq null ? false : true} + " ← 이 정보로 트리거 호출할거임");
+			trigerfn(${slist eq null ? false : true});			
+		});
+</script>
+<!-- end 알람체크하는 기능 -->
+
+
 <title>Insert title here</title>
 <style type="text/css">
 #loginid {

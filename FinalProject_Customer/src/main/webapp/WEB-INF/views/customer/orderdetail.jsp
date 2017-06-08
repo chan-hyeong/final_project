@@ -140,11 +140,15 @@ input{
 	<form name="testfrm" action="paymentform.do" method="post" onsubmit="return check();">
 	
 	
-		사용자 id : <input type="text" name="c_id" value="${id }"><br>
-		매장 코드 : <input type="text" name="s_code" value="${s_code}"><br>
-		기본 가격 : <input type="text" name="o_totalprice" value="${ menudto.m_price }">원<br>
+		사용자 id : <input type="text" name="c_id" value="${id}" readonly="readonly"><br>
+		매장 코드 : <input type="text" name="s_code" value="${s_code}" readonly="readonly"> <!-- 세션에서  불러오기  --><br>
+		
+		기본 가격 : <input type="text" name="o_totalprice" value="${ menudto.m_price }" readonly="readonly">원<br>
 		<br>
-		메뉴 코드 : <input type="text" name="m_code" value="${menudto.m_code }"><br>
+		메뉴 코드 : <input type="text" name="m_code" value="${menudto.m_code }" readonly="readonly"><br>
+		<!-- 바뀌면 안될  -->
+		<hr>
+		
 		빵 선택 : 
 		<select name="o_pan">
 			<option value="none">빵선택</option>
@@ -190,8 +194,8 @@ input{
 			<div>
 				${olist.m_name} 
 				<input id="price${i.count }" value="0" />
-				<input type="hidden" value="${ olist.m_code}" name="o_option${i.count }"/>|
-				<input type="hidden" value="${ olist.m_price }" id="h_price${i.count }" readonly="readonly"/>
+				<input type="hidden" value="${ olist.m_code}" name="o_option${i.count}"/>|
+				<input type="hidden" value="${ olist.m_price }" id="h_price${i.count}" readonly="readonly"/>
 				<input type="button" value="▼" id="${i.count}" onclick="extra_sub(o_option${i.count }_num, price${i.count }, h_price${i.count })"/>
 				<input readonly="readonly" value="0" name="o_option${i.count }_num">
 				<input type="button" value="▲" id="${i.count}" onclick="extra_add(o_option${i.count }_num, price${i.count }, h_price${i.count })"/>
@@ -210,7 +214,17 @@ input{
 		<br>총 가격 : 
 		<input hidden="hidden" type="text" name="o_price" value="${ menudto.m_price }"> <label name="o_price">
 		<fmt:formatNumber>${ menudto.m_price}</fmt:formatNumber>  원</label>
+		
+		&nbsp;&nbsp;
+		<label for="amount">수량 : </label> 
+		<select name="amount" id="amount"> 
+			<option value="1" selected="selected">1개</option>
+			<option value="2"> 2개 </option>
+			<option value="3"> 3개 </option>
+			<option value="4"> 4개 </option>
+		</select>
 		<br>
+		
 		<button value="basket" name="command">장바구니</button>
 		<button value="payment" name="command">결제</button>
 	</form>

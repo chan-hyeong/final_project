@@ -13,6 +13,8 @@
 				, s_address
 				, s_phone
 				, s_manager
+				, s_latitude
+				, s_longitude
 		from 	stores s
 	</select>
 	
@@ -23,8 +25,8 @@
 				, s_address
 				, s_phone
 				, s_manager
-				--, s_latitude
-				--, s_longitude
+				, s_latitude
+				, s_longitude
 		from 	stores s
 		where 
 				s.s_code = #{s_code}

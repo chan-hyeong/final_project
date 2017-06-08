@@ -29,11 +29,11 @@
 		var id = "${id}"
 		var store = "${s_code}"
 		if(id == ""){
-			alert('로그인을 먼저 해주세요');
+			if ( confirm('로그인 먼저 해주세요') ) window.location.href="loginform.do";
 			return false;
 		}		
 		if(store == ""){
-			alert('매장을 먼저 선택해주세요');
+			if ( confirm('매장을 먼저 선택해주세요') ) window.location.href="store2.do";
 			return false; 
 		}
 	}
@@ -41,7 +41,7 @@
 	function store(){
 		var id = "${id}"
 		if(id == ""){
-			alert('로그인 먼저 해주세요');
+			if ( confirm('로그인 먼저 해주세요') ) window.location.href="loginform.do";
 			return false;
 		}
 		
@@ -151,8 +151,8 @@ button{
 	<jsp:include page="footer.jsp"></jsp:include>
 </div>
 
-	<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery08/2.2.2/jquery.min.js'></script>
-	<script src='http://npmcdn.com/isotope-layout@3/dist/isotope.pkgd.js'></script>
+<!-- 	<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery08/2.2.2/jquery.min.js'></script>
+ -->	<script src='http://npmcdn.com/isotope-layout@3/dist/isotope.pkgd.js'></script>
 	
     <script src="${pageContext.request.contextPath}/js/index.js"></script>
     <script src="${pageContext.request.contextPath}/js/side.js"></script>
