@@ -244,25 +244,19 @@
       <div class="top" style="text-align: center;">
                <c:forEach items="${top5 }" var="top" >
                  <div class="col-sm-4" style="font-weight: bold;" >
+                 <a href="#" onclick="return session('${top.menu_code}');">
                  ${top.rank }위
                   <img title="${top.menu_name }" src=<c:url value="img/${top.menu_code}.png"/> style="box-shadow: 2px 2px 3px rgba(69,52,27,0.56); margin-top: 15px; text-align: center;">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  </a>
                  </div>
-                  
                </c:forEach>
-          
         </div>
         
      </div>
 			<br> <br> <br>
 		</div>
-
-
-
-
-
-
-
+		
 		<!-- footer -->
 		<jsp:include page="footer.jsp" />
 	</div>
@@ -431,5 +425,30 @@ ppt {
 		}
 		x[slideIndex - 1].style.display = "block";
 		dots[slideIndex - 1].className += " w3-red";
+	}
+	
+	//session check
+	function session(m_code){
+		var id = "${id}";
+		var store = "${selected_store.s_code}";
+		
+		if(id == ""){
+			if ( confirm('주문을 원하시면 로그인을 해주세요') ) window.location.href="loginform.do";
+			return false;
+		}		
+		if(store == ""){
+			if ( confirm('매장을 먼저 선택해주세요') ) window.location.href="store2.do";
+			return false; 
+		}
+		window.location.href="orderdetail.do?m_code=" + m_code + "";
+	}
+
+	function store(){
+		var id = "${id}"
+		if(id == ""){
+			if ( confirm('로그인 먼저 해주세요') ) window.location.href="loginform.do";
+			return false;
+		}
+		
 	}
 </script>

@@ -47,11 +47,11 @@ System.out.println("============================================================
 		Order_DetailDAO detail_dao = sqlsession.getMapper(Order_DetailDAO.class);
 		
 		String c_id = session.getAttribute("id").toString();
-		
-		
+		CustomersDAO customer_dao = sqlsession.getMapper(CustomersDAO.class);
+		session.setAttribute("c_coin", customer_dao.get_customerInfo_by_id(c_id).getC_coin());
+
 		//매장정보 
 		String s_code = request.getParameter("s_code");
-		
 		
 
 		int order_num = list_dao.get_order_num()+1; 
@@ -168,6 +168,9 @@ System.out.println(" 결제후 coin : " + cus_dao.get_customerInfo_by_id(list_dt
 		
 		//[4] history.do 로 이동 : 주문내역 보여주기 (이 경우에는 주문내역 상세페이지)
 //		alarm_need_check(session, 0);//알람필요?
+CustomersDAO customer_dao = sqlsession.getMapper(CustomersDAO.class);
+session.setAttribute("c_coin", customer_dao.get_customerInfo_by_id(list_dto.getC_id()).getC_coin());
+
 		return "redirect:history.do?order_num="+list_dto.getOrder_num();
 	}
 	

@@ -23,6 +23,35 @@
 	width: 100%;
 }
 </style>
+<script>
+	//컴마씨우기
+	function comma(str) {
+	    str = String(str);
+	    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+	}
+	//콤마풀기
+	function uncomma(str) {
+	    str = String(str);
+	    return str.replace(/[^\d]+/g, '');
+	}
+</script>
+<script type="text/javascript">
+var lat;
+var lon;
+
+	if ("geolocation" in navigator) {
+		alert(" 지오로케이션 사용 가능 */");
+		navigator.geolocation.getCurrentPosition(function(position) {
+			 alert("("+position.coords.latitude+", "+ position.coords.longitude+")");
+			 lat=eval(position.coords.latitude);
+			 lon=eval(position.coords.longitude);
+			});
+	} else {
+	  /* 지오로케이션 사용 불가능 */
+	  alert(" 지오로케이션 사용 불가능 *");
+	}
+</script>
+
 <script type="text/javascript">
 	function gmap_getdistance(lat1, lon1, lat2, lon2){
 		// from http://www.movable-type.co.uk/scripts/latlong.html
@@ -64,10 +93,9 @@ var stores = new Array();
 		getLocation();
 	});
 
-
 	var map;
 	var infowindow;
-	var x = document.getElementById("demo");
+	var x = document.getElementById("map");
 
 	function getLocation() {
 		if (navigator.geolocation) {
@@ -80,12 +108,14 @@ var stores = new Array();
 	// 맵 초기화 
 	function initMap(position) {
 		//[1] 현재위치가져오기 
-		lat = position.coords.latitude;
-		lon = position.coords.longitude;
+		//lat = position.coords.latitude;
+		//lon = position.coords.longitude;
+			 alert(lat);
+			 alert(lon);
 
 		//오리역 
-		//lat = 37.339875;
-		//lon = 127.108942;
+		lat = 37.339875;
+		lon = 127.108942;
 
 		//지도의 center점을 설정하기 위한 객체?
 		var pyrmont = {
@@ -109,9 +139,9 @@ var stores = new Array();
 
 		
 		for ( var i =0; i<${fn:length(storelist)}; i++){
-			console.log("( " + lat  + ", " + lon + " ) ~ ( " +  latarr[i] + ", " + lonarr[i]+" )\n");
+			//console.log("( " + lat  + ", " + lon + " ) ~ ( " +  latarr[i] + ", " + lonarr[i]+" )\n");
 			distancearr[i] = gmap_getdistance(lat,lon, latarr[i], lonarr[i]);
-			console.log(i+" " + addrarr[i] + " 거리는 : " + distancearr[i] + "m\n\n");
+			//console.log(i+" " + addrarr[i] + " 거리는 : " + distancearr[i] + "m\n\n");
 		    
 			stores[i] = { s_code : s_codearr[i], s_name : s_namearr[i], s_address : addrarr[i], distance : distancearr[i], s_latitude : latarr[i], s_longitude : lonarr[i]};
 		}
@@ -152,21 +182,24 @@ var stores = new Array();
 			if (dist < 1000)
 				tmplb.innerHTML = comma(stores[i].distance) + " m" ;
 			else 
-				tmplb.innerHTML = comma(parseInt(eval(stores[i].distance)/1000)) + " km" ;
+				tmplb.innerHTML = comma( (parseInt( eval(stores[i].distance)/1000 )) ) + " km" ;
 			
 			
-			tmplb = document.getElementById('adrs'+i);//주소 이름 등등 반영
+			tmplb = document.getElementById('adrs'+i);//정렬된 주소 표시
 			tmplb.innerHTML = stores[i].s_address;
 			
-			tmplb = document.getElementById('s_code'+i);//s_code이름 등등 반영
+			tmplb = document.getElementById('s_code'+i);//정렬된 s_code 표시
 			tmplb.value = stores[i].s_code;
 			
+			tmplb = document.getElementById('name'+i);//주소 매장명 반영
+			tmplb.innerHTML = stores[i].s_name + " 점";
+			
 			tmplb = document.getElementById('distresult');//s_code이름 등등 반영
-			tmplb.innerHTML += '<li>'+stores[i].s_code + '|' + stores[i].s_address + '|' + stores[i].distance + '|</li>';
+			tmplb.innerHTML += '<li>'+stores[i].s_code + '|' + stores[i].s_name + '|' + stores[i].s_address + '|' + stores[i].distance + '|</li>';
 		}
-		console.log("정렬된 stores 배열 : " + str);
+		//console.log("정렬된 stores 배열 : " + str);
 		for (var i = 0 ; i < ${fn:length(storelist)}; i++){
-			console.log(i+"\t"+latarr[i] + " " + lonarr[i] + " "+ addrarr[i]);
+			//console.log(i+"\t"+latarr[i] + " " + lonarr[i] + " "+ addrarr[i]);
 			latlon = new google.maps.LatLng(stores[i].s_latitude, stores[i].s_longitude);
 			
 			var tmarker= new google.maps.Marker({
@@ -179,21 +212,17 @@ var stores = new Array();
 			});
 			google.maps.event.addListener(tmarker, 'click', function() {
 				var ctt= "";
-				//ctt += tmarker.index +"<br>";
-				ctt += tmarker.title + "<br>";
-				ctt += tmarker.address + "<br>";
+				ctt += this.title + "<br>";
+				ctt += this.address + "<br>";
 				infowindow.setContent(ctt);
 				infowindow.open(map, this);
 				
 				//마커를 눌렀을경우
 				if ( ${id ne null} ){
-					
-				alert(this.s_name);
-				//선택된 매장 정보를 받아와서 
-				if ( confirm(this.address + " 를 선택하시겠습니까?"))
-					window.location.href="store_selec.do?s_code="+this.s_code+"";
-				}
-				//else 포커스 이동, 정보보기 
+					//선택된 매장 정보를 받아와서 
+					if ( confirm(this.title + " 점을 선택하시겠습니까?\n" + "(주소 : " + this.address + ")" ))
+						window.location.href="store_selec.do?s_code="+this.s_code+"";
+					}
 			});
 		}
 		
@@ -215,7 +244,7 @@ var stores = new Array();
 				$("#distresult").append(
 						"<li> 매장명 : " + results[i].name + ", 매장평점 : "
 								+ results[i].rating + "</li>");
-				console.log(results[i].rating);
+				/* console.log(results[i].rating); */
 			}
 		}
 	}
@@ -298,18 +327,21 @@ var stores = new Array();
 					</ul>
 					
 					<script	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAx-OV3qCLjcCKIFWMgSRHOa2uPRR7RRB4&libraries=places&callback=initMap"	async defer></script>
-
+					
+					 <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVtMhIFUiHQM5qnLz_hb1PImhAsbPWP0w&libraries=places&callback=initMap"	async defer></script>
+ -->
 					<!-- 
 						매장리스트 출력  , 자주가는 매장?, 가까운 매장 현재위치에서 2km이내 매장에만 주문을 전송할수 있어요 
 					-->
+					<br>
 					<c:forEach var="list" items="${storelist}" varStatus="i">
 						<form action="store_selec.do" method="post" style="display: ${id eq null ? 'none' : 'inline'};">
 							<label id="name${i.index}" style="width:20%;">${list.s_name}</label>
-							<label id="adrs${i.index}" style="width:35%;">${list.s_address}</label>
+							<label id="adrs${i.index}" style="width:45%; ">${list.s_address}</label>
 							<input type="hidden" name="s_code" id="s_code${i.index}" value="${list.s_code}">
-							<label id="dist${i.index}" style="width:6%;">0</label> m
+							<label id="dist${i.index}" style="width:6%;">0</label>	
 							<input type="submit" value="선택">
-						</form>
+						</form><br><br>
 					</c:forEach>
 				</div>
 
@@ -321,15 +353,3 @@ var stores = new Array();
 		</div>
 </body>
 </html>
-<script>
-	//컴마씨우기
-	function comma(str) {
-	    str = String(str);
-	    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
-	}
-	//콤마풀기
-	function uncomma(str) {
-	    str = String(str);
-	    return str.replace(/[^\d]+/g, '');
-	}
-</script>

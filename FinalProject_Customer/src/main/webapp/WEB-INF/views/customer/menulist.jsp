@@ -88,7 +88,7 @@ function store(){
 	position: fixed;
 	
 }
-.btn{
+.btnBottom{
 	    width: 100%;
     position: fixed;
     bottom: 0;
@@ -138,9 +138,9 @@ function store(){
 				        </div>
 				        <div class="modal-footer" >
 				        <!-- 버튼에 스타일 입히기  ★★★★★★★★-->
-				          <button onclick="return session('${menulist[i.index].m_code}');">디폴트 담기</button>
-				          <button onclick="return session('${menulist[i.index].m_code}');">즐겨찾기 담기</button>
-				          <button onclick="return session('${menulist[i.index].m_code}');">주문하기</button>
+				          <button class="btn btn-default" onclick="return session('${menulist[i.index].m_code}');">디폴트 담기</button>
+				          <button class="btn btn-default" onclick="return session('${menulist[i.index].m_code}');">즐겨찾기 담기</button>
+				          <button class="btn btn-default" onclick="return session('${menulist[i.index].m_code}');">주문하기</button>
 				        </div>
 				      </div>
 				    </div>
@@ -151,14 +151,14 @@ function store(){
 	
 		<!--------------매장 선택 정보--------------------------------------- -->
 		<a href="store2.do" onclick="return store();">
-			<button class="btn btn-warning" style="height: 8%;">
+			<button class="btn btnBottom btn-warning" style="height: 8%;">
 					<font color="white">
 					<c:choose>
 						<c:when test="${selected_store eq null}">
 							주문하실 매장을 먼저 선택해주세요
 						</c:when>
 						<c:otherwise>
-							현재 선택된 매장은 <font size="5">${selected_store.s_name}</font><%-- (${selected_store.s_address})--%> 점 입니다
+							${selected_store.s_code} 현재 선택된 매장은 <font size="5">${selected_store.s_name}</font><%-- (${selected_store.s_address})--%> 점 입니다
 						</c:otherwise>
 					</c:choose>
 					</font>

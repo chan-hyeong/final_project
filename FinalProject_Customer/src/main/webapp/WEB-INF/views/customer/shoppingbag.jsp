@@ -62,7 +62,7 @@ div.right{
 div.11{
 	border: solid;
 }
-.btnStore{
+.btnBottom{
 	width: 100%;
     position: fixed;
     bottom: 0;
@@ -192,7 +192,7 @@ function flip(data) {
 	
 			<!--------------매장 선택 정보--------------------------------------- -->
 		<a href="store2.do" onclick="return store();">
-			<button class="btnStore btn-warning" style="height: 8%;">
+			<button class="btnBottom btn-warning" style="height: 8%;">
 					<font color="white">
 					<c:choose>
 						<c:when test="${selected_store eq null}">
@@ -215,13 +215,14 @@ function flip(data) {
 function session(){
 	var id = "${id}";
 	var selected_store = "${selected_store.s_code}";
+	var selected_store_name = "${selected_store.s_name}";
 	
 	if(selected_store == ""){
 		if ( confirm('매장을 먼저 선택해주세요') ) window.location.href="store2.do";
 		return false; 
 	}
 	
-	return confirm('장바구니 내역을 결제합니다.') ;
+	return confirm(selected_store_name + ' 지점에서 장바구니 내역을 결제합니다.') ;
 }//end function 
 
 </script>

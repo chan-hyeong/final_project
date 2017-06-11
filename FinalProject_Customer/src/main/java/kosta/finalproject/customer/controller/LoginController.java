@@ -38,6 +38,8 @@ public class LoginController {
 			session.setAttribute("id", dto.getC_id());
 			session.setAttribute("c_coin", dao.get_customerInfo_by_id(dto.getC_id()).getC_coin());
 			
+			order_status_check(session);
+			
 			return "redirect:main.do";//로그인 성공 
 		} else
 
@@ -45,7 +47,6 @@ public class LoginController {
 			model.addAttribute("result", "아이디와 비밀번호를 확인하세요.");
 		
 		//알람 트리거 
-		order_status_check(session);
 		
 		return "customer/loginform";
 	}
@@ -73,7 +74,8 @@ public class LoginController {
 	public @ResponseBody List<Integer> order_status_check(HttpSession session) {
 System.out.println("\n\norder_status_check 진입 ");
 		HistoryDAO dao = sqlsession.getMapper(HistoryDAO.class);
-		String c_id = session.getAttribute("id").toString();
+		
+		String c_id = (session.getAttribute("id")==null) ?  "" : session.getAttribute("id").toString();
 
 		List<Integer> order_nums = null;
 		List<Integer> chaged_order_nums = null;
