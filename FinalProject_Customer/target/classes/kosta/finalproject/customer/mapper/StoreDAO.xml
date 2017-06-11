@@ -21,13 +21,15 @@
 	<select id="get_store_info" resultType="kosta.finalproject.customer.dto.StoreTDTO">
 		select
 				s_code
-				, (select c.code_name from code c where c.code=s.s_code) as s_name,
+				, (select c.code_name from code c where c.code=#{s_code}) as s_name
 				, s_address
 				, s_phone
 				, s_manager
 				, s_latitude
 				, s_longitude
+		
 		from 	stores s
+		
 		where 
 				s.s_code = #{s_code}
 	</select>

@@ -3,51 +3,69 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+
 <mapper namespace="kosta.finalproject.customer.dao.CustomersDAO">
+
 	<!-- 회원가입, c_coin은 빼야할듯? -->
-	<insert id="insert" parameterType="kosta.finalproject.customer.dto.CustomersTDTO">
-		insert into CUSTOMERS (c_id, c_pw, c_name, c_email, c_coin, c_birth,
-		c_gender) values
-		(#{c_id},#{c_pw},#{c_name},#{c_email},#{c_coin},#{c_birth},#{c_gender})
+	<insert id="insert_into_Customers" parameterType="kosta.finalproject.customer.dto.CustomersTDTO">
+		insert into 
+			CUSTOMERS (c_id, c_pw, c_name, c_email, c_coin, c_birth, c_gender) 
+		values
+			(#{c_id},#{c_pw},#{c_name},#{c_email},#{c_coin},#{c_birth},#{c_gender})
 	</insert>
 
-	<select id="customers" resultType="integer"
+	<select id="login_id_pw_check" resultType="integer"
 		parameterType="kosta.finalproject.customer.dto.CustomersTDTO">
 		select count(*) from CUSTOMERS where c_id=#{c_id} and c_pw=#{c_pw}
 	</select>
 	
-	<!-- 회원정보 불러오기 -->
-	<select id="getcustomers" resultType="kosta.finalproject.customer.dto.CustomersTDTO">
-		select * from CUSTOMERS where c_id=#{c_id}
+	
+	
+	<!-- 회원정보 불러오기, * 말고 필드명 다쓰기  -->
+	<select id="get_customerInfo_by_id" resultType="kosta.finalproject.customer.dto.CustomersTDTO">
+		select c_id, c_pw
+			, c_name, c_email, c_birth, c_gender
+			, c_coin 
+		from CUSTOMERS 
+		where c_id = #{c_id}
 	</select>
+	
+	
 
 	<!-- 회원정보 수정, 수정안한 정보는 수정안하게끔? -->
-	<update id="update" parameterType="kosta.finalproject.customer.dto.CustomersTDTO">
+	<update id="update_customerInfo" parameterType="kosta.finalproject.customer.dto.CustomersTDTO">
 		update CUSTOMERS 
 		set
-			c_pw=#{c_pw}, c_name=#{c_name}, c_email=#{c_email}, 
-			c_coin=#{c_coin}, c_birth=#{c_birth}
+			c_pw=#{c_pw}
+			--, c_name=#{c_name}
+			, c_email=#{c_email} 
+			, c_birth=#{c_birth}
+			--, c_coin=#{c_coin} 
 		where c_id = #{c_id}
 	</update>
 
 	<!-- id중복체크에 사용 -->
-	<select id="getid" resultType="integer"
+	<select id="check_id_duplication" resultType="integer"
 		parameterType="kosta.finalproject.customer.dto.CustomersTDTO">
 		select count(*) from CUSTOMERS where c_id=#{c_id}
 	</select>
 	
 	
+	
 	<!-- paymentform에서 결제시 내 c_coin에서 차감  , int payment_by_order(String c_id, int order_num),
 		 일단 order_list에 추가될거임 , 여기서 에러나면 (c_coin 제약조건 > 0 ) 트랜잭션!  롤백?--> 
-	<update id="payment_by_order">
+	<update id="subtract_coin_in_order">
 		update CUSTOMERS
 		set 
-			c_coin = c_coin - (select o_totalprice from order_list where order_num = #{param2})
+			c_coin = c_coin - #{param2}
 		where 
 			c_id = #{param1}
 	</update>
 	
-	<!-- 이벤트시 5%적립기능? -->	
+	
+	
+	
+	<!-- ★★★ 이벤트시 5%적립기능? 아직 구현 안함 -->	
 	<update id="bonus_by_order">
 		update CUSTOMERS
 		set 
@@ -58,7 +76,5 @@
 	</update>
 	
 	
-
-
 
 </mapper>

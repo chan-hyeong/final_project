@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="kosta.finalproject.customer.dao.Topmenu5DAO">
+  <select id="top5list" resultMap="top5">
+      select code as mene_code,
+		code_name as menu_name,
+		acount,
+		rank from
+		(select code,
+		code_name,
+		acount,
+		rank() over(order by acount desc, code) as rank
+		from ( select code,code_name, (select sum( decode(code , od.m_code , 1,
+		0))
+		from order_detail od , order_list ol
+		where ol.ORDER_NUM=od.ORDER_NUM 
+		and ol.ORDER_STATUS in('결제완료','준비완료')
+		) as acount
+		from code
+		where code_group in ('menu'))) where rank between 1 and 5
+  </select>
+  <resultMap type="HashMap" id="top5">
+  <result javaType="java.lang.String" column="menu_name" property="menu_name"/>
+  <result javaType="java.lang.String" column="mene_code" property="menu_code"/>
+  <result javaType="java.lang.Integer" column="rank" property="rank"/>
+  </resultMap>
+  
+  </mapper>

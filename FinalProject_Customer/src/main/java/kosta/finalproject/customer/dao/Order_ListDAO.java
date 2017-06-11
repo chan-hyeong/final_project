@@ -6,6 +6,14 @@ import kosta.finalproject.customer.dto.Order_ListTDTO;
 
 public interface Order_ListDAO {
 	/////////////////////////// select///////////////////////// 
+	/**
+	 * order_num 으로 오더정보 다 가져오는 매서드 
+	 * @param c_id
+	 * @param order_num
+	 * @return
+	 */
+	public Order_ListTDTO get_order_list_info(String c_id, int order_num);
+	
 	public List<Order_ListTDTO> get_order_list(String c_id);
 	//전체 리스트 가져오기 <--코드로 가져오기 
 	

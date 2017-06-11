@@ -41,6 +41,19 @@
 	   //document.getElementById("distresult").innerHTML = formatnumber(d,2);
 	}
 </script>
+
+<script>
+
+var latarr = new Array(<c:forEach items="${storelist}" var="item" varStatus="i"> '${item.s_latitude eq null? 0 : item.s_latitude }' <c:if test="${!i.last}">, </c:if></c:forEach> );
+var lonarr = new Array(<c:forEach items="${storelist}" var="item" varStatus="i"> '${item.s_longitude eq null? 0 : item.s_longitude }' <c:if test="${!i.last}">, </c:if></c:forEach> );
+var addrarr = new Array(<c:forEach items="${storelist}" var="item" varStatus="i"> '${item.s_address eq null? 0 : item.s_address }' <c:if test="${!i.last}">, </c:if></c:forEach> );
+var s_codearr = new Array(<c:forEach items="${storelist}" var="item" varStatus="i"> '${item.s_code eq null? 0 : item.s_code }' <c:if test="${!i.last}">, </c:if></c:forEach> );
+var s_namearr = new Array(<c:forEach items="${storelist}" var="item" varStatus="i"> '${item.s_name eq null? 0 : item.s_name}' <c:if test="${!i.last}">, </c:if></c:forEach> );
+
+var distancearr = new Array();	
+var stores = new Array();
+</script>
+
 <script>
 <!--
 	$(document).ready(function() {
@@ -51,13 +64,6 @@
 		getLocation();
 	});
 
-var latarr = new Array(<c:forEach items="${storelist}" var="item" varStatus="i"> '${item.s_latitude eq null? 0 : item.s_latitude }' <c:if test="${!i.last}">, </c:if></c:forEach> );
-var lonarr = new Array(<c:forEach items="${storelist}" var="item" varStatus="i"> '${item.s_longitude eq null? 0 : item.s_longitude }' <c:if test="${!i.last}">, </c:if></c:forEach> );
-var addrarr = new Array(<c:forEach items="${storelist}" var="item" varStatus="i"> '${item.s_address eq null? 0 : item.s_address }' <c:if test="${!i.last}">, </c:if></c:forEach> );
-var s_codearr = new Array(<c:forEach items="${storelist}" var="item" varStatus="i"> '${item.s_code eq null? 0 : item.s_code }' <c:if test="${!i.last}">, </c:if></c:forEach> );
-
-var distancearr = new Array();	
-var stores = new Array();
 
 	var map;
 	var infowindow;
@@ -78,8 +84,8 @@ var stores = new Array();
 		lon = position.coords.longitude;
 
 		//오리역 
-		lat = 37.339875;
-		lon = 127.108942;
+		//lat = 37.339875;
+		//lon = 127.108942;
 
 		//지도의 center점을 설정하기 위한 객체?
 		var pyrmont = {
@@ -107,7 +113,7 @@ var stores = new Array();
 			distancearr[i] = gmap_getdistance(lat,lon, latarr[i], lonarr[i]);
 			console.log(i+" " + addrarr[i] + " 거리는 : " + distancearr[i] + "m\n\n");
 		    
-			stores[i] = { s_code : s_codearr[i], s_address : addrarr[i], distance : distancearr[i], s_latitude : latarr[i], s_longitude : lonarr[i]};
+			stores[i] = { s_code : s_codearr[i], s_name : s_namearr[i], s_address : addrarr[i], distance : distancearr[i], s_latitude : latarr[i], s_longitude : lonarr[i]};
 		}
 		/* var str = "";
 		for ( var i =0; i<${fn:length(storelist)}; i++){
@@ -142,16 +148,23 @@ var stores = new Array();
 		for ( var i =0; i<${fn:length(storelist)}; i++){
 			str += i + " : " + stores[i].s_address + " , " + stores[i].distance + "\n";//정렬된 값 확인하기 위해 출력 
 			var tmplb = document.getElementById('dist'+i);//거리 반영
-			tmplb.innerHTML = stores[i].distance ;
+			var dist = stores[i].distance 
+			if (dist < 1000)
+				tmplb.innerHTML = comma(stores[i].distance) + " m" ;
+			else 
+				tmplb.innerHTML = comma(parseInt(eval(stores[i].distance)/1000)) + " km" ;
+			
+			
 			tmplb = document.getElementById('adrs'+i);//주소 이름 등등 반영
 			tmplb.innerHTML = stores[i].s_address;
+			
 			tmplb = document.getElementById('s_code'+i);//s_code이름 등등 반영
 			tmplb.value = stores[i].s_code;
 			
 			tmplb = document.getElementById('distresult');//s_code이름 등등 반영
 			tmplb.innerHTML += '<li>'+stores[i].s_code + '|' + stores[i].s_address + '|' + stores[i].distance + '|</li>';
 		}
-		/* console.log("정렬된 stores 배열 : " + str);
+		console.log("정렬된 stores 배열 : " + str);
 		for (var i = 0 ; i < ${fn:length(storelist)}; i++){
 			console.log(i+"\t"+latarr[i] + " " + lonarr[i] + " "+ addrarr[i]);
 			latlon = new google.maps.LatLng(stores[i].s_latitude, stores[i].s_longitude);
@@ -159,30 +172,30 @@ var stores = new Array();
 			var tmarker= new google.maps.Marker({
 				position : latlon,
 				map : map,
-				title : stores[i].s_code + "\n" + stores[i].s_address,
+				title : stores[i].s_name,
 				address : stores[i].s_address,
 				s_code : stores[i].s_code,
 				index : i
 			});
 			google.maps.event.addListener(tmarker, 'click', function() {
 				var ctt= "";
-				ctt += tmarker.index +"<br>";
-				//ctt += tmarker.title +"<br>";
-				ctt += tmarker.address +"<br>";
-				
+				//ctt += tmarker.index +"<br>";
+				ctt += tmarker.title + "<br>";
+				ctt += tmarker.address + "<br>";
 				infowindow.setContent(ctt);
 				infowindow.open(map, this);
 				
 				//마커를 눌렀을경우
-				//alert(this.s_code);
+				if ( ${id ne null} ){
+					
+				alert(this.s_name);
 				//선택된 매장 정보를 받아와서 
 				if ( confirm(this.address + " 를 선택하시겠습니까?"))
 					window.location.href="store_selec.do?s_code="+this.s_code+"";
+				}
 				//else 포커스 이동, 정보보기 
 			});
-		} */
-
-		
+		}
 		
 		infowindow = new google.maps.InfoWindow();
 		var service = new google.maps.places.PlacesService(map);
@@ -191,10 +204,7 @@ var stores = new Array();
 			radius : 12000,
 			keyword : "써브웨이", 
 			type : [ 'bakery', 'cafe', 'store']
-		
 		}, callback);
-		
-		
 	}//end init
 	
 
@@ -252,7 +262,7 @@ var stores = new Array();
 	<br>
 	<br>
 
-	<div style="margin-top: 15%;">
+	<div style="margin-top: 10%;">
 
 		<div class="container">
 			<ul id="myTab" class="nav nav-tabs" role="tablist">
@@ -269,22 +279,22 @@ var stores = new Array();
 			
 			<div id="myTabContent" class="tab-content">
 				<!-- 자주가는 매장 탭  -->
-				<div role="tabpane1" class="tab-pane fade" id="freq" aria-labelledby="freq-tab">
+				<%-- <div role="tabpane1" class="tab-pane fade" id="freq" aria-labelledby="freq-tab">
 						자주가는 매장은 어케 표시할까나...
 						select  s_code, count(*)
 						from order_list
-						where c_id = <%-- #{c_id} --%>
+						where c_id = #{c_id}
 						group by s_code 
 						order by count(*)
 						뭐 이런거면 될려나 
 						
 				</div>
-					
+					 --%>
 				<!-- 지도에서 찾기 탭  -->
 				<div role="tabpane2" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
 					<div id="map" style="width: 70%; height: 60%; margin: 10px;"></div>
 					
-					<ul id="distresult">
+					<ul id="distresult" style="display: none;">
 					</ul>
 					
 					<script	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAx-OV3qCLjcCKIFWMgSRHOa2uPRR7RRB4&libraries=places&callback=initMap"	async defer></script>
@@ -293,20 +303,33 @@ var stores = new Array();
 						매장리스트 출력  , 자주가는 매장?, 가까운 매장 현재위치에서 2km이내 매장에만 주문을 전송할수 있어요 
 					-->
 					<c:forEach var="list" items="${storelist}" varStatus="i">
-						<form action="store_selec.do" method="post">
-							<label id="adrs${i.index}" style="width:20%;">${list.s_address}</label>
+						<form action="store_selec.do" method="post" style="display: ${id eq null ? 'none' : 'inline'};">
+							<label id="name${i.index}" style="width:20%;">${list.s_name}</label>
+							<label id="adrs${i.index}" style="width:35%;">${list.s_address}</label>
 							<input type="hidden" name="s_code" id="s_code${i.index}" value="${list.s_code}">
-							<label id="dist${i.index}" style="width:10%;">0</label> m
+							<label id="dist${i.index}" style="width:6%;">0</label> m
 							<input type="submit" value="선택">
 						</form>
 					</c:forEach>
 				</div>
 
 				<!-- 가까운 매장 탭  -->
-				<div role="tabpane3" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
+				<!-- <div role="tabpane3" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
 					가까운 매장 탭 	
-				</div>
+				</div> -->
 			</div><!-- /myTabContent  -->
 		</div>
 </body>
 </html>
+<script>
+	//컴마씨우기
+	function comma(str) {
+	    str = String(str);
+	    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+	}
+	//콤마풀기
+	function uncomma(str) {
+	    str = String(str);
+	    return str.replace(/[^\d]+/g, '');
+	}
+</script>

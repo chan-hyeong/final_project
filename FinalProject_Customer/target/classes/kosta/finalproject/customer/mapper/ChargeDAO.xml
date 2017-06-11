@@ -7,15 +7,10 @@
 
 	<update id="coinupdate">
 		update
-		customers
-
-		set c_coin = c_coin + #{ param1 }
+			customers
+		set 
+			c_coin = c_coin + #{ param1 }
 		where c_id = #{ param2 }
 	</update>
 
-	<select id="getCoin" resultType="int">
-		select c_coin
-		from customers
-		where c_id = 'test'
-	</select>
 </mapper>

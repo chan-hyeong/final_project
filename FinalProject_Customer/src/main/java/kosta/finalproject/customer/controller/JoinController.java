@@ -31,7 +31,7 @@ public class JoinController {
 	public String joinpro(CustomersTDTO dto) {
 		System.out.println("this is joinpro.do ");
 		CustomersDAO dao = sqlsession.getMapper(CustomersDAO.class);
-		if (dao.insert(dto) > 0)
+		if (dao.insert_into_Customers(dto) > 0)
 			System.out.println("join success");
 		return "customer/index";
 	}
@@ -65,7 +65,7 @@ public class JoinController {
 	@RequestMapping("/id_check.do")
 	public String confirmID(CustomersTDTO dto, Model model) {
 		CustomersDAO dao = sqlsession.getMapper(CustomersDAO.class);
-		int result = dao.getid(dto);
+		int result = dao.check_id_duplication(dto);
 
 		if (result == 0) {
 			model.addAttribute("result", 0);// 아이디 없음
@@ -86,7 +86,7 @@ public class JoinController {
 		String id = (String) session.getAttribute("id");
 		System.out.println("id : " + id);
 		CustomersTDTO dto = null;
-		dto = dao.getcustomers(id);
+		dto = dao.get_customerInfo_by_id(id);
 		System.out.println(dto.getC_id());
 		model.addAttribute("info", dto);
 		
@@ -100,7 +100,7 @@ public class JoinController {
 		CustomersDAO dao = sqlsession.getMapper(CustomersDAO.class);
 		String id = (String) session.getAttribute("id");
 		System.out.println("id : " + id);
-		dao.update(dto);
+		dao.update_customerInfo(dto);
 		return "customer/main";
 	}
 

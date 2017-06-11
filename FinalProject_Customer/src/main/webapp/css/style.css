@@ -7,18 +7,18 @@
     border-bottom-style: solid;
 }
 .button-group{
-	margin: 0 auto;
+   margin: 0 auto;
     width: 100%;
     text-align: center;
     margin-top: 10%;
 }
 .grid{
-	
-	text-align: center;
-	
+   
+   text-align: center;
+   
 }
 .symbol{
-	text-align: center;
+   text-align: center;
 }
 #floatMenu {
     position: absolute;
@@ -47,5 +47,3 @@
 .navbar-brand>img {
     display: block;
 }
-
-	

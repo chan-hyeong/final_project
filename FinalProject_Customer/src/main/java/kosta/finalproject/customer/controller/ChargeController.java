@@ -42,10 +42,12 @@ public class ChargeController {
 		logger.debug("charge.do test");
 		String c_id = session.getAttribute("id").toString();
 		CustomersDAO dao = sqlsession.getMapper(CustomersDAO.class);
-		CustomersTDTO dto = null;
-		dto = dao.getcustomers(c_id);
+		CustomersTDTO customer_info = dao.get_customerInfo_by_id(c_id);
 		
-		request.setAttribute("info", dto);
+		request.setAttribute("RequestURI", request.getRequestURI());//포트 이후 경로
+		request.setAttribute("RequestURL", request.getRequestURL());//전부 포함 
+		
+		request.setAttribute("info", customer_info);
 		return "customer/charge";
 	}
 	
@@ -58,7 +60,8 @@ public class ChargeController {
  	@ResponseBody
 	@RequestMapping(value="/payments.do", method=RequestMethod.GET)
 	public HashMap<String, Object> payments(@RequestParam("coin") int c_coin, HttpServletRequest request, HttpSession session, CustomersTDTO dto){
-		System.out.println("여기까진 탐");
+		CustomersDAO customer_dao = sqlsession.getMapper(CustomersDAO.class);
+
 		HashMap<String, Object> chargeRe=new HashMap<String, Object>();
 		String c_id = request.getParameter("c_id");
 		String uid = request.getParameter("imp_uid");
@@ -66,15 +69,13 @@ public class ChargeController {
 		String api_key = "4582535957834535"; //imp42758107
 		String api_secret = "rIenjGaLd4ZLrzK2iApJ7Jiz248QfcyHVM4etfZGjZrLycOQNeAUYSu0XCQcPoTKbYZEdZlxYMjxZ8nM";
 		
-		ChargeDAO dao = sqlsession.getMapper(ChargeDAO.class);
+		ChargeDAO charge_dao = sqlsession.getMapper(ChargeDAO.class);
 	
 		logger.debug(uid);
 		logger.debug(c_coin);
 		logger.debug(c_id);
 		
-		System.out.println("\n\tupdate 문 수행하기 직전 coin : " + dao.getCoin());
-		int result = dao.coinupdate(c_coin, c_id);
-		System.out.println("\tupdate 문 수행직후 : " + result);
+		int result = charge_dao.coinupdate(c_coin, c_id);
 		
 		logger.debug(result);
 		//해당 결제에 대한 정보들을 불러옴
@@ -86,6 +87,9 @@ public class ChargeController {
 		chargeRe.put("rsp", rsp);
 		chargeRe.put("success", true);
 		System.out.println("결제성공");
+		
+		session.setAttribute("c_coin", customer_dao.get_customerInfo_by_id(dto.getC_id()).getC_coin());
+		
 		return chargeRe;
 	}
 	

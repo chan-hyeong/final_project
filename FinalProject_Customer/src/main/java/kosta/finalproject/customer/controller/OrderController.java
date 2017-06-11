@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import kosta.finalproject.customer.dao.HistoryDAO;
+import kosta.finalproject.customer.dao.CustomersDAO;
 import kosta.finalproject.customer.dao.InventoryDAO;
 import kosta.finalproject.customer.dao.Order_DetailDAO;
 import kosta.finalproject.customer.dao.Order_ListDAO;
@@ -37,20 +37,22 @@ public class OrderController {
 			,@RequestParam(name="amount", defaultValue="1")int amount
 			) {
 		
-		System.out.println("\n\n\n==============================================================================");
-		System.out.println("\t"+list_dto.toString());
-		System.out.println("\t"+detail_dto.toString());
-		System.out.println("\t"+amount);
-		System.out.println("==============================================================================\n\n\n");
+System.out.println("\n\n\n==============================================================================");
+System.out.println("\t"+list_dto.toString());
+System.out.println("\t"+detail_dto.toString());
+System.out.println("\t"+amount);
+System.out.println("==============================================================================\n\n\n");
 		
 		Order_ListDAO list_dao = sqlsession.getMapper(Order_ListDAO.class);
 		Order_DetailDAO detail_dao = sqlsession.getMapper(Order_DetailDAO.class);
 		
 		String c_id = session.getAttribute("id").toString();
 		
+		
+		//매장정보 
 		String s_code = request.getParameter("s_code");
-		int o_totalprice = new Integer(request.getParameter("o_price"));
-		list_dto.setO_totalprice(o_totalprice);//장바구니라면 이거 바꿔줘야하는데 
+		
+		
 
 		int order_num = list_dao.get_order_num()+1; 
 		list_dto.setOrder_num(order_num);
@@ -106,6 +108,7 @@ public class OrderController {
 		Order_ListDAO list_dao = sqlsession.getMapper(Order_ListDAO.class);
 		Order_DetailDAO detail_dao = sqlsession.getMapper(Order_DetailDAO.class);
 		InventoryDAO inven_dao = sqlsession.getMapper(InventoryDAO.class);
+		CustomersDAO cus_dao = sqlsession.getMapper(CustomersDAO.class);
 		
 		Order_ListTDTO list_dto = (Order_ListTDTO) session.getAttribute("list_dto");
 		List<Order_DetailTDTO> detail_dto_list = (List<Order_DetailTDTO>) session.getAttribute("detail_dto_list");
@@ -118,6 +121,7 @@ public class OrderController {
 //		if ( detail_dto_list !=null) System.out.println("\t"+detail_dto_list.size() +" : " + detail_dto_list.toString());
 //		System.out.println("\t"+"-------------------------------------------------------------------\n\n");		
 		
+		//★★★★★★★★★★여기서 부터 트랜잭션 필요 
 		
 		//[1] 주문 추가  
 		if (  command.equalsIgnoreCase("basketpayment")){  //장바구니에서 넘어온 경우 
@@ -137,43 +141,35 @@ public class OrderController {
 			//where order_num = 0
 		}else if (command.equalsIgnoreCase("payment")) {//일반 주문 (단품) 
 			list_dao.insert_order(list_dto);
-			System.out.println("\t인서트 완료 : " + detail_dao.insert_order_detail(detail_dto_list.get(0)));
+			for (int i = 0 ; i< detail_dto_list.size(); i++){
+				System.out.println("\t" + i + "행 인서트 완료 : " + detail_dao.insert_order_detail(detail_dto_list.get(i)));
+			}
 		}
 		
 		//[2]재고 조정
 		//★★★★★★★★★★
 		///////////////////////////////////// inventory 변경 test 중 ★★★★★★★★★
 		
-		System.out.println("\t 업데이트할 order_list : " + list_dto.getOrder_num() + " / " + list_dto.getS_code()  + " / " + list_dto.getOrder_date() );
-		System.out.println(" 재고 수정 결과는2 ? : " + inven_dao.update_inventory_by_order(list_dto.getOrder_num(), list_dto.getS_code()));
+System.out.println("\t 업데이트할 order_list : " + list_dto.getOrder_num() + " / " + list_dto.getS_code()  + " / " + list_dto.getOrder_date() );
+System.out.println(" 재고 수정 결과는2 ? : " + inven_dao.update_inventory_by_order(list_dto.getOrder_num(), list_dto.getS_code()));
 		
 		///////////////////////////////////// inventory 변경 test 중 ★★★★★★★★★
 		
 		//[3] 결제된 금액만큼 customers.c_coin 을 업데이트하기 ? 
-		System.out.println(list_dto.getO_totalprice() + " : total 가격!!!!!!!!!! ");
+
+System.out.println(" order_list dto : " + list_dto.toString());
+System.out.println(" 결제전 coin : " + cus_dao.get_customerInfo_by_id(list_dto.getC_id()).getC_coin());
+System.out.println(list_dto.getO_totalprice() + " : total 가격!!!!!!!!!! ");
+		cus_dao.subtract_coin_in_order(list_dto.getC_id(), list_dto.getO_totalprice());
+System.out.println(" 결제후 coin : " + cus_dao.get_customerInfo_by_id(list_dto.getC_id()).getC_coin());
 		
 		
-		
+		//★★★★★★★★★★여기까지 트랜잭션 필요, 예외발생시 돌아갈곳도  
 		
 		//[4] history.do 로 이동 : 주문내역 보여주기 (이 경우에는 주문내역 상세페이지)
 //		alarm_need_check(session, 0);//알람필요?
-		return "redirect:history.do";
+		return "redirect:history.do?order_num="+list_dto.getOrder_num();
 	}
 	
-
-	/**
-	 * 알람이 필요한 경우 세션에 true를 담는다
-	 * setAttribute("alarm_need_check", "true");
-	 * @param session
-	 * @param order_num 아직못정함 
-	 */
-//	public void alarm_need_check(HttpSession session, int order_num){
-//		HistoryDAO dao = sqlsession.getMapper(HistoryDAO.class);
-		
-//		if ( dao.get_uncompleted_order_num(session.getAttribute("id").toString()) == 0 ) //준비완료면 order_num을 그 외에는 0을  
-//			session.setAttribute("alarm_need_check", "true");
-//		else 
-//			session.removeAttribute("alarm_need_check"); //마지막 주문도 준비완료된 상태라면 알람이 필요없지 
-//	}//end 
 	
 }//end class

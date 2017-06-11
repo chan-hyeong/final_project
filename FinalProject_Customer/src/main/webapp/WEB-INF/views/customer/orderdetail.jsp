@@ -7,236 +7,332 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Insert title here</title>
-
-<script type="text/javascript">
-	var total_extra = 0;
-	function extra_add(target_o_num, target_o_price, o_price){
-		/* alert(params);
-		alert(params.value); */
-		if(total_extra >= 5){ 
-			alert("extra는 5개 이상 못해요");	
-			return false;
-		}
-		target_o_num.value++; 
-		target_o_price.value = eval(target_o_price.value) + eval(o_price.value);
-		
- 		document.getElementsByName('o_price')[0].value = eval(document.getElementsByName('o_price')[0].value) + eval(o_price.value ); 
- 
-		document.getElementsByName('o_price')[1].innerHTML = document.getElementsByName('o_price')[0].value  
-		total_extra ++;
-	}
-	function extra_sub(target_o_num, target_o_price, o_price){
-		/* alert(params);
-		alert(params.value); */
-		
-		if(total_extra <= 0 || target_o_num.value <= 0){ 
-			return false;
-		}
-		target_o_num.value--; 
-		target_o_price.value = eval(target_o_price.value) - eval(o_price.value);
-		
-		document.getElementsByName('o_price')[0].value = eval(document.getElementsByName('o_price')[0].value) - eval(o_price.value );
-		
-		document.getElementsByName('o_price')[1].innerHTML = document.getElementsByName('o_price')[0].value  
-		total_extra --;
-	}
-
-	
-	var option_num = 0;
-	function test(params){
- 		if ( option_num >= 3) return false;
- 		alert(document.getElementById('option').innerHTML);
- 		option_num++;
- 		var d = "div_" + option_num;
-		var code1 = "<select>";
-			 code1 += "<option value=\"dc\">더블치즈</option>";	
-			 code1 += "<option value=\"ac\">아보카도</option>";	
-			 code1 += "<option value=\"dm\">더블미트</option>";
-			 code1 += "<option value=\"em\">에그마요</option>";
-			 code1 += "<option value=\"bk\">베이컨</option>";
-			 code1 += "</select>";
-		var code2 = "<select><option value=1>1</option><option value=2>2</option><option value=3>3</option></select>";
-		var code = code1+code2+"<button value=1 onclick=\"delete_div(div_"+option_num+")\">X</button>";
-		document.getElementById(d).innerHTML += code;
-		return;
-	}
-	
-	function delete_div(params){
-		var name = params;
-		alert("눌린버튼 : " + name);
-		name.innerHTML = "";
-		option_num --;
-	}
-	
-	function  sauce_select(params){
-		var o_sauce1 = document.getElementsByName('o_sauce1')[0].value;
-		var o_sauce2 = document.getElementsByName('o_sauce2')[0].value;
-		
-		if(o_sauce1=='none'){ 
-			alert("소스 선택해라");
-			return false;
-		}
-		if(o_sauce1==o_sauce2) {
-			alert("다른 소스를 선택하라 ");
-			params.value='none';
-			return false;
-		}
-		return true;
-	}
-
-	function check(){
-		if( document.testfrm.o_pan.value == 'none' ) {
-			alert("빵을 선택해주세여함");
-			return false;
-		}
-		if( !sauce_select(document.testfrm.o_sauce2)){
-			alert("소스를 다른거 선택하삼");
-			return false;
-		}
-		return true;
-		
-	}
-	
-</script>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>${id } 님 주문을 진행합니다</title>
 <style type="text/css">
-input{
-	width: 50px;
+table {
+	border-collapse: collapse;
+	border: none;
+	margin-right: 10%;
+	float: right;
+	border-top-style: solid;
 }
 
+td {
+	padding: 10px;
+}
+
+img {
+	margin-left: 10%;
+	float: left;
+}
+
+table th {
+	padding: 2%;
+	text-align: center;
+}
+
+div.tit01 {
+	font: bold 24px/30px "malgun gothic", "Dotum", " Gulim", "Arial",
+		"verdana", "Helvetica", sans-serif;
+	color: #111;
+	text-align: center;
+}
+
+#opt {
+	font-stretch: normal;
+}
 </style>
-
 </head>
-<body>	
-<!-- header -->
+<body>   
 <jsp:include page="header.jsp"></jsp:include>
-<br>
-<br>
-<br>
-<br>
 
-<br>
-<br>
-<br>
-<div style="margin: 10px;">
 
-	<img src="${pageContext.request.contextPath}/img/${menudto.m_code}.png">
-		${menudto.m_explain}<br>
-		${menudto.m_name}<br>
-	<br>
-	
- 	<!-- <button onclick="test()">테스트버튼 </button>
- 	<br>
- 	<div id="option">
- 		<div id="div_1"></div>
- 		<div id="div_2"></div>
- 		<div id="div_3"></div>
-	</div>
-	 -->
-	<hr>
-	테스트 폼 :<br>
-	
-	<form name="testfrm" action="paymentform.do" method="post" onsubmit="return check();">
-	
-	
-		사용자 id : <input type="text" name="c_id" value="${id}" readonly="readonly"><br>
-		매장 코드 : <input type="text" name="s_code" value="${s_code}" readonly="readonly"> <!-- 세션에서  불러오기  --><br>
-		
-		기본 가격 : <input type="text" name="o_totalprice" value="${ menudto.m_price }" readonly="readonly">원<br>
-		<br>
-		메뉴 코드 : <input type="text" name="m_code" value="${menudto.m_code }" readonly="readonly"><br>
-		<!-- 바뀌면 안될  -->
-		<hr>
-		
-		빵 선택 : 
-		<select name="o_pan">
-			<option value="none">빵선택</option>
-			<c:forEach var="olist" items="${option_bread}">
-				<option  value="${ olist.m_code }">${olist.m_name}</option>
-			</c:forEach>
-		</select> 		
-		<br>
-		
-		<br>
-		필수 : <br>
-			<input type="hidden" name="m_necessary1" value="${menudto.m_necessary1 }"><label>${menudto.m_necessary1_name }</label>
-			<input type="hidden" name="m_necessary1_num" value="${menudto.m_necessary1_num }"><label>${menudto.m_necessary1_num}개</label><br>
-			
-			<input type="hidden" name="m_necessary2" value="${menudto.m_necessary2}"><label>${menudto.m_necessary2_name }</label>
-			<input type="hidden" name="m_necessary2_num" value="${menudto.m_necessary2_num}"><label>${menudto.m_necessary1_num}개</label><br>
-			
-			<input type="hidden" name="m_necessary3" value="${menudto.m_necessary3}"><label>${menudto.m_necessary3_name }</label>
-			<input type="hidden" name="m_necessary3_num" value="${menudto.m_necessary3_num}"><label>${menudto.m_necessary3_num}개</label><br>
-			
-			<input type="hidden" name="m_necessary4" value="${menudto.m_necessary4 }"><label>${menudto.m_necessary4_name }</label>
-			<input type="hidden" name="m_necessary4_num" value="${menudto.m_necessary4_num }"><label>${menudto.m_necessary4_num}개</label><br>
-		
-		 	
- 	<div> 		
-		<select name="o_sauce1" onchange="sauce_select(o_sauce1)">
-			<option value="none">소스선택</option>
-			<c:forEach var="olist" items="${option_sauces}">
-				<option value="${ olist.m_code }">${olist.m_name}</option>
-			</c:forEach>
-		</select>
-		<select name="o_sauce2" onchange="sauce_select(o_sauce2)">
-			<option value="none">소스선택</option>
-			<c:forEach var="olist" items="${option_sauces}">
-				<option value="${ olist.m_code }">${olist.m_name}</option>
-			</c:forEach>
-		</select>		
- 	</div>
-		
- 		<br>옵션 : <br>
- 	<div>
-		<c:forEach var="olist" items="${option_extra}" varStatus="i">
-			<div>
-				${olist.m_name} 
-				<input id="price${i.count }" value="0" />
-				<input type="hidden" value="${ olist.m_code}" name="o_option${i.count}"/>|
-				<input type="hidden" value="${ olist.m_price }" id="h_price${i.count}" readonly="readonly"/>
-				<input type="button" value="▼" id="${i.count}" onclick="extra_sub(o_option${i.count }_num, price${i.count }, h_price${i.count })"/>
-				<input readonly="readonly" value="0" name="o_option${i.count }_num">
-				<input type="button" value="▲" id="${i.count}" onclick="extra_add(o_option${i.count }_num, price${i.count }, h_price${i.count })"/>
-			</div>
-		</c:forEach>
- 	</div>
-		
-		<br>채소 : <br>
-		<!-- 채소 정보만 넘겨주는 option  -->
-<%-- 		<c:forEach var="olist" items="${option}" varStatus="i">  --%>
-		<c:forEach var="olist" items="${option_vege}" varStatus="i"> 
- 			<input type="checkbox" id="${olist.m_code}" name="o_vege${i.count}" value="${olist.m_code}" checked="checked" ><label for="${olist.m_code}">${olist.m_name}</label>&nbsp; 
- 			<br>
- 		</c:forEach>
-		
-		<br>총 가격 : 
-		<input hidden="hidden" type="text" name="o_price" value="${ menudto.m_price }"> <label name="o_price">
-		<fmt:formatNumber>${ menudto.m_price}</fmt:formatNumber>  원</label>
-		
-		&nbsp;&nbsp;
-		<label for="amount">수량 : </label> 
-		<select name="amount" id="amount"> 
-			<option value="1" selected="selected">1개</option>
-			<option value="2"> 2개 </option>
-			<option value="3"> 3개 </option>
-			<option value="4"> 4개 </option>
-		</select>
-		<br>
-		
-		<button value="basket" name="command">장바구니</button>
-		<button value="payment" name="command">결제</button>
-	</form>
-	</div>
-	
-	
-	<br>
-	<br>
-	<br>
-	<br>
-	<!-- footer -->
-	<jsp:include page="footer.jsp"></jsp:include>
-	
+<div style="margin-top: 10%;">
+   <div class="tit01">${id } 회원님의 주문현황</div>
+   <br>
+   <br>
+	<img src="${pageContext.request.contextPath}/img/${menudto.m_code}.png?ver=6" >
+     ${menudto.m_explain}
+     
+     <!-- 사용자가 선택한 조합 == 결제페이지로 넘길 정보 -->
+    <form name="orderfrm" action="paymentform.do" method="post" onsubmit="return check();">
+         <table>
+			 <input type="hidden" name="c_id" value="${id}">
+			 <input type="hidden" name="s_code" value="${selected_store.s_code}">
+		     <input type="hidden" name="m_code" value="${menudto.m_code }">
+            <colgroup><col width="30%"><col width=""></colgroup>
+
+            <tr>
+               <th>기본 가격</th>
+               <td><input type="hidden" id="default_price" value="${ menudto.m_price }"><fmt:formatNumber>${ menudto.m_price }</fmt:formatNumber>  원</td>
+            </tr>
+            <tr>
+               <th>빵 선택</th>
+               <td>
+               <!-- 빵을 선택, 6개중에 , radio 버튼에 디자인 입혀서 동그란 토글 버튼으로 하고싶다  -->
+                  <select name="o_pan" required="required" title="빵은 필수 선택사항입니다.">
+                   <option value="none">빵선택</option>
+                   <c:forEach var="olist" items="${option_bread}">
+                     <option  value="${ olist.m_code }" title="menu테이블에 explain을 추가한다면 title에 넣으면 되겠다." >${olist.m_name}</option>
+                   </c:forEach>
+                  </select>  
+                </td>
+            </tr>
+
+            <tr>
+               <th>필수</th>
+               <td>
+                  <p>
+                  <!-- 기본으로 들어가는 재료 출력 -->
+                     <input type="hidden" name="m_necessary1" value="${menudto.m_necessary1 }">
+                     <input type="hidden" name="m_necessary1_num" value="${menudto.m_necessary1_num }">
+                     <input type="hidden" name="m_necessary2" value="${menudto.m_necessary2}">
+                     <input type="hidden" name="m_necessary2_num" value="${menudto.m_necessary2_num}">
+                     <input type="hidden" name="m_necessary3" value="${menudto.m_necessary3}">
+                     <input type="hidden" name="m_necessary3_num" value="${menudto.m_necessary3_num}">
+                     <input type="hidden" name="m_necessary4" value="${menudto.m_necessary4 }">
+                     <input type="hidden" name="m_necessary4_num" value="${menudto.m_necessary4_num }">
+                     
+                     <label>${menudto.m_necessary1_name } &nbsp;&nbsp; ${menudto.m_necessary1_num}개</label><br><c:if test="${menudto.m_necessary2_num > 0 }">
+                     <label>${menudto.m_necessary2_name } &nbsp;&nbsp; ${menudto.m_necessary2_num}개</label><br></c:if><c:if test="${menudto.m_necessary3_num > 0 }">
+                     
+                     <label>${menudto.m_necessary3_name } &nbsp;&nbsp; ${menudto.m_necessary3_num}개</label><br></c:if><c:if test="${menudto.m_necessary4_num > 0 }">
+                     <label>${menudto.m_necessary4_name } &nbsp;&nbsp; ${menudto.m_necessary4_num}개</label></c:if>
+                  </p>
+
+                  <p>
+                  <!-- 소스선택 , radio 버튼에 디자인 입혀서 동그란 토글 버튼으로 하고싶다  -->
+                     <select name="o_sauce1" onchange="sauce_select(o_sauce1)" required="required" title="기본적으로 소스는 하나이상 선택, 아 소스없이 먹는사람도 있겠는데, 걍 묻기만 할까">
+                        <option value="none">소스선택</option>
+                        <c:forEach var="olist" items="${option_sauces}">
+                           <option value="${ olist.m_code }">${olist.m_name}</option>
+                        </c:forEach>
+                     </select>
+                     <select name="o_sauce2" onchange="sauce_select(o_sauce2)">
+                        <option value="none">추가 소스선택</option>
+                        <c:forEach var="olist" items="${option_sauces}">
+                           <option value="${ olist.m_code }">${olist.m_name}</option>
+                        </c:forEach>
+                     </select>  
+                  </p>
+               </td>
+            </tr>
+
+            <tr>
+               <th>옵션</th>
+               <td>
+               <!-- 옵션을 반복문으로 출력  -->
+                  <c:forEach var="olist" items="${option_extra}" varStatus="i">
+                     	<div>
+                        <!-- 옵션 m_code , 필요없을듯?-->
+                        <input type="hidden" value="${ olist.m_code}" name="o_option${i.count }"/> 
+                        
+                        <!-- 옵션 이름 -->
+                        <label style="display: inline-block; width: 60px; white-space: nowrap; letter-spacing: 2px;" title="옵션의 이름">${olist.m_name}</label>
+                        
+                        <!-- 개당 옵션 가격 정보는 숨겨둔다  -->
+                        <input type="hidden" value="${ olist.m_price }" id="h_price${i.count }" readonly="readonly"/>&nbsp;
+                        
+                        <input type="button" class="btn btn-primary btn-xs" value="▼" id="${i.count}" onclick="extra_sub(o_option${i.count }_num, price${i.count }, h_price${i.count })"/>
+                        
+                        <!-- 선택된 옵션의 수량 표시 -->
+                        <font id="o_option${i.count }_num" style="margin:0px 10px 0px 10px;" size="3" title="선택된 옵션의 수량">0</font>
+                        <input type="hidden" readonly="readonly" value="0" name="o_option${i.count }_num"> 
+                        
+                        <input type="button" class="btn btn-primary btn-xs" value="▲" id="${i.count }" onclick="extra_add(o_option${i.count }_num, price${i.count }, h_price${i.count })"/>
+                        
+                        <!-- 추가된 가격 표시 -->
+                        &nbsp;(+&nbsp;￦ <font id="price${i.count }"> 0 </font>)
+                   		</div>
+                   </c:forEach>
+               <!-- 옵션을 반복문으로 출력  -->
+               </td>
+            </tr>
+
+            <tr>
+               <th>채소</th>
+               <td>
+               	<div style="display:-webkit-box; max-width: 45%; ">
+                  <!-- 채소 정보만 넘겨주는 option  -->
+                  <c:forEach var="olist" items="${option_vege}" varStatus="i"> 
+                  <div style="width: 90%; white-space: nowrap; ">
+                    <input type="checkbox" id="${olist.m_code}" name="o_vege${i.count}" value="${olist.m_code}" checked="checked" >
+                    	<label style="letter-spacing: 2px; margin-right: 10px; /* display: inline-block; width: 30px; white-space: nowrap; letter-spacing: 2px; padding-right :5px; */" 
+                    		for="${olist.m_code}">${olist.m_name}</label>
+                  </div>
+                    <c:if test="${i.count%3 == 0 }"></div><div style="display:-webkit-box; max-width: 45%;"></c:if>
+                  </c:forEach>
+               	</div>
+               </td>
+            </tr>
+
+            <tr>
+               <th>옵션 적용가</th>
+               <td>
+                  <input hidden="hidden" type="text" name="o_price" value="${ menudto.m_price }"> 
+                  <label id="o_price"><fmt:formatNumber>${ menudto.m_price}</fmt:formatNumber> 원</label>
+					</td>
+            </tr>
+            <tr>
+               <th><label for="amount">수 량</label></th>
+               <td>
+						<select name="amount" id="amount" title="같은 조합의 메뉴를 한번에 여러개 주문할 수 있습니다." onchange="update_totalprice(this.value)">
+							<option value="1" selected="selected">1개</option>
+							<option value="2">2개</option>
+							<option value="3">3개</option>
+							<option value="4">4개</option>
+					</select> &nbsp;
+				</td>
+            </tr>
+            <tr>
+            	<td colspan="2"><hr></td>
+            </tr>
+            <tr>
+               <th><font size="4" color="green">총 합계</font></th>
+               <td>
+               		<!-- 수량까지 적용한 최종가격 o_totalprice -->
+                  	<input hidden="hidden" type="text" name="o_totalprice" value="${ menudto.m_price }"> 
+                  	<font id="o_totalprice" size="4"><fmt:formatNumber>${ menudto.m_price }</fmt:formatNumber> 원</font> 
+				</td>
+            </tr>
+			<tr>
+				<td colspan="2" style="text-align: center; border-top-style: solid;">
+				<br>
+				<br>
+					<button value="basket" name="command" class="btn btn-default" title="현재 조합을 장바구니에 추가합니다.">장바구니</button>
+					<button value="payment" name="command" class="btn btn-default" title="현재 조합으로 주문을 진행합니다.">결제</button><br><br>
+				</td>
+			</tr>
+         </table>
+      </form>
+
+</div>
+<br>
+<br>
+<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>
+<script type="text/javascript">
+	//선택된 옵션의 개수를 전역에 저장하면서 체크
+   var total_extra = 0;
+   
+	
+	function update_totalprice(amount){
+		var o_price = eval(document.getElementsByName('o_price')[0].value * amount);
+		document.getElementsByName('o_totalprice')[0].value = o_price;
+		document.getElementById('o_totalprice').innerHTML = comma(o_price) + " 원";
+	}
+	
+   /* 옵션 감소 ▲ 버튼  
+   	parmas : 수량을 담는 element, 가격을 담는 element, 옵션가가 반영된 총가격을 담는 element
+   */
+   function extra_add(e_amount_to_update, e_price_to_update, o_price){
+      if(total_extra >= 5){ 
+         alert("extra는 5개 이상 못해요");   
+         return false;
+      }
+      e_amount_to_update.value++; //개수 증가 
+      
+      document.getElementById(e_amount_to_update.name).innerHTML = e_amount_to_update.value; //레이블 
+      
+      e_price_to_update.innerHTML = comma(eval(uncomma(e_price_to_update.innerHTML)) + eval(o_price.value)); //가격 갱신
+      
+       document.getElementsByName('o_price')[0].value = eval(document.getElementsByName('o_price')[0].value) + eval(o_price.value); 
+ 
+      document.getElementById('o_price').innerHTML = comma(document.getElementsByName('o_price')[0].value)+" 원";  //화면에 보여지는 값 
+      update_totalprice(document.getElementsByName('amount')[0].value);
+      total_extra ++;
+   }
+   
+   /* 옵션 감소 ▼ 버튼  
+   	parmas : 수량을 담는 element, 가격을 담는 element, 옵션가가 반영된 총가격을 담는 element
+   */
+   function extra_sub(e_amount_to_update, e_price_to_update, o_price){
+      if(total_extra <= 0 || e_amount_to_update.value <= 0){ 
+         return false;
+      }
+      e_amount_to_update.value--;//옵션 선택개수 감소 
+      document.getElementById(e_amount_to_update.name).innerHTML = e_amount_to_update.value; //사용자가 보게될 선택개수도 업데이트
+      
+      e_price_to_update.innerHTML = comma(eval(uncomma(e_price_to_update.innerHTML)) - eval(o_price.value)); //선택된 옵션 가격 갱신
+      
+      document.getElementsByName('o_price')[0].value = eval(document.getElementsByName('o_price')[0].value) - eval(o_price.value );//다음페이지로 넘길값
+      
+      document.getElementById('o_price').innerHTML = comma(document.getElementsByName('o_price')[0].value)+" 원";  //화면에 보여지는 값 
+      update_totalprice(document.getElementsByName('amount')[0].value);
+      
+      total_extra --;
+   }//end function 
+   
+   
+   	function comma(str) {
+   	    str = String(str);
+   	    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+   	}
+   	//콤마풀기
+   	function uncomma(str) {
+   	    str = String(str);
+   	    return str.replace(/[^\d]+/g, '');
+   	}
+
+   	
+   	//옵션추가를 동적으로 셀렉을 쓰려면 전역으로 배열을 선언해놓고 옵션을 담으면 될듯 , 추가될때마다 빼주기 
+    var option_num = 0;
+   function test(params){
+       if ( option_num >= 3) return false;
+       alert(document.getElementById('option').innerHTML);
+       option_num++;
+       var d = "div_" + option_num;
+      var code1 = "<select>";
+          code1 += "<option value=\"dc\">더블치즈</option>";   
+          code1 += "<option value=\"ac\">아보카도</option>";   
+          code1 += "<option value=\"dm\">더블미트</option>";
+          code1 += "<option value=\"em\">에그마요</option>";
+          code1 += "<option value=\"bk\">베이컨</option>";
+          code1 += "</select>";
+      var code2 = "<select><option value=1>1</option><option value=2>2</option><option value=3>3</option></select>";
+      var code = code1+code2+"<button value=1 onclick=\"delete_div(div_"+option_num+")\">X</button>";
+      document.getElementById(d).innerHTML += code;
+      return;
+   }
+   
+   function delete_div(params){
+      var name = params;
+      alert("눌린버튼 : " + name);
+      name.innerHTML = "";
+      option_num --;
+   }
+   	//옵션추가를 동적으로 셀렉을 쓰려면 전역으로 배열을 선언해놓고 옵션을 담으면 될듯 , 추가될때마다 빼주기 
+   
+   function sauce_select(params){
+      var o_sauce1 = document.getElementsByName('o_sauce1')[0].value; //선택된 소스1
+      var o_sauce2 = document.getElementsByName('o_sauce2')[0].value; //선택된 소스2
+      
+      if(o_sauce1=='none'){ 
+         alert("첫번째 소스를 선택해주세요");
+         return false;
+      }
+      if(o_sauce1==o_sauce2) {
+         alert("서로 다른 소스를 선택해주세요");
+         params.value='none';
+         params.focus();
+         return false;
+      }
+      return true;
+   }//end 소스선택확인 function
+
+   	//form 을 서브밋하기전에 선택
+   	<!--
+   function check(){
+	   var e_pan = document.getElementsByName('o_pan')[0];
+      if( e_pan.value == 'none' ) {
+         e_pan.focus();
+         alert("빵을 선택해주세요");
+         return false;
+      }
+      return sauce_select(document.orderfrm.o_sauce2);
+      //return true;
+   }//end function
+   //-->
+</script>

@@ -5,6 +5,23 @@
 
 <mapper namespace="kosta.finalproject.customer.dao.Order_ListDAO">
 	<!-- 코드로 넘겨받는 order_list -->
+	<select id="get_order_list_info" resultType="kosta.finalproject.customer.dto.Order_ListTDTO" >
+		select	
+				order_num,
+				c_id, 
+				s_code,
+				order_status,
+				order_date,
+				o_totalprice,
+				order_payment,
+				(select m_code from order_detail where order_num=ol.order_num and rownum=1) as m_code,
+				(select count(*) from order_detail where order_num=ol.order_num) as m_count
+		from order_list ol 
+		where c_id=#{param1} 
+			and order_num = #{param2}
+	</select>
+	
+	<!-- 코드로 넘겨받는 order_list -->
 	<select id="get_order_list" resultType="kosta.finalproject.customer.dto.Order_ListTDTO" >
 		select	
 				order_num,

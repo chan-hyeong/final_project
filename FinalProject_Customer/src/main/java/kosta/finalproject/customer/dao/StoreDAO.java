@@ -14,7 +14,7 @@ public interface StoreDAO {
 	
 	/**
 	 * s_code를 파라미터로 넘기면 
-	 * 해당 store 정보를 리턴한다  
+	 * 해당 store 모든 정보를 리턴한다  
 	 * @return
 	 */
 	public StoreTDTO get_store_info(String s_code);

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
@@ -8,89 +8,268 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/footer.css">	
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/css/footer.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<title>메인</title>
+<style type="text/css">
+.go {
+	height: 100px;
+	width: 300px;
+	background-color: rgba(0, 0, 0, .075);
+	box-shadow: 2px 2px 3px rgba(69, 52, 27, 0.56);
+	border-color: #555;
+	display: table-cell;
+	vertical-align: middle;
+	font-size: 17px;
+	font-weight: 900;
+	color: rgb(80, 80, 80);
+	line-height: 24px;
+	margin-left: 10px;
+	padding: 1%;
+}
 
-			
-<title>
-	<c:if test="${id ne null }">
-		${id}님 환영합니다. 
-	</c:if>
-	subway order 입니다 
-</title>
+.go2 {
+	/* display: inline-block; */
+	padding: 0 10px;
+	border: 2px solid #0078ae;
+	font-size: 16px;
+	font-weight: 500;
+	color: #0078ae;
+	line-height: 40px;
+	/* vertical-align: middle; */
+	float: right;
+}
+
+.go2 a {
+	color: #807d7d;
+	font-weight: bold;
+}
+
+.go3 {
+	padding: 0 10px;
+	border: 2px solid #ffffff;
+	font-size: 16px;
+	font-weight: 500;
+	color: #ffffff;
+	line-height: 40px;
+	/* vertical-align: middle; */
+	float: right;
+}
+
+.order {
+	background: rgb(38, 97, 156);
+	/* display: table-cell; */
+	/* vertical-align: middle; */
+	font-size: 17px;
+	font-weight: 500;
+	color: #4a3a3a;
+	height: 80px;
+	width: 300px;
+	text-align: center;
+	/* margin-left: 50%; */
+	padding: 25px;
+	box-shadow: 2px 2px 3px rgba(69, 52, 27, 0.56);
+	font-weight: bold;
+	color: white;
+}
+
+.row {
+	margin-right: -15px;
+	margin-left: -15px;
+	margin-top: 5%;
+}
+</style>
 
 </head>
+
 <body>
-
-
-<div class="wrapper">
-<!-- header -->
-<div class="header">
-	<jsp:include page="header.jsp"/>
-</div>
-<br>
-<!-- content -->
-	<div class="content" style="margin-top: 10%;">
-			<div id="myCarousel" class="carousel slide" data-ride="carousel">
-			<!-- Indicators -->
-			<ol class="carousel-indicators">
-				<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-				<li data-target="#myCarousel" data-slide-to="1"></li>
-				<li data-target="#myCarousel" data-slide-to="2"></li>
-			</ol>
-
-			<!-- Wrapper for slides -->
-			<div class="carousel-inner">
-				<div class="item active">
-					<img src="${pageContext.request.contextPath}/css/서브1.jpg"
-						style="width: 100%;">
-				</div>
-
-				<div class="item">
-					<img src="${pageContext.request.contextPath}/css/서브2.jpg"
-						style="width: 100%;">
-				</div>
-
-				<div class="item">
-					<img src="${pageContext.request.contextPath}/css/서브3.jpg"
-						style="width: 100%;">
-				</div>
-			</div>
-
-			<!-- Left and right controls -->
-			<a class="left carousel-control" href="#myCarousel" data-slide="prev" 
-			style="background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0,rgba(0, 0, 0, 0) 100%);"> 
-				<span class="glyphicon glyphicon-chevron-left"></span> <span
-				class="sr-only">Previous</span>
-			</a> <a class="right carousel-control" href="#myCarousel"
-				data-slide="next" 
-				style="background-image: linear-gradient(to left, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 100%);"> <span
-				class="glyphicon glyphicon-chevron-right"></span> <span
-				class="sr-only">Next</span>
-			</a>
+	<div class="wrapper">
+		<!-- header -->
+		<div class="header">
+			<jsp:include page="header.jsp" />
 		</div>
-	</div>
-	<div>
-	<br>
-	<br>
-	<br>
-		<h2>여기는 메뉴가 올자리입니다.</h2>
-		<br>
-		<br>
-		<br>
+
+		<!-- content -->
+		<div class="content" style="margin-top: 85px;-webkit-margin-before: 12em;">
+			<div id="myCarousel" class="carousel slide" data-ride="carousel">
+				<!-- Indicators -->
+				<ol class="carousel-indicators">
+					<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+					<li data-target="#myCarousel" data-slide-to="1"></li>
+					<li data-target="#myCarousel" data-slide-to="2"></li>
+				</ol>
+
+				<!-- Wrapper for slides -->
+				<div class="carousel-inner">
+					<div class="item active">
+						<img src="${pageContext.request.contextPath}/css/main1.png"
+							style="width: 100%;">
+					</div>
+
+					<div class="item">
+						<img src="${pageContext.request.contextPath}/css/main2.png"
+							style="width: 100%;">
+					</div>
+
+					<div class="item">
+						<img src="${pageContext.request.contextPath}/css/main3.png"
+							style="width: 100%;">
+					</div>
+				</div>
+
+				<!-- Left and right controls -->
+				<a class="left carousel-control" href="#myCarousel"
+					data-slide="prev"
+					style="background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 100%);">
+					<span class="glyphicon glyphicon-chevron-left"></span> <span
+					class="sr-only">Previous</span>
+				</a> <a class="right carousel-control" href="#myCarousel"
+					data-slide="next"
+					style="background-image: linear-gradient(to left, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 100%);">
+					<span class="glyphicon glyphicon-chevron-right"></span> <span
+					class="sr-only">Next</span>
+				</a>
+			</div>
+		</div>
+		<div>
+			<br>
+
+			<div
+				style="display: -webkit-box; display: -moz-box; display: -ms-flexbox; display: -webkit-flex; display: flex; align-items: center; justify-content: center; -webkit-align-items: center; -webkit-justify-content: center; -webkit-box-pack: center; -webkit-box-align: center; -moz-box-pack: center; -moz-box-align: center; -ms-box-pack: center; -ms-box-align: center;">
+				<div class="order">
+					SubWay 주문방법 →
+					<div class="go3" data-toggle="modal" data-target="#myModal">
+						클릭</div>
+				</div>
+				<!-- Modal -->
+				<div class="modal fade" id="myModal" role="dialog">
+					<div class="modal-dialog">
+
+						<!-- Modal content-->
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title" id="m_name"></h4>
+							</div>
+							<div class="modal-body" id="m_necessary">
+								<div class="w3-content" style="max-width: 800px">
+									<img class="mySlides"
+										src="${pageContext.request.contextPath}/css/o1.jpg"
+										style="width: 100%"> <img class="mySlides"
+										src="${pageContext.request.contextPath}/css/o2.jpg"
+										style="width: 100%"> <img class="mySlides"
+										src="${pageContext.request.contextPath}/css/o3.jpg"
+										style="width: 100%"> <img class="mySlides"
+										src="${pageContext.request.contextPath}/css/o4.jpg"
+										style="width: 100%"> <img class="mySlides"
+										src="${pageContext.request.contextPath}/css/o5.jpg"
+										style="width: 100%"> <img class="mySlides"
+										src="${pageContext.request.contextPath}/css/o6.jpg"
+										style="width: 100%"> <img class="mySlides"
+										src="${pageContext.request.contextPath}/css/o7.jpg"
+										style="width: 100%">
+								</div>
+
+								<div class="w3-center">
+									<div class="w3-section">
+										<input type="button" class="w3-button w3-light-grey"
+											onclick="plusDivs(-1)" value="Prev" /> <input type="button"
+											class="w3-button w3-light-grey" onclick="plusDivs(1)"
+											value="Next" />
+									</div>
+									<input type="button" class="w3-button demo"
+										onclick="currentDiv(1)" value="1"> <input
+										type="button" class="w3-button demo" onclick="currentDiv(2)"
+										value="2"> <input type="button" class="w3-button demo"
+										onclick="currentDiv(3)" value="3"> <input
+										type="button" class="w3-button demo" onclick="currentDiv(4)"
+										value="4"> <input type="button" class="w3-button demo"
+										onclick="currentDiv(5)" value="5"> <input
+										type="button" class="w3-button demo" onclick="currentDiv(6)"
+										value="6"> <input type="button" class="w3-button demo"
+										onclick="currentDiv(7)" value="7">
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+			<div class="form-group row"
+				style="display: -webkit-box; display: -moz-box; display: -ms-flexbox; display: -webkit-flex; display: flex; align-items: center; justify-content: center; -webkit-align-items: center; -webkit-justify-content: center; -webkit-box-pack: center; -webkit-box-align: center; -moz-box-pack: center; -moz-box-align: center; -ms-box-pack: center; -ms-box-align: center;">
+				<div class="go">
+					<c:if test="${id eq null}">
+				로그인 하시면 <br>
+				편리하게 주문가능!
+				</c:if>
+					<c:if test="${id ne null}">
+					${id }님 환영합니다.
+				</c:if>
+					<c:if test="${id eq null}">
+						<div class="go2">
+							<a href="loginform.do">로그인</a>
+						</div>
+					</c:if>
+				</div>
+				&nbsp;&nbsp;&nbsp;
+				<div class="go">
+					복잡한 주문을 <br> 간단하게!
+					<div class="go2">
+						<a href="menulist.do">주문</a>
+					</div>
+				</div>
+				&nbsp;&nbsp;&nbsp;
+				<div class="go">
+					내 주변 매장 찾기<br>
+					<div class="go2">
+						<a href="store2.do">매장</a>
+					</div>
+				</div>
+				&nbsp;&nbsp;&nbsp;
+			</div>
+			<!-- 	<div class="go">
+		주문 할려면 로그인 gogo
+		로그인
+	</div> -->
+			<br>
+			<br>
+			 <h1 style="margin-left: 9%;">베스트 Top 5</h1>
+      <div>
+      <div class="top" style="text-align: center;">
+               <c:forEach items="${top5 }" var="top" >
+                 <div class="col-sm-4" style="font-weight: bold;" >
+                 ${top.rank }위
+                  <img title="${top.menu_name }" src=<c:url value="img/${top.menu_code}.png"/> style="box-shadow: 2px 2px 3px rgba(69,52,27,0.56); margin-top: 15px; text-align: center;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                 </div>
+                  
+               </c:forEach>
+          
+        </div>
+        
+     </div>
+			<br> <br> <br>
+		</div>
+
+
+
+
+
+
+
+		<!-- footer -->
+		<jsp:include page="footer.jsp" />
 	</div>
 
-	<!-- footer -->
-	<div class="footer">
- 		<jsp:include page="footer.jsp"/> 
-	</div>
-</div>
-	
-</body>
-</html>
 
 
-<%-- <p>
+	<%-- <p>
 추천 : order_Detail , order_list 를 이용해서 인기 메뉴 rank 매김 , 연령? 지역? 시간? 성별?로 그룹 
 또는 본인이 자주 시켰던 메뉴의 인기 조합 
 별점 시스템? 자기만 평을 매기는거지 평은 order_detail에 comment정도로 저장하면 될듯?
@@ -220,7 +399,37 @@ ppt {
  --%>
 
 
-<%-- form action="modify.do" method="get">
-<input type="hidden" name="c_id" value="<%=id %>" >
-<input type="submit" value="내정보">
-</form> --%>
+</body>
+</html>
+<script type="text/javascript">
+	var slideIndex = 1;
+	showDivs(slideIndex);
+
+	function plusDivs(n) {
+		showDivs(slideIndex += n);
+	}
+
+	function currentDiv(n) {
+		showDivs(slideIndex = n);
+	}
+
+	function showDivs(n) {
+		var i;
+		var x = document.getElementsByClassName("mySlides");
+		var dots = document.getElementsByClassName("demo");
+		if (n > x.length) {
+			slideIndex = 1
+		}
+		if (n < 1) {
+			slideIndex = x.length
+		}
+		for (i = 0; i < x.length; i++) {
+			x[i].style.display = "none";
+		}
+		for (i = 0; i < dots.length; i++) {
+			dots[i].className = dots[i].className.replace(" w3-red", "");
+		}
+		x[slideIndex - 1].style.display = "block";
+		dots[slideIndex - 1].className += " w3-red";
+	}
+</script>

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import kosta.finalproject.customer.dao.HistoryDAO;
 import kosta.finalproject.customer.dao.Order_ListDAO;
+import kosta.finalproject.customer.dao.StoreDAO;
 import kosta.finalproject.customer.dto.Order_ListTDTO;
 
 @Controller
@@ -43,19 +44,27 @@ public class HistoryController {
 	public String history_detail_test(HttpServletRequest request, HttpSession session,
 			@RequestParam("order_num") int order_num) {
 		
+		//알람트리거
+		order_status_check(session);
+		
 		HistoryDAO detail_dao = sqlsession.getMapper(HistoryDAO.class);
 		Order_ListDAO order_dao = sqlsession.getMapper(Order_ListDAO.class);
-		List<HashMap<String, String>> list =detail_dao.historydetail(order_num);
+		StoreDAO store_dao = sqlsession.getMapper(StoreDAO.class);
+		List<HashMap<String, String>> detail_list =detail_dao.historydetail(order_num);
 		
-		for( Order_ListTDTO item : order_dao.get_order_list(session.getAttribute("id").toString())){
+		String c_id = session.getAttribute("id").toString();
+		
+		for( Order_ListTDTO item : order_dao.get_order_list(c_id)){
 			if ( item.getOrder_num() == order_num){ 
 				request.setAttribute("orderitem", item);
 				System.out.println(item.toString());
 				break;
 			}
 		}
+		Order_ListTDTO list_dto = order_dao.get_order_list_info(c_id, order_num);
 		
-		request.setAttribute("order_detail_list", list);
+		request.setAttribute("order_detail_list", detail_list);
+		request.setAttribute("store_info", store_dao.get_store_info(list_dto.getS_code()));
 		
 		return "customer/history_detail_test";
 	}
@@ -107,18 +116,16 @@ public class HistoryController {
 
 
 	/**
-	 * 
-	 * 1. session null 체크 1-1. null 이라면 session에 담기
-	 * 
-	 * 2. 있다면 사이즈 체크 2-1. 사이즈 비교 : 다른 경우는 order_status 에 변화가 있는거임 아 그런데 하나가 처리되고
-	 * 하나가
+	 * order_status '준비완료'가 아닌(== 주문상태를 체크할 필요가 있는) order_num 리스트를 이용해서
+	 * 사용자에게 준비완료됨을 알려줌  
+	 * header에 삽입된 ajax가 interval 호출함 
 	 * 
 	 * @param session
-	 * @return
+	 * @return : order_status 가 '준비완료' 로 바뀐 order_num 의 리스트 
 	 */
-	@RequestMapping(value="checked.do")
+	@RequestMapping(value="orders_status_check.do")
 	public @ResponseBody List<Integer> order_status_check(HttpSession session) {
-		System.out.println("\n\norder_status_check 진입 ");
+System.out.println("\n\norder_status_check 진입 ");
 		HistoryDAO dao = sqlsession.getMapper(HistoryDAO.class);
 		String c_id = session.getAttribute("id").toString();
 
@@ -139,7 +146,7 @@ public class HistoryController {
 				// order_num이 변화된게 1개 이상있는거임
 				session.setAttribute("slist", dao.get_uncompleted_order_num(c_id)); // session 갱신해주고 
 				session.setAttribute("changed_order_nums", chaged_order_nums);// 상태바뀐놈들, 리턴을 하고 있으니 굳이 필요하진..
-				System.out.println("\t session에 담음 " + order_nums.toString()+"\n");
+//System.out.println("\t session에 담음 " + order_nums.toString());
 			}else{
 				session.setAttribute("slist", order_nums);
 			}
@@ -149,12 +156,10 @@ public class HistoryController {
 			session.removeAttribute("slist");
 		} 
 
-		System.out.println("\t session에 담긴 slist 값 ("+session.getAttribute("slist").toString() + " \n");
-		System.out.println("\t return 할 chaged_order_list 값 ("+chaged_order_nums.size()+"): " + chaged_order_nums.toString() + " \n");
+//System.out.println("\t session에 담긴 slist 값 ("+session.getAttribute("slist").toString());
+//System.out.println("\t return 할 chaged_order_list 값 ("+chaged_order_nums.size()+"): " + chaged_order_nums.toString());
 		return chaged_order_nums;// 스크립트 펑션에서 받아볼 list
 	}
-	// 상태를 확인해야할 놈들을 세션에 담고있다가
-	// interval 로 그놈들의 상태를 확인하기
 	
 	
 }//end class
